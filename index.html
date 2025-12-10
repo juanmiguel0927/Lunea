@@ -3,85 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Lunea - Completa y Estable</title>
+    <title>Lunea - Estable</title>
     
-    <!-- Librerías (Versiones estables) -->
+    <!-- Librerías (React 17) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
-        body { background-color: #f8fafc; color: #1e293b; font-family: system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: #f8fafc; color: #1e293b; font-family: -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
         .day-cell:active { transform: scale(0.95); }
         .animate-in { animation: fadeIn 0.3s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        ::-webkit-scrollbar { width: 0; background: transparent; }
-        
-        @media print {
-            .no-print { display: none !important; }
-            body { background: white; color: black; }
-            #root { height: auto; overflow: visible; }
-            .print-break { page-break-before: always; }
-        }
+        ::-webkit-scrollbar { width: 0; }
+        @media print { .no-print { display: none !important; } body { background: white; } }
     </style>
 </head>
 <body>
 
     <div id="root">
         <div style="height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-            <p style="color: #64748b; margin-bottom: 20px;">Cargando Lunea v44...</p>
-            <button onclick="localStorage.removeItem('lunea_v44_db'); location.reload()" style="padding: 10px 20px; background: #ef4444; color: white; border:none; border-radius: 8px;">Restablecer Todo</button>
+            <p style="color: #64748b; margin-bottom: 20px;">Cargando Lunea v47...</p>
+            <button onclick="localStorage.removeItem('lunea_v47_db'); location.reload()" style="padding: 10px 20px; background: #ef4444; color: white; border:none; border-radius: 8px;">Restablecer Todo</button>
         </div>
     </div>
 
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        // --- COMPONENTE SVG SEGURO ---
-        const Svg = ({d, c, click}) => <svg onClick={click} className={c} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">{d}</svg>;
-
-        // --- DEFINICIÓN DE TODOS LOS ICONOS ---
-        const IconHeart = ({c, click}) => <Svg click={click} c={c} d={<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />} />;
-        const IconCalendar = ({c, click}) => <Svg click={click} c={c} d={<><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></>} />;
-        const IconSettings = ({c, click}) => <Svg click={click} c={c} d={<><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" /></>} />;
-        const IconLeft = ({c, click}) => <Svg click={click} c={c} d={<polyline points="15 18 9 12 15 6" />} />;
-        const IconRight = ({c, click}) => <Svg click={click} c={c} d={<polyline points="9 18 15 12 9 6" />} />;
-        const IconGrid = ({c, click}) => <Svg click={click} c={c} d={<><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /></>} />;
-        const IconActivity = ({c, click}) => <Svg click={click} c={c} d={<polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />} />;
-        const IconDroplet = ({c, click}) => <Svg click={click} c={c} d={<path d="M12 2.69l5.74 5.88a6 6 0 0 1-8.48 8.48A6 6 0 0 1 5.25 9.56L12 2.69z" />} />;
-        const IconMoon = ({c, click}) => <Svg click={click} c={c} d={<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />} />;
-        const IconSun = ({c, click}) => <Svg click={click} c={c} d={<><circle cx="12" cy="12" r="5" /><line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" /><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" /><line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" /><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" /></>} />;
-        const IconPill = ({c, click}) => <Svg click={click} c={c} d={<rect x="2" y="6" width="20" height="12" rx="6" />} />;
-        const IconCheck = ({c, click}) => <Svg click={click} c={c} d={<polyline points="20 6 9 17 4 12" />} />;
-        const IconUsers = ({c, click}) => <Svg click={click} c={c} d={<><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /></>} />;
-        const IconTrash = ({c, click}) => <Svg click={click} c={c} d={<><polyline points="3 6 5 6 21 6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></>} />;
-        const IconPlus = ({c, click}) => <Svg click={click} c={c} d={<><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></>} />;
-        const IconDownload = ({c, click}) => <Svg click={click} c={c} d={<><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></>} />;
-        const IconUpload = ({c, click}) => <Svg click={click} c={c} d={<><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" /></>} />;
-        const IconEye = ({c, click}) => <Svg click={click} c={c} d={<><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></>} />;
-        const IconEyeOff = ({c, click}) => <Svg click={click} c={c} d={<><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" /><line x1="1" y1="1" x2="23" y2="23" /></>} />;
-        const IconFileText = ({c, click}) => <Svg click={click} c={c} d={<><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><polyline points="10 9 9 9 8 9" /></>} />;
-        const IconSparkles = ({c, click}) => <Svg click={click} c={c} d={<><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M9 5H5"/><path d="M19 21v-4"/><path d="M15 19h4"/></>} />;
-        const IconThermometer = ({c, click}) => <Svg click={click} c={c} d={<path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z" />} />;
-        const IconScale = ({c, click}) => <Svg click={click} c={c} d={<><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" /><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" /><path d="M7 21h10" /><path d="M12 3v18" /><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2" /></>} />;
-        const IconClose = ({c, click}) => <Svg click={click} c={c} d={<><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></>} />;
-        const IconSmile = ({c, click}) => <Svg click={click} c={c} d={<><circle cx="12" cy="12" r="10" /><path d="M8 14s1.5 2 4 2 4-2 4-2" /></>} />;
-        const IconFrown = ({c, click}) => <Svg click={click} c={c} d={<><circle cx="12" cy="12" r="10" /><path d="M16 16s-1.5-2-4-2-4 2-4 2" /><line x1="9" y1="9" x2="9.01" y2="9" /><line x1="15" y1="9" x2="15.01" y2="9" /></>} />;
-        const IconZap = ({c, click}) => <Svg click={click} c={c} d={<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />} />;
-        const IconCloudRain = ({c, click}) => <Svg click={click} c={c} d={<><line x1="16" y1="13" x2="16" y2="21" /><line x1="8" y1="13" x2="8" y2="21" /><line x1="12" y1="15" x2="12" y2="23" /><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25" /></>} />;
-        const IconEdit = ({c, click}) => <Svg click={click} c={c} d={<><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></>} />;
-        const IconCloud = ({c, click}) => <Svg click={click} c={c} d={<><line x1="16" y1="13" x2="16" y2="21" /><line x1="8" y1="13" x2="8" y2="21" /><line x1="12" y1="15" x2="12" y2="23" /><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25" /></>} />;
+        // --- ICONOS DIRECTOS (Sin componentes wrapper para máxima seguridad) ---
+        
+        const IconHeart = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" /></svg>;
+        const IconCalendar = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>;
+        const IconSettings = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" /></svg>;
+        const IconLeft = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>;
+        const IconRight = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>;
+        const IconGrid = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /></svg>;
+        const IconActivity = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" /></svg>;
+        const IconDroplet = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2.69l5.74 5.88a6 6 0 0 1-8.48 8.48A6 6 0 0 1 5.25 9.56L12 2.69z" /></svg>;
+        const IconMoon = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>;
+        const IconPill = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="6" width="20" height="12" rx="6" /></svg>;
+        const IconCheck = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>;
+        const IconUsers = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /></svg>;
+        const IconTrash = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></svg>;
+        const IconPlus = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>;
+        const IconDownload = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>;
+        const IconUpload = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" /></svg>;
+        const IconEye = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg>;
+        const IconEyeOff = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" /><line x1="1" y1="1" x2="23" y2="23" /></svg>;
+        const IconFileText = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><polyline points="10 9 9 9 8 9" /></svg>;
+        const IconSparkles = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M9 5H5"/><path d="M19 21v-4"/><path d="M15 19h4"/></svg>;
+        const IconThermometer = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z" /></svg>;
+        const IconScale = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" /><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" /><path d="M7 21h10" /><path d="M12 3v18" /><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2" /></svg>;
+        const IconClose = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>;
+        const IconSmile = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M8 14s1.5 2 4 2 4-2 4-2" /></svg>;
+        const IconFrown = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M16 16s-1.5-2-4-2-4 2-4 2" /><line x1="9" y1="9" x2="9.01" y2="9" /><line x1="15" y1="9" x2="15.01" y2="9" /></svg>;
+        const IconZap = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>;
+        const IconCloudRain = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="16" y1="13" x2="16" y2="21" /><line x1="8" y1="13" x2="8" y2="21" /><line x1="12" y1="15" x2="12" y2="23" /><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25" /></svg>;
+        const IconEdit = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>;
+        const IconSun = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5" /><line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" /><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" /><line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" /><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" /></svg>;
+        const IconCloud = (props) => <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="16" y1="13" x2="16" y2="21" /><line x1="8" y1="13" x2="8" y2="21" /><line x1="12" y1="15" x2="12" y2="23" /><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25" /></svg>;
 
         const SYMPTOMS = [
-            { id: 'happy', label: 'Feliz', I: IconSmile },
-            { id: 'sad', label: 'Triste', I: IconFrown },
-            { id: 'irritable', label: 'Irritable', I: IconZap },
-            { id: 'cramps', label: 'Cólicos', I: IconActivity },
-            { id: 'headache', label: 'Dolor', I: IconThermometer },
-            { id: 'bloating', label: 'Hinchazón', I: IconDroplet },
-            { id: 'energetic', label: 'Energía', I: IconSun },
-            { id: 'tired', label: 'Cansada', I: IconCloud }
+            { id: 'happy', label: 'Feliz', Icon: IconSmile },
+            { id: 'sad', label: 'Triste', Icon: IconFrown },
+            { id: 'irritable', label: 'Irritable', Icon: IconZap },
+            { id: 'cramps', label: 'Cólicos', Icon: IconActivity },
+            { id: 'headache', label: 'Dolor', Icon: IconThermometer },
+            { id: 'bloating', label: 'Hinchazón', Icon: IconDroplet },
+            { id: 'energetic', label: 'Energía', Icon: IconSun },
+            { id: 'tired', label: 'Cansada', Icon: IconCloud }
         ];
 
         const THEMES = {
@@ -90,7 +82,7 @@
             indigo: { bg: 'bg-indigo-500', text: 'text-indigo-600', light: 'bg-indigo-100', border: 'border-indigo-200' },
         };
 
-        // --- COMPONENTES ---
+        // --- COMPONENTES AUXILIARES ---
         const SimpleChart = ({ data, color, minVal, maxVal }) => {
             if (!data || data.length < 2) return <div className="h-32 flex items-center justify-center text-xs border border-dashed rounded-xl text-slate-400">Registra al menos 2 datos</div>;
             const points = data.map((d, i) => {
@@ -122,7 +114,7 @@
             const StepIcon = steps[step].I;
             return (
                 <div className="fixed inset-0 z-50 bg-white flex flex-col items-center justify-center p-8 text-center animate-in">
-                    <div className="bg-rose-100 p-6 rounded-full text-rose-500 mb-6"><StepIcon c="w-12 h-12"/></div>
+                    <div className="bg-rose-100 p-6 rounded-full text-rose-500 mb-6"><StepIcon className="w-12 h-12"/></div>
                     <h2 className="text-2xl font-bold mb-4 text-slate-800">{steps[step].t}</h2>
                     <p className="text-slate-500 mb-8">{steps[step].d}</p>
                     <button onClick={() => step < steps.length - 1 ? setStep(step+1) : onComplete()} className="w-full py-3 bg-rose-500 text-white rounded-xl font-bold shadow-lg">
@@ -132,11 +124,32 @@
             );
         };
 
+        const PinPad = ({ onUnlock, onSetPin, isSetting, onCancel }) => {
+            const [val, setVal] = useState('');
+            const handle = (n) => {
+                const next = val + n;
+                setVal(next);
+                if (next.length === 4) { if(isSetting) onSetPin(next); else onUnlock(next); setVal(''); }
+            };
+            return (
+                <div className="fixed inset-0 bg-slate-900 z-[60] flex flex-col items-center justify-center text-white p-4">
+                    <h2 className="text-xl font-bold mb-8">{isSetting?'Crear PIN':'Bloqueado'}</h2>
+                    <div className="flex gap-4 mb-8">{[0,1,2,3].map(i=><div key={i} className={`w-4 h-4 rounded-full ${val.length>i?'bg-white':'bg-slate-700'}`}/>)}</div>
+                    <div className="grid grid-cols-3 gap-6">
+                        {[1,2,3,4,5,6,7,8,9].map(n=><button key={n} onClick={()=>handle(n.toString())} className="w-16 h-16 rounded-full bg-slate-800 text-xl font-bold">{n}</button>)}
+                        <div/><button onClick={()=>handle('0')} className="w-16 h-16 rounded-full bg-slate-800 text-xl font-bold">0</button>
+                        <button onClick={()=>isSetting?onCancel():setVal('')} className="w-16 h-16 rounded-full flex items-center justify-center"><IconLeft className="w-8 h-8"/></button>
+                    </div>
+                </div>
+            )
+        };
+
+        // --- APP PRINCIPAL ---
         const App = () => {
             const [db, setDb] = useState(() => {
                 try {
-                    const s = localStorage.getItem('lunea_v44_db');
-                    if (s) return JSON.parse(s);
+                    const saved = localStorage.getItem('lunea_v47_db');
+                    if (saved) return JSON.parse(saved);
                 } catch(e) {}
                 const uid = Date.now().toString();
                 return {
@@ -150,12 +163,18 @@
             const [selDay, setSelDay] = useState(null);
             const [month, setMonth] = useState(new Date());
             const [viewYear, setViewYear] = useState(new Date().getFullYear());
+            const [locked, setLocked] = useState(!!db.pin);
+            const [showPinSetup, setShowPinSetup] = useState(false);
             const fileRef = useRef(null);
 
-            useEffect(() => localStorage.setItem('lunea_v44_db', JSON.stringify(db)), [db]);
-            const user = db.users.find(u => u.id === db.currentUserId) || db.users[0];
+            useEffect(() => localStorage.setItem('lunea_v47_db', JSON.stringify(db)), [db]);
 
-            // Helpers
+            const user = db.users.find(u => u.id === db.currentUserId) || db.users[0];
+            const theme = THEMES[db.theme] || THEMES.rose;
+            const dark = db.darkMode;
+
+            useEffect(() => { document.body.className = dark ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-800'; }, [dark]);
+
             const toKey = d => new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().split('T')[0];
             const getCycleDay = (dStr) => {
                 const start = new Date(user.config.lastPeriod); start.setHours(0,0,0,0);
@@ -183,7 +202,7 @@
 
             const handleExport = () => { const a=document.createElement('a'); a.href="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(db)); a.download="lunea.json"; a.click(); };
             const handleImport = (e) => { const r=new FileReader(); r.onload=ev=>{ try{ setDb(JSON.parse(ev.target.result)); alert("Importado"); }catch(er){alert("Error");} }; r.readAsText(e.target.files[0]); };
-            const handleAddUser = () => { const n = prompt("Nombre:"); if(n) { const id = Date.now().toString(); setDb(p => ({...p, currentUserId: id, users: [...p.users, {id, name: n, config: user.config, logs: {}}]})); } };
+            const handleAddUser = () => { const n=prompt("Nombre:"); if(n) { const id = Date.now().toString(); setDb(p => ({...p, currentUserId: id, users: [...p.users, {id, name: n, config: user.config, logs: {}}]})); } };
             const handleEditUser = (id) => { const u = db.users.find(x => x.id === id); const n = prompt("Nuevo nombre:", u.name); if(n) setDb(p => ({...p, users: p.users.map(x => x.id === id ? {...x, name: n} : x)})); };
             const handleDeleteUser = (id) => { if(db.users.length>1 && confirm("¿Borrar?")) setDb(p => ({...p, users: p.users.filter(x => x.id !== id), currentUserId: p.users[0].id})); };
 
@@ -195,7 +214,10 @@
             };
 
             if (db.showTutorial) return <TutorialModal onComplete={() => setDb({...db, showTutorial: false})} />;
+            if (locked) return <PinPad onUnlock={c => c===db.pin?setLocked(false):alert("Mal")} isSetting={false} />;
+            if (showPinSetup) return <PinPad isSetting={true} onSetPin={c => {setDb({...db, pin:c}); setShowPinSetup(false);}} onCancel={()=>setShowPinSetup(false)} />;
 
+            // RENDERERS
             if (view === 'pdf') {
                 return (
                     <div className="bg-white text-black p-8 min-h-screen">
@@ -221,12 +243,12 @@
             const renderYear = () => (
                 <div className="p-4 animate-in">
                     <div className="flex justify-between items-center mb-6">
-                        <button onClick={()=>setView('calendar')}><IconLeft c="w-6 h-6"/></button>
-                        <div className="flex items-center gap-4"><button onClick={()=>setViewYear(y=>y-1)}><IconLeft c="w-4 h-4"/></button><h2 className="text-xl font-bold">Año {viewYear}</h2><button onClick={()=>setViewYear(y=>y+1)}><IconRight c="w-4 h-4"/></button></div><div className="w-6"/>
+                        <button onClick={()=>setView('calendar')}><IconLeft className="w-6 h-6"/></button>
+                        <div className="flex items-center gap-4"><button onClick={()=>setViewYear(y=>y-1)}><IconLeft className="w-4 h-4"/></button><h2 className="text-xl font-bold">Año {viewYear}</h2><button onClick={()=>setViewYear(y=>y+1)}><IconRight className="w-4 h-4"/></button></div><div className="w-6"/>
                     </div>
                     <div className="grid grid-cols-3 gap-2">
                         {Array.from({length:12}).map((_,m) => (
-                            <div key={m} className="p-1 rounded border text-[7px] bg-white">
+                            <div key={m} className={`p-1 rounded border text-[7px] ${dark?'bg-slate-900 border-slate-700':'bg-white'}`}>
                                 <div className="font-bold text-center mb-1">{new Date(viewYear, m).toLocaleDateString('es-ES',{month:'short'})}</div>
                                 <div className="grid grid-cols-7 gap-[1px]">
                                     {Array.from({length: new Date(viewYear, m+1, 0).getDate()}).map((_, d) => {
@@ -254,8 +276,8 @@
                     const log = user.logs[k] || {};
                     days.push(
                         <button key={k} onClick={() => setSelDay({d, k})} className={`day-cell h-14 rounded-xl flex flex-col items-center justify-center border border-transparent ${p ? p.light : ''} ${isToday ? 'ring-2 ring-rose-500 z-10' : ''}`}>
-                            <span className={`text-sm font-bold ${p ? p.text : 'text-slate-600'}`}>{i}</span>
-                            {cd && <span className="absolute top-1 right-1 text-[9px] text-slate-400">{cd}</span>}
+                            <span className={`text-sm font-bold ${p ? p.text : (dark?'text-slate-400':'text-slate-600')}`}>{i}</span>
+                            {cd && <span className={`absolute top-1 right-1 text-[9px] ${dark?'text-slate-500':'text-slate-400'}`}>{cd}</span>}
                             <div className="flex gap-0.5 mt-1">
                                 {p && <div className={`w-1.5 h-1.5 rounded-full ${p.bg}`}></div>}
                                 {(log.water || log.sleep) && <div className="w-1.5 h-1.5 rounded-full bg-blue-400"></div>}
@@ -265,11 +287,11 @@
                     );
                 }
                 return (
-                    <div className="p-4 bg-white rounded-3xl shadow-sm mb-6">
+                    <div className={`p-4 rounded-3xl mb-6 ${dark?'bg-slate-900':'bg-white shadow-sm'}`}>
                         <div className="flex justify-between items-center mb-4">
-                            <button onClick={()=>setMonth(new Date(month.setMonth(month.getMonth()-1)))} className="p-2"><IconLeft c="w-5 h-5"/></button>
+                            <button onClick={()=>setMonth(new Date(month.setMonth(month.getMonth()-1)))} className="p-2"><IconLeft className="w-5 h-5"/></button>
                             <div className="flex items-center gap-2"><span className="font-bold capitalize">{month.toLocaleDateString('es-ES', {month:'long', year:'numeric'})}</span><button onClick={()=>setMonth(new Date())} className="text-[10px] px-2 py-1 rounded font-bold bg-rose-100 text-rose-600">HOY</button></div>
-                            <button onClick={()=>setMonth(new Date(month.setMonth(month.getMonth()+1)))} className="p-2"><IconRight c="w-5 h-5"/></button>
+                            <button onClick={()=>setMonth(new Date(month.setMonth(month.getMonth()+1)))} className="p-2"><IconRight className="w-5 h-5"/></button>
                         </div>
                         <div className="grid grid-cols-7 text-center text-xs text-slate-400 font-bold mb-2"><span>D</span><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span></div>
                         <div className="grid grid-cols-7 gap-1">{days}</div>
@@ -279,14 +301,17 @@
 
             // PRINCIPAL
             return (
-                <div className="min-h-screen pb-20 text-slate-800">
-                    {view === 'calendar' && (
+                <div className={`min-h-screen pb-20 ${dark ? 'text-white' : 'text-slate-800'}`}>
+                    {view !== 'pdf' && view !== 'year' && (
+                        <header className="px-6 py-4 flex justify-between items-center">
+                            <div className={`flex items-center gap-2 ${theme.text}`}><IconHeart className="w-6 h-6 fill-current"/><h1 className="text-xl font-bold">Lunea</h1></div>
+                            <button onClick={()=>setView('settings')}><IconSettings className="w-6 h-6 text-slate-400"/></button>
+                        </header>
+                    )}
+
+                    {view === 'calendar' ? (
                         <div className="max-w-md mx-auto p-4">
-                            <header className="flex justify-between items-center mb-6 px-2">
-                                <div className="flex items-center gap-2 text-rose-500"><IconHeart c="w-6 h-6 fill-current"/><h1 className="text-xl font-bold text-slate-800">Lunea</h1></div>
-                                <button onClick={()=>setView('settings')}><IconSettings c="w-6 h-6 text-slate-400"/></button>
-                            </header>
-                            <div className="rounded-[2rem] p-6 mb-6 text-center bg-white shadow-sm border border-slate-100">
+                            <div className={`rounded-[2rem] p-6 mb-6 text-center shadow-sm border ${dark?'bg-slate-900 border-slate-800':'bg-white border-slate-100'}`}>
                                 <h2 className="text-xs font-bold uppercase text-slate-400 mb-2">{new Date().toLocaleDateString('es-ES', {weekday:'long', day:'numeric'})}</h2>
                                 <div className="text-5xl font-black text-slate-800 mb-1">{getCycleDay(toKey(new Date())) || '?'}</div>
                                 <div className="text-sm text-slate-500 mb-4">Día del Ciclo</div>
@@ -294,45 +319,37 @@
                             </div>
                             {renderCalendar()}
                         </div>
-                    )}
-
-                    {view === 'report' && (
-                        <div className="p-6 max-w-md mx-auto animate-in pb-24">
-                            <div className="flex justify-between"><button onClick={()=>setView('calendar')}><IconLeft c="w-6 h-6"/></button><h2 className="text-xl font-bold">Salud & IA</h2></div>
-                            <div className="p-6 rounded-3xl border bg-white shadow-sm mt-4">
-                                <div className="flex gap-2 items-center text-indigo-500 font-bold mb-2"><IconSparkles c="w-5 h-5"/> Lunea AI</div>
+                    ) : view === 'report' ? (
+                        <div className="max-w-md mx-auto p-6 space-y-6 animate-in pb-24">
+                            <div className="flex justify-between"><button onClick={()=>setView('calendar')}><IconLeft className="w-6 h-6"/></button><h2 className="text-xl font-bold">Salud & IA</h2></div>
+                            <div className={`p-6 rounded-3xl border ${dark?'bg-slate-900 border-slate-800':'bg-white shadow-sm'}`}>
+                                <div className="flex gap-2 items-center text-indigo-500 font-bold mb-2"><IconSparkles className="w-5 h-5"/> Lunea AI</div>
                                 {getInsights().map((t,i)=><p key={i} className="text-sm text-slate-600 mb-1">• {t}</p>)}
                             </div>
-                            <button onClick={()=>setView('pdf')} className="w-full py-3 mt-4 rounded-xl font-bold bg-rose-500 text-white flex justify-center gap-2 mb-4"><IconFileText c="w-5 h-5"/> Ver Reporte PDF</button>
-                            <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 mb-4">
+                            <button onClick={()=>setView('pdf')} className={`w-full py-3 rounded-xl font-bold ${theme.light} ${theme.text} flex justify-center gap-2`}><IconFileText className="w-5 h-5"/> Ver Reporte PDF</button>
+                            <div className={`p-6 rounded-3xl border ${dark?'bg-slate-900 border-slate-800':'bg-white shadow-sm'}`}>
                                 <h3 className="font-bold mb-2">Temperatura</h3>
                                 <SimpleChart data={Object.keys(user.logs).sort().slice(-14).map(k=>({val: user.logs[k].temp})).filter(x=>x.val)} color="#f43f5e" minVal={35} maxVal={38} />
                             </div>
-                            <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
+                            <div className={`p-6 rounded-3xl border ${dark?'bg-slate-900 border-slate-800':'bg-white shadow-sm'}`}>
                                 <h3 className="font-bold mb-2">Peso</h3>
                                 <SimpleChart data={Object.keys(user.logs).sort().slice(-14).map(k=>({val: user.logs[k].weight})).filter(x=>x.val)} color="#14b8a6" minVal={40} maxVal={100} />
                             </div>
                         </div>
-                    )}
-
-                    {view === 'year' && renderYear()}
-
-                    {view === 'settings' && (
+                    ) : view === 'year' ? renderYear() : (
                         <div className="p-6 max-w-md mx-auto animate-in">
-                            <div className="flex justify-between mb-6"><button onClick={()=>setView('calendar')}><IconLeft c="w-6 h-6"/></button><h2 className="text-xl font-bold">Ajustes</h2><div/></div>
-                            
-                            <div className="bg-white p-4 rounded-xl shadow-sm mb-4">
-                                <div className="flex justify-between mb-4 font-bold"><h3>Usuarios</h3><button onClick={handleAddUser}><IconPlus c="w-5 h-5"/></button></div>
+                            <div className="flex justify-between mb-6"><button onClick={()=>setView('calendar')}><IconLeft className="w-6 h-6"/></button><h2 className="text-xl font-bold">Ajustes</h2><div/></div>
+                            <div className={`p-4 rounded-xl mb-4 ${dark?'bg-slate-900':'bg-white shadow-sm'}`}>
+                                <div className="flex justify-between mb-4 font-bold"><h3>Usuarios</h3><button onClick={handleAddUser}><IconPlus className="w-5 h-5"/></button></div>
                                 {db.users.map(u=><div key={u.id} className="flex justify-between items-center py-2 border-b last:border-0">
                                     <button onClick={()=>setDb({...db, currentUserId:u.id})} className={u.id===db.currentUserId?'text-rose-500 font-bold':''}>{u.name}</button>
                                     <div className="flex gap-2">
-                                        <button onClick={()=>handleEditUser(u.id)} className="text-slate-400"><IconEdit c="w-4 h-4"/></button>
-                                        {db.users.length>1 && <button onClick={()=>handleDeleteUser(u.id)} className="text-red-400"><IconTrash c="w-4 h-4"/></button>}
+                                        <button onClick={()=>handleEditUser(u.id)} className="text-slate-400"><IconEdit className="w-4 h-4"/></button>
+                                        {db.users.length>1 && <button onClick={()=>handleDeleteUser(u.id)} className="text-red-400"><IconTrash className="w-4 h-4"/></button>}
                                     </div>
                                 </div>)}
                             </div>
-                            
-                            <div className="bg-white p-4 rounded-xl shadow-sm mb-4">
+                            <div className={`p-4 rounded-xl mb-4 ${dark?'bg-slate-900':'bg-white shadow-sm'}`}>
                                 <h3 className="font-bold mb-4">Ciclo</h3>
                                 <div className="space-y-4">
                                     <label className="block text-sm">Inicio: <input type="date" value={user.config.lastPeriod} onChange={(e)=>updateConfig('lastPeriod', e.target.value)} className="border p-1 rounded ml-2"/></label>
@@ -342,10 +359,11 @@
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div className="bg-white p-4 rounded-xl shadow-sm mb-4">
+                            <div className={`p-4 rounded-xl mb-4 ${dark?'bg-slate-900':'bg-white shadow-sm'}`}>
                                 <h3 className="font-bold mb-3">Datos y App</h3>
+                                <div className="flex gap-2 mb-4">{Object.keys(THEMES).map(k=><button key={k} onClick={()=>setDb({...db, theme:k})} className={`w-6 h-6 rounded-full ${THEMES[k].bg} ${db.theme===k?'ring-2 ring-gray-400':''}`}/>)}</div>
                                 <div className="flex justify-between items-center mb-4">
+                                    {db.pin ? <button onClick={()=>setDb({...db, pin:null})} className="text-red-500">Quitar PIN</button> : <button onClick={()=>setShowPinSetup(true)} className="text-indigo-500 font-bold">Poner PIN</button>}
                                     <button onClick={()=>setDb({...db, showTutorial:true})} className="underline">Ver Tutorial</button>
                                 </div>
                                 <div className="flex gap-2 text-xs"><button onClick={handleExport} className="flex-1 py-2 border rounded">Exportar</button><button onClick={()=>fileRef.current.click()} className="flex-1 py-2 border rounded">Importar</button><input type="file" ref={fileRef} onChange={handleImport} className="hidden"/></div>
@@ -356,9 +374,9 @@
                     {/* NAV */}
                     {view !== 'pdf' && (
                         <div className="fixed bottom-0 w-full bg-white border-t p-2 flex justify-around z-40 no-print">
-                            <button onClick={()=>setView('calendar')} className={view==='calendar'?'text-rose-500':'text-slate-400'}><IconCalendar c="w-6 h-6"/></button>
-                            <button onClick={()=>setView('year')} className={view==='year'?'text-rose-500':'text-slate-400'}><IconGrid c="w-6 h-6"/></button>
-                            <button onClick={()=>setView('report')} className={view==='report'?'text-rose-500':'text-slate-400'}><IconActivity c="w-6 h-6"/></button>
+                            <button onClick={()=>setView('calendar')} className={view==='calendar'?'text-rose-500':'text-slate-400'}><IconCalendar className="w-6 h-6"/></button>
+                            <button onClick={()=>setView('year')} className={view==='year'?'text-rose-500':'text-slate-400'}><IconGrid className="w-6 h-6"/></button>
+                            <button onClick={()=>setView('report')} className={view==='report'?'text-rose-500':'text-slate-400'}><IconActivity className="w-6 h-6"/></button>
                         </div>
                     )}
 
@@ -374,7 +392,7 @@
                                 {/* SALUD COMPLETA */}
                                 <div className="grid grid-cols-2 gap-4 mb-4">
                                     <div className="bg-blue-50 p-4 rounded-xl flex flex-col items-center">
-                                        <div className="text-blue-500 font-bold text-xs mb-2 flex gap-1"><IconDroplet c="w-4 h-4"/> AGUA</div>
+                                        <div className="text-blue-500 font-bold text-xs mb-2 flex gap-1"><IconDroplet className="w-4 h-4"/> AGUA</div>
                                         <div className="flex items-center gap-3">
                                             <button onClick={()=>updateLog(selDay.k,'water',Math.max(0,(user.logs[selDay.k]?.water||0)-1))} className="w-8 h-8 bg-white rounded-full font-bold shadow">-</button>
                                             <span className="font-bold text-xl">{user.logs[selDay.k]?.water||0}</span>
@@ -382,7 +400,7 @@
                                         </div>
                                     </div>
                                     <div className="bg-indigo-50 p-4 rounded-xl flex flex-col items-center">
-                                        <div className="text-indigo-500 font-bold text-xs mb-2 flex gap-1"><IconMoon c="w-4 h-4"/> SUEÑO</div>
+                                        <div className="text-indigo-500 font-bold text-xs mb-2 flex gap-1"><IconMoon className="w-4 h-4"/> SUEÑO</div>
                                         <div className="flex items-center gap-3">
                                             <button onClick={()=>updateLog(selDay.k,'sleep',Math.max(0,(user.logs[selDay.k]?.sleep||0)-1))} className="w-8 h-8 bg-white rounded-full font-bold shadow">-</button>
                                             <span className="font-bold text-xl">{user.logs[selDay.k]?.sleep||0}h</span>
@@ -393,15 +411,15 @@
 
                                 <div className="flex gap-4 mb-4">
                                     <button onClick={()=>updateLog(selDay.k,'pill',!user.logs[selDay.k]?.pill)} className={`flex-1 p-4 rounded-xl flex items-center justify-center gap-2 border ${user.logs[selDay.k]?.pill?'bg-green-100 border-green-500 text-green-700':'border-slate-100'}`}>
-                                        {user.logs[selDay.k]?.pill?<IconCheck c="w-5 h-5"/>:<IconPill c="w-5 h-5"/>} <span className="font-bold text-sm">Pastilla</span>
+                                        {user.logs[selDay.k]?.pill?<IconCheck className="w-5 h-5"/>:<IconPill className="w-5 h-5"/>} <span className="font-bold text-sm">Pastilla</span>
                                     </button>
                                     <div className="flex-1 p-4 rounded-xl flex items-center justify-between border border-slate-100">
-                                        <IconScale c="w-5 h-5 opacity-50"/><input type="number" placeholder="Kg" value={user.logs[selDay.k]?.weight||''} onChange={(e)=>updateLog(selDay.k,'weight',e.target.value)} className="w-16 text-right font-bold outline-none"/>
+                                        <IconScale className="w-5 h-5 opacity-50"/><input type="number" placeholder="Kg" value={user.logs[selDay.k]?.weight||''} onChange={(e)=>updateLog(selDay.k,'weight',e.target.value)} className="w-16 text-right font-bold outline-none"/>
                                     </div>
                                 </div>
 
                                 <div className="p-4 rounded-xl mb-4 flex items-center justify-between border border-slate-100">
-                                    <div className="flex gap-2 text-rose-400 font-bold text-sm"><IconThermometer c="w-5 h-5"/> Temp</div>
+                                    <div className="flex gap-2 text-rose-400 font-bold text-sm"><IconThermometer className="w-5 h-5"/> Temp</div>
                                     <input type="number" step="0.1" placeholder="36.5" value={user.logs[selDay.k]?.temp||''} onChange={(e)=>updateLog(selDay.k,'temp',e.target.value)} className="w-20 text-right font-bold text-lg outline-none"/>
                                 </div>
 
@@ -413,8 +431,8 @@
                                 <div className="grid grid-cols-4 gap-2">
                                     {SYMPTOMS.map(s => {
                                         const active = (user.logs[selDay.k]?.symptoms||[]).includes(s.id);
-                                        const SIcon = s.I;
-                                        return <button key={s.id} onClick={()=>{const curr=user.logs[selDay.k]?.symptoms||[]; updateLog(selDay.k,'symptoms',active?curr.filter(x=>x!==s.id):[...curr,s.id])}} className={`p-3 rounded-xl border flex flex-col items-center gap-1 ${active?'bg-rose-100 border-rose-200 text-rose-600':'border-slate-100 text-slate-400'}`}><SIcon c="w-6 h-6"/><span className="text-[10px] font-medium">{s.label}</span></button>
+                                        const SIcon = s.Icon;
+                                        return <button key={s.id} onClick={()=>{const curr=user.logs[selDay.k]?.symptoms||[]; updateLog(selDay.k,'symptoms',active?curr.filter(x=>x!==s.id):[...curr,s.id])}} className={`p-3 rounded-xl border flex flex-col items-center gap-1 ${active?`${theme.light} border-transparent ${theme.text}`:(dark?'border-slate-700':'border-slate-100')}`}><SIcon className="w-6 h-6"/><span className="text-[10px] font-medium">{s.label}</span></button>
                                     })}
                                 </div>
                             </div>
