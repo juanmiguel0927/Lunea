@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Lunea - Rastreador de Ciclo</title>
+    <title>Lunea Master - Ciclo y Salud</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- React y ReactDOM -->
+    <!-- React & ReactDOM -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     
@@ -16,25 +16,26 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
-        body { -webkit-tap-highlight-color: transparent; background-color: #f8fafc; color: #1e293b; }
-        .spinner { border: 4px solid #f3f3f3; border-top: 4px solid #6366f1; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        ::-webkit-scrollbar { width: 0px; background: transparent; }
-        /* Animación suave para celdas */
+        body { -webkit-tap-highlight-color: transparent; background-color: #f8fafc; color: #1e293b; font-family: 'Segoe UI', system-ui, sans-serif; }
         .day-cell { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
         .day-cell:active { transform: scale(0.90); }
+        
+        /* Estilos de Impresión para PDF */
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body { background: white; color: black; }
+            #root { height: auto; overflow: visible; }
+        }
+        .print-only { display: none; }
     </style>
 </head>
 <body>
 
-    <!-- Contenedor Principal -->
     <div id="root">
         <div style="height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-            <div class="spinner"></div>
-            <p style="margin-top: 20px; font-family: sans-serif; color: #64748b;">Restaurando Lunea...</p>
-            <button onclick="localStorage.clear(); window.location.reload()" style="margin-top: 40px; padding: 8px 16px; background: #ef4444; color: white; border: none; border-radius: 6px; font-size: 12px; cursor: pointer;">
-                Restablecer datos (Si falla)
-            </button>
+            <p style="color: #64748b;">Cargando Lunea Master...</p>
+            <button onclick="localStorage.clear(); window.location.reload()" style="margin-top: 20px; padding: 10px; background: #ef4444; color: white; border-radius: 8px;">Restablecer si falla</button>
         </div>
     </div>
 
@@ -42,45 +43,43 @@
         const { useState, useEffect, useMemo, useRef } = React;
 
         // --- ICONOS ---
-        const Icon = ({ children, className }) => (
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-                {children}
-            </svg>
-        );
-
+        const Icon = ({ path, className }) => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{path}</svg>;
         const Icons = {
-            Heart: (p) => <Icon {...p}><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" /></Icon>,
-            Calendar: (p) => <Icon {...p}><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></Icon>,
-            Settings: (p) => <Icon {...p}><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.74v-.47a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.35a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" /><circle cx="12" cy="12" r="3" /></Icon>,
-            ChevronLeft: (p) => <Icon {...p}><polyline points="15 18 9 12 15 6" /></Icon>,
-            ChevronRight: (p) => <Icon {...p}><polyline points="9 18 15 12 9 6" /></Icon>,
-            Sun: (p) => <Icon {...p}><circle cx="12" cy="12" r="5" /><line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" /><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" /><line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" /><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" /></Icon>,
-            Moon: (p) => <Icon {...p}><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></Icon>,
-            Droplet: (p) => <Icon {...p}><path d="M12 2.69l5.74 5.88a6 6 0 0 1-8.48 8.48A6 6 0 0 1 5.25 9.56L12 2.69z" /></Icon>,
-            Activity: (p) => <Icon {...p}><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" /></Icon>,
-            Smile: (p) => <Icon {...p}><circle cx="12" cy="12" r="10" /><path d="M8 14s1.5 2 4 2 4-2 4-2" /><line x1="9" y1="9" x2="9.01" y2="9" /><line x1="15" y1="9" x2="15.01" y2="9" /></Icon>,
-            Frown: (p) => <Icon {...p}><circle cx="12" cy="12" r="10" /><path d="M16 16s-1.5-2-4-2-4 2-4 2" /><line x1="9" y1="9" x2="9.01" y2="9" /><line x1="15" y1="9" x2="15.01" y2="9" /></Icon>,
-            Zap: (p) => <Icon {...p}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></Icon>,
-            CloudRain: (p) => <Icon {...p}><line x1="16" y1="13" x2="16" y2="21" /><line x1="8" y1="13" x2="8" y2="21" /><line x1="12" y1="15" x2="12" y2="23" /><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25" /></Icon>,
-            Thermometer: (p) => <Icon {...p}><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z" /></Icon>,
-            Scale: (p) => <Icon {...p}><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" /><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" /><path d="M7 21h10" /><path d="M12 3v18" /><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2" /></Icon>,
-            Pill: (p) => <Icon {...p}><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z" /><path d="m8.5 8.5 7 7" /></Icon>,
-            CheckCircle: (p) => <Icon {...p}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></Icon>,
-            Eye: (p) => <Icon {...p}><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></Icon>,
-            EyeOff: (p) => <Icon {...p}><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" /><line x1="1" y1="1" x2="23" y2="23" /></Icon>,
-            Users: (p) => <Icon {...p}><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></Icon>,
-            Trash: (p) => <Icon {...p}><polyline points="3 6 5 6 21 6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></Icon>,
-            Download: (p) => <Icon {...p}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></Icon>,
-            Upload: (p) => <Icon {...p}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" /></Icon>,
-            Plus: (p) => <Icon {...p}><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></Icon>
+            Heart: (p) => <Icon {...p} path={<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />} />,
+            Calendar: (p) => <Icon {...p} path={<><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></>} />,
+            Settings: (p) => <Icon {...p} path={<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.74v-.47a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.35a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />} />,
+            ChevronLeft: (p) => <Icon {...p} path={<polyline points="15 18 9 12 15 6" />} />,
+            ChevronRight: (p) => <Icon {...p} path={<polyline points="9 18 15 12 9 6" />} />,
+            Sun: (p) => <Icon {...p} path={<><circle cx="12" cy="12" r="5" /><line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" /><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" /><line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" /><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" /></>} />,
+            Moon: (p) => <Icon {...p} path={<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />} />,
+            Droplet: (p) => <Icon {...p} path={<path d="M12 2.69l5.74 5.88a6 6 0 0 1-8.48 8.48A6 6 0 0 1 5.25 9.56L12 2.69z" />} />,
+            Activity: (p) => <Icon {...p} path={<polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />} />,
+            Smile: (p) => <Icon {...p} path={<><circle cx="12" cy="12" r="10" /><path d="M8 14s1.5 2 4 2 4-2 4-2" /></>} />,
+            Frown: (p) => <Icon {...p} path={<><circle cx="12" cy="12" r="10" /><path d="M16 16s-1.5-2-4-2-4 2-4 2" /><line x1="9" y1="9" x2="9.01" y2="9" /><line x1="15" y1="9" x2="15.01" y2="9" /></>} />,
+            Zap: (p) => <Icon {...p} path={<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />} />,
+            CloudRain: (p) => <Icon {...p} path={<><line x1="16" y1="13" x2="16" y2="21" /><line x1="8" y1="13" x2="8" y2="21" /><line x1="12" y1="15" x2="12" y2="23" /><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25" /></>} />,
+            Thermometer: (p) => <Icon {...p} path={<path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z" />} />,
+            Scale: (p) => <Icon {...p} path={<><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" /><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" /><path d="M7 21h10" /><path d="M12 3v18" /><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2" /></>} />,
+            Pill: (p) => <Icon {...p} path={<><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z" /><path d="m8.5 8.5 7 7" /></>} />,
+            CheckCircle: (p) => <Icon {...p} path={<><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></>} />,
+            Eye: (p) => <Icon {...p} path={<><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></>} />,
+            EyeOff: (p) => <Icon {...p} path={<><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" /><line x1="1" y1="1" x2="23" y2="23" /></>} />,
+            Users: (p) => <Icon {...p} path={<><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></>} />,
+            Trash: (p) => <Icon {...p} path={<><polyline points="3 6 5 6 21 6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></>} />,
+            Download: (p) => <Icon {...p} path={<><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></>} />,
+            Upload: (p) => <Icon {...p} path={<><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" /></>} />,
+            Plus: (p) => <Icon {...p} path={<><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></>} />,
+            Lock: (p) => <Icon {...p} path={<><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></>} />,
+            FileText: (p) => <Icon {...p} path={<><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><polyline points="10 9 9 9 8 9" /></>} />,
+            Palette: (p) => <Icon {...p} path={<><circle cx="13.5" cy="6.5" r=".5" /><circle cx="17.5" cy="10.5" r=".5" /><circle cx="8.5" cy="7.5" r=".5" /><circle cx="6.5" cy="12.5" r=".5" /><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z" /></>} />
         };
 
-        const PHASES_DATA = {
-            MENSTRUAL: { id: 'menstrual', label: 'Menstruación', discreteLabel: 'Fase 1', color: 'bg-rose-500', darkColor: 'bg-rose-600', discreteColor: 'bg-slate-500', lightColor: 'bg-rose-50', darkLightColor: 'bg-rose-900/20', textColor: 'text-rose-600', darkTextColor: 'text-rose-300', discreteText: 'text-slate-600', discreteLight: 'bg-slate-100', desc: 'Renovación.', tips: 'Descansa e hidrátate.' },
-            FOLLICULAR: { id: 'follicular', label: 'Fase Folicular', discreteLabel: 'Fase 2', color: 'bg-pink-300', darkColor: 'bg-pink-500', discreteColor: 'bg-slate-400', lightColor: 'bg-pink-50', darkLightColor: 'bg-pink-900/20', textColor: 'text-pink-600', darkTextColor: 'text-pink-300', discreteText: 'text-slate-500', discreteLight: 'bg-slate-50', desc: 'Preparación.', tips: 'Energía creativa.' },
-            FERTILE: { id: 'fertile', label: 'Ventana Fértil', discreteLabel: 'Fase 3', color: 'bg-purple-400', darkColor: 'bg-purple-500', discreteColor: 'bg-slate-400', lightColor: 'bg-purple-50', darkLightColor: 'bg-purple-900/20', textColor: 'text-purple-600', darkTextColor: 'text-purple-300', discreteText: 'text-slate-600', discreteLight: 'bg-slate-100', desc: 'Alta fertilidad.', tips: 'Sociabilidad alta.' },
-            OVULATION: { id: 'ovulation', label: 'Ovulación', discreteLabel: 'Pico', color: 'bg-purple-600', darkColor: 'bg-purple-600', discreteColor: 'bg-slate-600', lightColor: 'bg-purple-100', darkLightColor: 'bg-purple-900/30', textColor: 'text-purple-700', darkTextColor: 'text-purple-300', discreteText: 'text-slate-800', discreteLight: 'bg-slate-200', desc: 'Liberación óvulo.', tips: 'Posible dolor leve.' },
-            LUTEAL: { id: 'luteal', label: 'Fase Lútea', discreteLabel: 'Fase 4', color: 'bg-amber-300', darkColor: 'bg-amber-500', discreteColor: 'bg-slate-500', lightColor: 'bg-amber-50', darkLightColor: 'bg-amber-900/10', textColor: 'text-amber-600', darkTextColor: 'text-amber-300', discreteText: 'text-slate-500', discreteLight: 'bg-slate-50', desc: 'Pre-ciclo.', tips: 'Prioriza el sueño.' }
+        const THEMES = {
+            ROSE: { id: 'rose', primary: 'bg-rose-500', text: 'text-rose-600', light: 'bg-rose-50', ring: 'ring-rose-500' },
+            TEAL: { id: 'teal', primary: 'bg-teal-500', text: 'text-teal-600', light: 'bg-teal-50', ring: 'ring-teal-500' },
+            VIOLET: { id: 'violet', primary: 'bg-violet-500', text: 'text-violet-600', light: 'bg-violet-50', ring: 'ring-violet-500' },
+            BLUE: { id: 'blue', primary: 'bg-blue-500', text: 'text-blue-600', light: 'bg-blue-50', ring: 'ring-blue-500' },
+            ORANGE: { id: 'orange', primary: 'bg-orange-500', text: 'text-orange-600', light: 'bg-orange-50', ring: 'ring-orange-500' }
         };
 
         const SYMPTOMS_LIST = [
@@ -94,7 +93,33 @@
             { id: 'tired', label: 'Cansada', icon: Icons.Frown },
         ];
 
-        // Componente Gráfico simple
+        const PinPad = ({ onUnlock, onSetPin, isSetting, onCancel }) => {
+            const [input, setInput] = useState('');
+            const handlePress = (n) => {
+                const next = input + n;
+                setInput(next);
+                if(next.length === 4) {
+                    if(isSetting) onSetPin(next);
+                    else onUnlock(next);
+                    setInput('');
+                }
+            };
+            return (
+                <div className="fixed inset-0 bg-slate-900 z-50 flex flex-col items-center justify-center text-white">
+                    <h2 className="text-xl font-bold mb-8">{isSetting ? 'Crea un PIN' : 'Introduce PIN'}</h2>
+                    <div className="flex gap-4 mb-8">
+                        {[0,1,2,3].map(i => <div key={i} className={`w-4 h-4 rounded-full ${input.length > i ? 'bg-white' : 'bg-slate-700'}`}></div>)}
+                    </div>
+                    <div className="grid grid-cols-3 gap-6">
+                        {[1,2,3,4,5,6,7,8,9].map(n => <button key={n} onClick={() => handlePress(n.toString())} className="w-16 h-16 rounded-full bg-slate-800 text-2xl font-bold active:bg-indigo-600">{n}</button>)}
+                        <div/>
+                        <button onClick={() => handlePress('0')} className="w-16 h-16 rounded-full bg-slate-800 text-2xl font-bold active:bg-indigo-600">0</button>
+                        <button onClick={() => isSetting && onCancel ? onCancel() : setInput('')} className="w-16 h-16 rounded-full flex items-center justify-center text-slate-400"><Icons.ChevronLeft className="w-8 h-8"/></button>
+                    </div>
+                </div>
+            );
+        };
+
         const SimpleChart = ({ data, colorClass, minVal, maxVal, isDark }) => {
             if (!data || data.length < 2) return <div className={`h-32 flex items-center justify-center text-xs rounded-xl border border-dashed ${isDark ? 'bg-slate-800 border-slate-700 text-slate-500' : 'bg-slate-50 border-slate-200 text-slate-400'}`}>Registra al menos 2 datos</div>;
             const points = data.map((d, i) => {
@@ -121,404 +146,320 @@
         const App = () => {
             const [db, setDb] = useState(() => {
                 try {
-                    const saved = localStorage.getItem('lunea_db');
+                    const saved = localStorage.getItem('lunea_master_db');
                     if (saved) return JSON.parse(saved);
-                } catch (e) {
-                    console.error("Error cargando datos, reiniciando DB");
-                }
-                const defaultUserId = Date.now().toString();
+                } catch(e) {}
+                const uid = Date.now().toString();
                 return {
-                    currentUserId: defaultUserId,
+                    currentUserId: uid,
                     users: [{
-                        id: defaultUserId,
-                        name: "Usuario Principal",
-                        userData: { lastPeriodStart: new Date().toISOString().split('T')[0], baseCycleLength: 28, periodLength: 5, isRegular: true, trackPill: false, history: [] },
-                        symptomsLog: {},
-                        dailyLog: {}
+                        id: uid, name: 'Usuario Principal',
+                        config: { lastPeriod: new Date().toISOString().split('T')[0], cycleLen: 28, periodLen: 5, regular: true, pill: false },
+                        logs: {} 
                     }],
-                    theme: 'light'
+                    darkMode: false,
+                    theme: 'rose',
+                    pin: null
                 };
             });
 
-            const [darkMode, setDarkMode] = useState(db.theme === 'dark');
+            const [locked, setLocked] = useState(!!db.pin);
             const [view, setView] = useState('calendar');
-            const [showSettings, setShowSettings] = useState(false);
-            const [selectedDayInfo, setSelectedDayInfo] = useState(null);
+            const [selectedDay, setSelectedDay] = useState(null);
+            const [currentMonth, setCurrentMonth] = useState(new Date());
             const [privacyMode, setPrivacyMode] = useState(false);
-            const [currentDate, setCurrentDate] = useState(new Date());
+            const [showPinSetup, setShowPinSetup] = useState(false);
             const fileInputRef = useRef(null);
 
-            useEffect(() => {
-                try {
-                    localStorage.setItem('lunea_db', JSON.stringify(db));
-                } catch (e) { console.error("Error guardando datos"); }
-            }, [db]);
+            useEffect(() => localStorage.setItem('lunea_master_db', JSON.stringify(db)), [db]);
+
+            const user = useMemo(() => db.users.find(u => u.id === db.currentUserId) || db.users[0], [db]);
+            const currentTheme = THEMES[db.theme.toUpperCase()] || THEMES.ROSE;
+            const darkMode = db.darkMode;
 
             useEffect(() => {
-                setDarkMode(db.theme === 'dark');
-                if (db.theme === 'dark') {
-                    document.body.classList.add('bg-slate-950', 'text-slate-100');
-                    document.body.classList.remove('bg-slate-50', 'text-slate-800');
-                } else {
-                    document.body.classList.add('bg-slate-50', 'text-slate-800');
-                    document.body.classList.remove('bg-slate-950', 'text-slate-100');
-                }
-            }, [db.theme]);
+                if(darkMode) { document.body.classList.add('bg-slate-950', 'text-slate-100'); document.body.classList.remove('bg-slate-50', 'text-slate-800'); }
+                else { document.body.classList.add('bg-slate-50', 'text-slate-800'); document.body.classList.remove('bg-slate-950', 'text-slate-100'); }
+            }, [darkMode]);
 
-            const currentUser = useMemo(() => db.users.find(u => u.id === db.currentUserId) || db.users[0], [db]);
+            // LÓGICA
+            const toKey = (d) => { const date=new Date(d); date.setHours(0,0,0,0); return new Date(date.getTime()-date.getTimezoneOffset()*60000).toISOString().split('T')[0]; };
+            
+            const activeCycleLength = user.config.cycleLen;
 
-            const updateCurrentUser = (field, value) => {
-                setDb(prev => ({
-                    ...prev,
-                    users: prev.users.map(u => u.id === prev.currentUserId ? { ...u, [field]: value } : u)
-                }));
-            };
-
-            const updateUserData = (subField, value) => {
-                setDb(prev => ({
-                    ...prev,
-                    users: prev.users.map(u => u.id === prev.currentUserId ? { ...u, userData: { ...u.userData, [subField]: value } } : u)
-                }));
-            };
-
-            const handleAddUser = () => {
-                const name = prompt("Nombre:");
-                if (!name) return;
-                const newId = Date.now().toString();
-                setDb(prev => ({
-                    ...prev,
-                    users: [...prev.users, {
-                        id: newId,
-                        name: name,
-                        userData: { lastPeriodStart: new Date().toISOString().split('T')[0], baseCycleLength: 28, periodLength: 5, isRegular: true, trackPill: false, history: [] },
-                        symptomsLog: {},
-                        dailyLog: {}
-                    }],
-                    currentUserId: newId
-                }));
-            };
-
-            const handleDeleteUser = (id) => {
-                if (db.users.length <= 1) return alert("No puedes borrar el único usuario.");
-                if (confirm("¿Borrar usuario?")) {
-                    setDb(prev => {
-                        const newUsers = prev.users.filter(u => u.id !== id);
-                        return { ...prev, users: newUsers, currentUserId: prev.currentUserId === id ? newUsers[0].id : prev.currentUserId };
-                    });
-                }
-            };
-
-            const handleExport = () => {
-                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db));
-                const node = document.createElement('a');
-                node.href = dataStr;
-                node.download = "lunea_backup.json";
-                document.body.appendChild(node);
-                node.click();
-                node.remove();
-            };
-
-            const handleFileChange = (e) => {
-                const reader = new FileReader();
-                reader.readAsText(e.target.files[0], "UTF-8");
-                reader.onload = (evt) => {
-                    try {
-                        const imported = JSON.parse(evt.target.result);
-                        if (imported.users) { setDb(imported); alert("Importado con éxito."); }
-                    } catch (err) { alert("Error al leer archivo."); }
-                };
-            };
-
-            const formatDateKey = (d) => {
-                const date = new Date(d);
-                date.setHours(0,0,0,0);
-                return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().split('T')[0];
-            };
-
-            const activeCycleLength = useMemo(() => {
-                if (!currentUser.userData.isRegular && currentUser.userData.history.length >= 2) {
-                    const recent = currentUser.userData.history.slice(-6);
-                    return Math.round(recent.reduce((a, b) => a + b.length, 0) / recent.length);
-                }
-                return currentUser.userData.baseCycleLength;
-            }, [currentUser]);
-
-            const getCycleDay = (target) => {
-                const start = new Date(currentUser.userData.lastPeriodStart); start.setHours(0,0,0,0);
-                const t = new Date(target); t.setHours(0,0,0,0);
-                if (t < start) return null;
-                const diff = Math.floor((t - start) / 86400000);
+            const getCycleDay = (dateStr) => {
+                const start = new Date(user.config.lastPeriod); start.setHours(0,0,0,0);
+                const target = new Date(dateStr); target.setHours(0,0,0,0);
+                if (target < start) return null;
+                const diff = Math.floor((target - start) / 86400000);
                 return (diff % activeCycleLength) + 1;
             };
 
             const getPhase = (day) => {
                 if (!day) return null;
                 const ov = activeCycleLength - 14;
-                if (day <= currentUser.userData.periodLength) return PHASES_DATA.MENSTRUAL;
-                if (day >= ov - 5 && day < ov) return PHASES_DATA.FERTILE;
-                if (day === ov) return PHASES_DATA.OVULATION;
-                if (day > ov + 1) return PHASES_DATA.LUTEAL;
-                if (day > currentUser.userData.periodLength && day < ov - 5) return PHASES_DATA.FOLLICULAR;
-                return PHASES_DATA.LUTEAL;
+                if (day <= user.config.periodLen) return { label: 'Menstruación', color: currentTheme.primary, text: currentTheme.text, light: currentTheme.light };
+                if (day >= ov - 5 && day < ov) return { label: 'Fértil', color: 'bg-purple-400', text: 'text-purple-600', light: 'bg-purple-50' };
+                if (day === ov) return { label: 'Ovulación', color: 'bg-purple-600', text: 'text-purple-700', light: 'bg-purple-100' };
+                if (day > ov + 1) return { label: 'Lútea', color: 'bg-amber-400', text: 'text-amber-600', light: 'bg-amber-50' };
+                if (day > user.config.periodLen && day < ov - 5) return { label: 'Folicular', color: 'bg-pink-300', text: 'text-pink-600', light: 'bg-pink-50' };
+                return { label: 'Lútea', color: 'bg-amber-400', text: 'text-amber-600', light: 'bg-amber-50' };
             };
 
-            const updateDailyLog = (dateKey, field, value) => {
-                const newDailyLog = {
-                    ...currentUser.dailyLog,
-                    [dateKey]: { ...currentUser.dailyLog[dateKey], [field]: value }
-                };
-                updateCurrentUser('dailyLog', newDailyLog);
+            const updateLog = (dateKey, field, value) => {
+                const newLogs = { ...user.logs, [dateKey]: { ...(user.logs[dateKey] || {}), [field]: value } };
+                setDb(prev => ({ ...prev, users: prev.users.map(u => u.id === prev.currentUserId ? { ...u, logs: newLogs } : u) }));
             };
 
-            const toggleSymptom = (dateKey, symptomId) => {
-                const currentLog = currentUser.symptomsLog[dateKey] || [];
-                const newLog = currentLog.includes(symptomId) 
-                    ? currentLog.filter(id => id !== symptomId) 
-                    : [...currentLog, symptomId];
-                
-                const newSymptomsLog = { ...currentUser.symptomsLog };
-                if (newLog.length === 0) delete newSymptomsLog[dateKey];
-                else newSymptomsLog[dateKey] = newLog;
-
-                updateCurrentUser('symptomsLog', newSymptomsLog);
+            const updateConfig = (field, value) => {
+                setDb(prev => ({ ...prev, users: prev.users.map(u => u.id === prev.currentUserId ? { ...u, config: { ...u.config, [field]: value } } : u) }));
             };
 
-            const theme = {
-                bg: darkMode ? 'bg-slate-950' : 'bg-slate-50',
-                text: darkMode ? 'text-slate-100' : 'text-slate-800',
-                subText: darkMode ? 'text-slate-400' : 'text-slate-500',
-                card: darkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-100',
-                header: darkMode ? 'bg-slate-950/80 border-slate-800' : 'bg-white/90 border-slate-100',
-                button: darkMode ? 'bg-slate-800 hover:bg-slate-700 text-slate-300' : 'bg-slate-100 hover:bg-slate-200 text-slate-500',
-                input: darkMode ? 'bg-slate-800 border-slate-700 text-white' : 'bg-slate-50 border-slate-200 text-slate-800',
-                tabActive: darkMode ? 'bg-slate-800 shadow text-slate-100' : 'bg-white shadow text-slate-800',
-                tabInactive: darkMode ? 'text-slate-400' : 'text-slate-500',
-                tabBg: darkMode ? 'bg-slate-900/50' : 'bg-slate-200/50',
+            // GESTIÓN
+            const handleAddUser = () => {
+                const name = prompt("Nombre:"); if(!name) return;
+                const uid = Date.now().toString();
+                setDb(p => ({...p, currentUserId: uid, users: [...p.users, { id: uid, name, config: user.config, logs: {} }]}));
             };
 
-            const todayPhase = getPhase(getCycleDay(new Date()));
-            const gradientColor = privacyMode 
-                ? (darkMode ? 'from-slate-800 to-slate-700' : 'from-slate-700 to-slate-500')
-                : (darkMode ? 'from-rose-600 to-orange-600' : 'from-rose-400 to-orange-400');
+            const handleDeleteUser = (id) => {
+                if(db.users.length <= 1) return alert("No puedes borrar el único usuario");
+                if(confirm("¿Borrar usuario?")) setDb(p => ({ ...p, users: p.users.filter(u => u.id !== id), currentUserId: p.currentUserId === id ? p.users.find(u=>u.id!==id).id : p.currentUserId }));
+            };
+
+            const handleNewCycle = () => {
+                if(confirm("¿Iniciar nuevo ciclo hoy?")) {
+                    const today = toKey(new Date());
+                    updateConfig('lastPeriod', today);
+                    // Aquí se podría añadir lógica para guardar en historial
+                    alert("Ciclo iniciado");
+                }
+            };
+
+            const handleExport = () => {
+                const a = document.createElement('a'); a.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db));
+                a.download = "lunea_backup.json"; a.click();
+            };
+
+            const handleImport = (e) => {
+                const reader = new FileReader();
+                reader.onload = (ev) => { try { setDb(JSON.parse(ev.target.result)); alert("Importado"); } catch(er) { alert("Error archivo"); } };
+                reader.readAsText(e.target.files[0]);
+            };
+
+            // VISTAS
+            if (locked) return <PinPad onUnlock={(code) => code === db.pin ? setLocked(false) : alert("PIN Incorrecto")} isSetting={false} />;
+            if (showPinSetup) return <PinPad isSetting={true} onSetPin={(code) => { setDb(p => ({...p, pin: code})); setShowPinSetup(false); alert("PIN Guardado"); }} onCancel={() => setShowPinSetup(false)} />;
+
+            if (view === 'pdf') {
+                return (
+                    <div className="bg-white text-black p-8 min-h-screen">
+                        <div className="flex justify-between items-center mb-8 border-b pb-4">
+                            <h1 className="text-3xl font-bold text-rose-600">Reporte Médico Lunea</h1>
+                            <div className="text-right"><p className="text-sm text-gray-500">{new Date().toLocaleDateString()}</p><p className="font-bold">{user.name}</p></div>
+                        </div>
+                        <div className="mb-8 p-4 bg-gray-50 rounded-xl">
+                            <h2 className="font-bold mb-2">Resumen</h2>
+                            <p>Ciclo promedio: {activeCycleLength} días | Último periodo: {user.config.lastPeriod}</p>
+                        </div>
+                        <table className="w-full text-sm text-left">
+                            <thead><tr className="border-b"><th className="py-2">Fecha</th><th>Fase</th><th>Síntomas</th><th>Notas</th></tr></thead>
+                            <tbody>
+                                {Object.keys(user.logs).sort().reverse().slice(0, 20).map(d => (
+                                    <tr key={d} className="border-b">
+                                        <td className="py-2">{d}</td>
+                                        <td>{getPhase(getCycleDay(d))?.label}</td>
+                                        <td>{(user.logs[d].symptoms || []).join(', ')}</td>
+                                        <td>{user.logs[d].temp ? `T:${user.logs[d].temp}` : ''}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                        <div className="mt-8 text-center no-print"><button onClick={() => window.print()} className="bg-black text-white px-6 py-2 rounded-lg">Imprimir / Guardar PDF</button> <button onClick={() => setView('calendar')} className="ml-4 underline">Volver</button></div>
+                    </div>
+                );
+            }
 
             const renderCalendar = () => {
-                const year = currentDate.getFullYear();
-                const month = currentDate.getMonth();
-                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                const year = currentMonth.getFullYear();
+                const month = currentMonth.getMonth();
+                const daysInMonth = new Date(year, month+1, 0).getDate();
                 const firstDay = new Date(year, month, 1).getDay();
                 const days = [];
                 for(let i=0; i<firstDay; i++) days.push(<div key={`e-${i}`}></div>);
                 for(let i=1; i<=daysInMonth; i++) {
                     const d = new Date(year, month, i);
-                    const k = formatDateKey(d);
-                    const cd = getCycleDay(d);
+                    const k = toKey(d);
+                    const cd = getCycleDay(k);
                     const p = getPhase(cd);
-                    const isToday = k === formatDateKey(new Date());
-                    const log = currentUser.dailyLog[k] || {};
-                    const hasSymp = currentUser.symptomsLog[k];
+                    const log = user.logs[k] || {};
+                    const isToday = k === toKey(new Date());
                     
-                    let bgClass = darkMode ? 'hover:bg-slate-800' : 'hover:bg-slate-50';
-                    let textClass = darkMode ? 'text-slate-400' : 'text-slate-500';
-
-                    if (p) {
-                        if (privacyMode) {
-                            bgClass = darkMode ? 'bg-slate-800' : p.discreteLight;
-                            textClass = darkMode ? 'text-slate-300' : p.discreteText;
-                        } else {
-                            bgClass = darkMode ? p.darkLightColor : p.lightColor;
-                            textClass = darkMode ? p.darkTextColor : p.textColor;
-                        }
-                    }
+                    let bg = darkMode ? 'hover:bg-slate-800' : 'hover:bg-slate-50';
+                    let text = darkMode ? 'text-slate-400' : 'text-slate-500';
+                    if (p) { bg = privacyMode ? (darkMode ? 'bg-slate-800' : 'bg-slate-100') : (darkMode ? 'bg-slate-800' : p.light); text = privacyMode ? 'text-slate-400' : p.text; }
 
                     days.push(
-                        <button key={i} onClick={() => setSelectedDayInfo({ date: d, dateKey: k, phase: p, cycleDay: cd })} 
-                            className={`day-cell h-14 rounded-xl relative flex flex-col items-center justify-center border border-transparent ${bgClass} ${isToday ? 'ring-2 ring-indigo-500 z-10' : ''}`}>
-                            {cd && <span className={`absolute top-1 right-1.5 text-[9px] font-medium opacity-70 ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>{cd}</span>}
-                            <span className={`text-sm font-bold z-10 mb-1 ${textClass}`}>{i}</span>
-                            <div className="absolute bottom-1.5 flex gap-0.5 flex-wrap justify-center px-1">
-                                {p && <div className={`w-1 h-1 rounded-full ${privacyMode ? (darkMode ? 'bg-slate-500' : p.discreteColor) : (darkMode ? p.darkColor : p.color)}`}></div>}
-                                {hasSymp && <div className="w-1 h-1 rounded-full bg-slate-400"></div>}
-                                {log.water >= 6 && <div className="w-1 h-1 rounded-full bg-blue-400"></div>}
-                                {log.pillTaken && <div className="w-1 h-1 rounded-full bg-green-500"></div>}
+                        <button key={k} onClick={() => setSelectedDay({date: d, k, p, cd})} 
+                            className={`day-cell h-16 rounded-xl relative flex flex-col items-center justify-center border border-transparent ${bg} ${isToday ? `ring-2 ${currentTheme.ring} z-10` : ''}`}>
+                            {cd && <span className={`absolute top-1 right-1.5 text-[10px] font-bold opacity-60 ${text}`}>{cd}</span>}
+                            <span className={`text-lg font-bold ${text}`}>{i}</span>
+                            <div className="absolute bottom-1.5 flex gap-1">
+                                {p && <div className={`w-1.5 h-1.5 rounded-full ${privacyMode ? 'bg-slate-400' : p.color}`}></div>}
+                                {(log.water>0 || log.sleep) && <div className="w-1.5 h-1.5 rounded-full bg-blue-400"></div>}
                             </div>
                         </button>
                     );
                 }
                 return (
-                    <div className={`rounded-3xl p-5 shadow-sm border mb-6 ${theme.card}`}>
+                    <div className={`p-4 rounded-3xl mb-6 ${darkMode ? 'bg-slate-900' : 'bg-white shadow-sm'}`}>
                         <div className="flex justify-between items-center mb-4">
-                            <button onClick={() => setCurrentDate(new Date(year, month - 1))} className={`p-2 rounded-full ${theme.button}`}><Icons.ChevronLeft className="w-5 h-5"/></button>
-                            <span className={`font-bold capitalize ${theme.text}`}>{currentDate.toLocaleString('es-ES', { month: 'long', year: 'numeric' })}</span>
-                            <button onClick={() => setCurrentDate(new Date(year, month + 1))} className={`p-2 rounded-full ${theme.button}`}><Icons.ChevronRight className="w-5 h-5"/></button>
+                            <button onClick={() => setCurrentMonth(new Date(year, month-1))} className="p-2"><Icons.ChevronLeft className="w-6 h-6"/></button>
+                            <span className="font-bold capitalize">{currentMonth.toLocaleString('es-ES', { month: 'long', year: 'numeric' })}</span>
+                            <button onClick={() => setCurrentMonth(new Date(year, month+1))} className="p-2"><Icons.ChevronRight className="w-6 h-6"/></button>
                         </div>
-                        <div className="grid grid-cols-7 gap-1 text-center text-[10px] text-slate-400 font-bold uppercase mb-2">
-                            {['Do','Lu','Ma','Mi','Ju','Vi','Sa'].map(d=><div key={d}>{d}</div>)}
-                        </div>
+                        <div className="grid grid-cols-7 text-center text-xs opacity-40 font-bold mb-2"><span>DO</span><span>LU</span><span>MA</span><span>MI</span><span>JU</span><span>VI</span><span>SA</span></div>
                         <div className="grid grid-cols-7 gap-2">{days}</div>
                     </div>
                 );
             };
 
-            const renderReport = () => {
-                const today = new Date();
-                const tempChartData = [];
-                const weightChartData = [];
-                for(let i=14; i>=0; i--) {
-                    const d = new Date();
-                    d.setDate(today.getDate() - i);
-                    const k = formatDateKey(d);
-                    const log = currentUser.dailyLog[k];
-                    if(log && log.temp) tempChartData.push({ val: log.temp });
-                    if(log && log.weight) weightChartData.push({ val: log.weight });
-                }
+            const renderSettings = () => (
+                <div className={`p-6 max-w-md mx-auto animate-in ${darkMode ? 'text-white' : 'text-slate-800'}`}>
+                    <div className="flex justify-between items-center mb-6"><button onClick={() => setView('calendar')}><Icons.ChevronLeft className="w-6 h-6"/></button><h2 className="text-xl font-bold">Ajustes</h2><div/></div>
 
-                return (
-                    <div className="space-y-6 animate-fade-in">
-                        <div className={`p-6 rounded-3xl shadow-sm border ${theme.card}`}>
-                            <h3 className={`font-bold mb-4 flex items-center gap-2 ${theme.text}`}><Icons.Activity className="w-5 h-5 text-indigo-500"/> Resumen</h3>
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className={`p-4 rounded-2xl ${darkMode ? 'bg-slate-800' : 'bg-slate-50'}`}>
-                                    <p className="text-xs text-slate-400 uppercase font-bold">Duración</p>
-                                    <p className={`text-2xl font-black ${theme.text}`}>{activeCycleLength} <span className="text-sm font-normal text-slate-400">días</span></p>
-                                </div>
-                                <div className={`p-4 rounded-2xl ${darkMode ? 'bg-slate-800' : 'bg-slate-50'}`}>
-                                    <p className="text-xs text-slate-400 uppercase font-bold">Tipo</p>
-                                    <p className={`text-lg font-bold ${theme.text}`}>{currentUser.userData.isRegular ? 'Regular' : 'Variable'}</p>
-                                </div>
+                    <div className={`p-4 rounded-2xl mb-4 ${darkMode ? 'bg-slate-900' : 'bg-white shadow-sm'}`}>
+                        <div className="flex justify-between items-center mb-4"><h3 className="font-bold flex gap-2 items-center"><Icons.Users className="w-4 h-4"/> Usuarios</h3><button onClick={handleAddUser}><Icons.Plus className="w-5 h-5"/></button></div>
+                        {db.users.map(u => (
+                            <div key={u.id} className={`flex justify-between p-3 rounded-lg mb-2 ${u.id === db.currentUserId ? (darkMode ? 'bg-slate-800' : 'bg-slate-50 border') : ''}`}>
+                                <button onClick={() => setDb({...db, currentUserId: u.id})} className="text-sm font-medium text-left flex-1">{u.name}</button>
+                                {u.id !== db.currentUserId && <button onClick={() => handleDeleteUser(u.id)} className="text-red-400"><Icons.Trash className="w-4 h-4"/></button>}
                             </div>
-                        </div>
-                        <div className={`p-6 rounded-3xl shadow-sm border ${theme.card}`}>
-                            <h3 className={`font-bold flex items-center gap-2 ${theme.text}`}><Icons.Thermometer className="w-5 h-5 text-rose-400" /> Temperatura</h3>
-                            <p className="text-xs text-slate-400">Últimos 14 días</p>
-                            <SimpleChart data={tempChartData} colorClass="text-rose-400" minVal={35.5} maxVal={37.5} isDark={darkMode} />
-                        </div>
-                        <div className={`p-6 rounded-3xl shadow-sm border ${theme.card}`}>
-                            <h3 className={`font-bold flex items-center gap-2 ${theme.text}`}><Icons.Scale className="w-5 h-5 text-teal-400" /> Peso</h3>
-                            <p className="text-xs text-slate-400">Últimos 14 días</p>
-                            <SimpleChart data={weightChartData} colorClass="text-teal-400" minVal={40} maxVal={100} isDark={darkMode} />
+                        ))}
+                    </div>
+
+                    <div className={`p-4 rounded-2xl mb-4 ${darkMode ? 'bg-slate-900' : 'bg-white shadow-sm'}`}>
+                        <h3 className="font-bold mb-4">Ciclo Actual</h3>
+                        <div className="space-y-4 text-sm">
+                            <div><label className="block opacity-60 text-xs mb-1">Inicio (Editable)</label><input type="date" value={user.config.lastPeriod} onChange={(e) => updateConfig('lastPeriod', e.target.value)} className={`w-full p-2 rounded ${darkMode ? 'bg-slate-800' : 'bg-slate-50 border'}`}/></div>
+                            <button onClick={handleNewCycle} className={`w-full py-2 rounded font-bold text-white ${currentTheme.primary}`}>Iniciar Nuevo Ciclo Hoy</button>
+                            <div className="flex gap-4 pt-2">
+                                <div className="flex-1"><label className="block opacity-60 text-xs mb-1">Duración</label><input type="number" value={user.config.cycleLen} onChange={(e) => updateConfig('cycleLen', parseInt(e.target.value))} className={`w-full p-2 rounded ${darkMode ? 'bg-slate-800' : 'bg-slate-50 border'}`}/></div>
+                                <div className="flex-1"><label className="block opacity-60 text-xs mb-1">Sangrado</label><input type="number" value={user.config.periodLen} onChange={(e) => updateConfig('periodLen', parseInt(e.target.value))} className={`w-full p-2 rounded ${darkMode ? 'bg-slate-800' : 'bg-slate-50 border'}`}/></div>
+                            </div>
                         </div>
                     </div>
-                );
-            };
 
+                    <div className={`p-4 rounded-2xl mb-4 ${darkMode ? 'bg-slate-900' : 'bg-white shadow-sm'}`}>
+                        <h3 className="font-bold mb-3">Apariencia y Seguridad</h3>
+                        <div className="flex gap-2 mb-4">{Object.values(THEMES).map(t => <button key={t.id} onClick={() => setDb({...db, theme: t.id})} className={`w-6 h-6 rounded-full ${t.primary} ${db.theme === t.id ? 'ring-2 ring-slate-400' : ''}`}></button>)}</div>
+                        {db.pin ? <button onClick={() => setDb({...db, pin: null})} className="text-red-500 text-sm">Quitar PIN</button> : <button onClick={() => setShowPinSetup(true)} className="text-indigo-500 text-sm font-bold">Poner PIN</button>}
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3 mb-8">
+                        <button onClick={handleExport} className={`py-3 rounded-xl text-xs font-bold border flex items-center justify-center gap-2 ${darkMode ? 'border-slate-700' : 'border-slate-200'}`}><Icons.Download className="w-4 h-4"/> Exportar JSON</button>
+                        <button onClick={() => fileInputRef.current.click()} className={`py-3 rounded-xl text-xs font-bold border flex items-center justify-center gap-2 ${darkMode ? 'border-slate-700' : 'border-slate-200'}`}><Icons.Upload className="w-4 h-4"/> Importar</button>
+                        <input type="file" ref={fileInputRef} onChange={handleImport} className="hidden" accept=".json"/>
+                    </div>
+                </div>
+            );
+
+            // MAIN RENDER
             return (
-                <div className="max-w-md mx-auto min-h-screen pb-24 md:pb-0">
-                    <header className={`backdrop-blur-md sticky top-0 z-30 px-5 py-3 border-b flex justify-between items-center ${theme.header}`}>
-                        <div className="flex items-center gap-2">
-                            <div className={`bg-gradient-to-tr ${gradientColor} p-1.5 rounded-lg text-white shadow-sm`}>
-                                <Icons.Heart className="w-4 h-4 fill-current" />
+                <div className={`min-h-screen pb-20 ${darkMode ? 'bg-slate-950 text-white' : 'bg-slate-50 text-slate-800'}`}>
+                    {view === 'calendar' && (
+                        <header className="px-6 py-4 flex justify-between items-center">
+                            <div className="flex items-center gap-2"><div className={currentTheme.text}><Icons.Heart className="w-6 h-6 fill-current"/></div><h1 className="text-xl font-bold tracking-tight">Lunea</h1></div>
+                            <div className="flex gap-3">
+                                <button onClick={() => setDb({...db, darkMode: !db.darkMode})}>{darkMode ? <Icons.Sun className="w-6 h-6"/> : <Icons.Moon className="w-6 h-6"/>}</button>
+                                <button onClick={() => setPrivacyMode(!privacyMode)} className={privacyMode ? 'text-indigo-500' : ''}>{privacyMode ? <Icons.EyeOff className="w-6 h-6"/> : <Icons.Eye className="w-6 h-6"/>}</button>
+                                <button onClick={() => setView('settings')}><Icons.Settings className="w-6 h-6"/></button>
                             </div>
-                            <h1 className="text-lg font-bold">Lunea</h1>
-                        </div>
-                        <div className="flex gap-2">
-                            <button onClick={() => setDb(p => ({...p, theme: darkMode ? 'light' : 'dark'}))} className={`p-2 rounded-full ${theme.button}`}>{darkMode ? <Icons.Sun className="w-5 h-5"/> : <Icons.Moon className="w-5 h-5"/>}</button>
-                            <button onClick={() => setPrivacyMode(!privacyMode)} className={`p-2 rounded-full ${privacyMode ? 'bg-slate-200 text-slate-800' : theme.button}`}>{privacyMode ? <Icons.EyeOff className="w-5 h-5"/> : <Icons.Eye className="w-5 h-5"/>}</button>
-                            <button onClick={() => setShowSettings(true)} className={`p-2 rounded-full ${theme.button}`}><Icons.Settings className="w-5 h-5"/></button>
-                        </div>
-                    </header>
+                        </header>
+                    )}
 
-                    {showSettings && (
-                        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-                            <div className={`rounded-3xl p-6 w-full max-w-sm shadow-2xl animate-fade-in ${darkMode ? 'bg-slate-900 text-white' : 'bg-white'} max-h-[90vh] overflow-y-auto`}>
-                                <div className="flex justify-between mb-4">
-                                    <h2 className="font-bold text-lg">Ajustes</h2>
-                                    <button onClick={() => setShowSettings(false)} className="text-slate-400">✕</button>
-                                </div>
-                                <div className={`p-4 rounded-2xl mb-4 ${darkMode ? 'bg-slate-800' : 'bg-slate-50'}`}>
-                                    <div className="flex justify-between mb-2 text-sm font-bold text-indigo-500">
-                                        <div className="flex items-center gap-2"><Icons.Users className="w-4 h-4"/> Usuarios</div>
-                                        <button onClick={handleAddUser}><Icons.Plus className="w-4 h-4"/></button>
-                                    </div>
-                                    {db.users.map(u => (
-                                        <div key={u.id} className={`flex justify-between p-2 rounded ${u.id === db.currentUserId ? (darkMode ? 'bg-slate-700' : 'bg-white shadow') : ''}`}>
-                                            <button onClick={() => setDb(prev => ({...prev, currentUserId: u.id}))} className="text-sm font-medium">{u.name}</button>
-                                            {u.id !== db.currentUserId && <button onClick={() => handleDeleteUser(u.id)} className="text-red-400"><Icons.Trash className="w-4 h-4"/></button>}
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className="space-y-4">
-                                    <div><label className="text-xs font-bold text-slate-400 uppercase">Inicio</label><input type="date" value={currentUser.userData.lastPeriodStart} onChange={(e) => updateUserData('lastPeriodStart', e.target.value)} className={`w-full mt-1 p-3 rounded-xl border-none ring-1 ring-slate-500/20 ${theme.input}`}/></div>
-                                    <div><label className="text-xs font-bold text-slate-400 uppercase">Duración</label><input type="number" value={currentUser.userData.baseCycleLength} onChange={(e) => updateUserData('baseCycleLength', parseInt(e.target.value))} className={`w-full mt-1 p-3 rounded-xl border-none ring-1 ring-slate-500/20 ${theme.input}`}/></div>
-                                    <div className="flex gap-2">
-                                        <button onClick={handleExport} className={`flex-1 py-2 rounded-lg text-xs font-bold border ${darkMode ? 'border-slate-700' : 'border-slate-200'}`}>Exportar JSON</button>
-                                        <button onClick={() => fileInputRef.current.click()} className={`flex-1 py-2 rounded-lg text-xs font-bold border ${darkMode ? 'border-slate-700' : 'border-slate-200'}`}>Importar JSON</button>
-                                        <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept=".json"/>
-                                    </div>
-                                    <div className="text-center pt-4 border-t border-slate-700/20">
-                                        <p className="text-xs text-slate-500 uppercase font-bold">Creado por</p>
-                                        <p className="font-medium text-indigo-500">Juan Miguel Rios Redondo</p>
-                                    </div>
-                                </div>
+                    {view === 'calendar' ? (
+                        <div className="max-w-md mx-auto p-4">
+                            <div className={`relative overflow-hidden rounded-[2rem] p-6 mb-6 text-center shadow-sm border ${darkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-100'}`}>
+                                <h2 className="text-xs font-bold uppercase tracking-widest opacity-50 mb-2">{new Date().toLocaleDateString('es-ES', {weekday:'long', day:'numeric', month:'long'})}</h2>
+                                <div className="my-4"><span className="text-6xl font-black">{getCycleDay(toKey(new Date())) || '?'}</span><br/><span className="text-sm font-medium opacity-50">Día del Ciclo</span></div>
+                                <div className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-bold ${getPhase(getCycleDay(toKey(new Date())))?.light || 'bg-gray-100'} ${getPhase(getCycleDay(toKey(new Date())))?.text || 'text-gray-500'}`}>{getPhase(getCycleDay(toKey(new Date())))?.label || 'Sin datos'}</div>
                             </div>
+                            {renderCalendar()}
+                        </div>
+                    ) : view === 'report' ? (
+                        <div className="max-w-md mx-auto p-6 space-y-6 animate-in">
+                            <div className="flex justify-between items-center"><button onClick={() => setView('calendar')}><Icons.ChevronLeft className="w-6 h-6"/></button><h2 className="text-xl font-bold">Salud</h2></div>
+                            <div className={`p-6 rounded-3xl shadow-sm border ${darkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-100'}`}>
+                                <h3 className="font-bold mb-4 flex gap-2"><Icons.FileText className="w-5 h-5"/> Reporte Médico</h3>
+                                <button onClick={() => setView('pdf')} className={`w-full py-3 rounded-xl font-bold ${currentTheme.light} ${currentTheme.text}`}>Ver PDF para Imprimir</button>
+                            </div>
+                            <div className={`p-6 rounded-3xl shadow-sm border ${darkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-100'}`}>
+                                <h3 className="font-bold mb-2">Temperatura</h3>
+                                <SimpleChart data={Object.keys(user.logs).sort().slice(-14).map(k=>({val: user.logs[k].temp})).filter(x=>x.val)} colorClass="text-rose-400" minVal={35.5} maxVal={37.5} isDark={darkMode}/>
+                            </div>
+                        </div>
+                    ) : renderSettings()}
+
+                    {view !== 'pdf' && (
+                        <div className={`fixed bottom-0 w-full p-2 border-t ${darkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-100'} flex justify-around no-print`}>
+                            <button onClick={() => setView('calendar')} className={`flex-1 py-3 flex justify-center ${view === 'calendar' ? currentTheme.text : 'opacity-50'}`}><Icons.Calendar className="w-6 h-6"/></button>
+                            <button onClick={() => setView('report')} className={`flex-1 py-3 flex justify-center ${view === 'report' ? currentTheme.text : 'opacity-50'}`}><Icons.Activity className="w-6 h-6"/></button>
                         </div>
                     )}
 
-                    <main className="p-4 md:p-6">
-                        <div className={`flex p-1 rounded-xl mb-6 font-medium text-sm ${theme.tabBg}`}>
-                            <button onClick={() => setView('calendar')} className={`flex-1 py-2 rounded-lg flex items-center justify-center gap-2 ${view === 'calendar' ? theme.tabActive : theme.tabInactive}`}><Icons.Calendar className="w-4 h-4"/> Diario</button>
-                            <button onClick={() => setView('report')} className={`flex-1 py-2 rounded-lg flex items-center justify-center gap-2 ${view === 'report' ? theme.tabActive : theme.tabInactive}`}><Icons.Activity className="w-4 h-4"/> Salud</button>
-                        </div>
-                        {view === 'calendar' ? renderCalendar() : renderReport()}
-                    </main>
-
-                    {selectedDayInfo && (
-                        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setSelectedDayInfo(null)}>
-                            <div className={`w-full max-w-sm rounded-3xl p-6 ${darkMode ? 'bg-slate-900 border border-slate-800' : 'bg-white'}`} onClick={e => e.stopPropagation()}>
-                                <div className="flex justify-between items-center mb-4">
-                                    <h3 className={`text-xl font-bold ${theme.text}`}>{selectedDayInfo.date.toLocaleDateString('es-ES', {weekday:'long', day:'numeric'})}</h3>
-                                    <button onClick={() => setSelectedDayInfo(null)}>✕</button>
-                                </div>
-
-                                {/* SECCIÓN DE SALUD (RESTAURADA) */}
-                                <div className="mb-6 grid grid-cols-2 gap-3">
-                                    <div className={`${darkMode ? 'bg-blue-900/20' : 'bg-blue-50'} p-4 rounded-2xl flex flex-col items-center`}>
-                                        <div className="flex items-center gap-2 text-blue-500 font-bold text-sm mb-2"><Icons.Droplet className="w-4 h-4" /> Agua</div>
+                    {selectedDay && (
+                        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end md:items-center justify-center p-0 md:p-4" onClick={() => setSelectedDay(null)}>
+                            <div className={`w-full md:max-w-sm rounded-t-3xl md:rounded-3xl p-6 h-[85vh] md:h-auto overflow-y-auto ${darkMode ? 'bg-slate-900 text-white' : 'bg-white text-slate-800'}`} onClick={e => e.stopPropagation()}>
+                                <div className="flex justify-between items-center mb-6"><h3 className="text-2xl font-bold capitalize">{selectedDay.date.toLocaleDateString('es-ES', {weekday:'long', day:'numeric'})}</h3><button onClick={() => setSelectedDay(null)} className="p-2 bg-gray-100 rounded-full text-black">✕</button></div>
+                                
+                                <div className="grid grid-cols-2 gap-4 mb-4">
+                                    <div className={`p-4 rounded-2xl flex flex-col items-center ${darkMode ? 'bg-blue-900/30' : 'bg-blue-50'}`}>
+                                        <div className="text-blue-500 font-bold text-xs mb-2 flex items-center gap-1"><Icons.Droplet className="w-4 h-4"/> AGUA</div>
                                         <div className="flex items-center gap-3">
-                                            <button onClick={() => updateDailyLog(selectedDayInfo.dateKey, 'water', Math.max(0, (currentUser.dailyLog[selectedDayInfo.dateKey]?.water||0) - 1))} className={`w-8 h-8 rounded-full shadow-sm font-bold flex items-center justify-center ${darkMode ? 'bg-slate-800 text-blue-400' : 'bg-white text-blue-500'}`}>-</button>
-                                            <span className={`text-xl font-bold w-4 text-center ${theme.text}`}>{currentUser.dailyLog[selectedDayInfo.dateKey]?.water || 0}</span>
-                                            <button onClick={() => updateDailyLog(selectedDayInfo.dateKey, 'water', (currentUser.dailyLog[selectedDayInfo.dateKey]?.water||0) + 1)} className="w-8 h-8 rounded-full bg-blue-500 text-white shadow-sm font-bold flex items-center justify-center">+</button>
+                                            <button onClick={() => updateLog(selectedDay.k, 'water', Math.max(0, (user.logs[selectedDay.k]?.water||0)-1))} className="w-8 h-8 rounded-full bg-white text-blue-500 shadow font-bold">-</button>
+                                            <span className="text-xl font-bold">{user.logs[selectedDay.k]?.water||0}</span>
+                                            <button onClick={() => updateLog(selectedDay.k, 'water', (user.logs[selectedDay.k]?.water||0)+1)} className="w-8 h-8 rounded-full bg-blue-500 text-white shadow font-bold">+</button>
                                         </div>
                                     </div>
-                                    <div className={`${darkMode ? 'bg-indigo-900/20' : 'bg-indigo-50'} p-4 rounded-2xl flex flex-col items-center`}>
-                                        <div className="flex items-center gap-2 text-indigo-500 font-bold text-sm mb-2"><Icons.Moon className="w-4 h-4" /> Sueño</div>
+                                    <div className={`p-4 rounded-2xl flex flex-col items-center ${darkMode ? 'bg-indigo-900/30' : 'bg-indigo-50'}`}>
+                                        <div className="text-indigo-500 font-bold text-xs mb-2 flex items-center gap-1"><Icons.Moon className="w-4 h-4"/> SUEÑO</div>
                                         <div className="flex items-center gap-3">
-                                            <button onClick={() => updateDailyLog(selectedDayInfo.dateKey, 'sleep', Math.max(0, (currentUser.dailyLog[selectedDayInfo.dateKey]?.sleep||0) - 1))} className={`w-8 h-8 rounded-full shadow-sm font-bold flex items-center justify-center ${darkMode ? 'bg-slate-800 text-indigo-400' : 'bg-white text-indigo-500'}`}>-</button>
-                                            <span className={`text-xl font-bold w-4 text-center ${theme.text}`}>{currentUser.dailyLog[selectedDayInfo.dateKey]?.sleep || 7}</span>
-                                            <button onClick={() => updateDailyLog(selectedDayInfo.dateKey, 'sleep', (currentUser.dailyLog[selectedDayInfo.dateKey]?.sleep||0) + 1)} className="w-8 h-8 rounded-full bg-indigo-500 text-white shadow-sm font-bold flex items-center justify-center">+</button>
+                                            <button onClick={() => updateLog(selectedDay.k, 'sleep', Math.max(0, (user.logs[selectedDay.k]?.sleep||0)-1))} className="w-8 h-8 rounded-full bg-white text-indigo-500 shadow font-bold">-</button>
+                                            <span className="text-xl font-bold">{user.logs[selectedDay.k]?.sleep||0}h</span>
+                                            <button onClick={() => updateLog(selectedDay.k, 'sleep', (user.logs[selectedDay.k]?.sleep||0)+1)} className="w-8 h-8 rounded-full bg-indigo-500 text-white shadow font-bold">+</button>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="mb-6 flex gap-3">
-                                    {currentUser.userData.trackPill && (
-                                        <button onClick={() => updateDailyLog(selectedDayInfo.dateKey, 'pillTaken', !currentUser.dailyLog[selectedDayInfo.dateKey]?.pillTaken)}
-                                            className={`flex-1 p-4 rounded-2xl flex items-center justify-center gap-2 border transition-all ${currentUser.dailyLog[selectedDayInfo.dateKey]?.pillTaken ? 'bg-green-500/10 border-green-500 text-green-500' : `${theme.card} ${theme.subText}`}`}>
-                                            {currentUser.dailyLog[selectedDayInfo.dateKey]?.pillTaken ? <Icons.CheckCircle className="w-5 h-5"/> : <Icons.Pill className="w-5 h-5"/>}
-                                            <span className="font-bold text-sm">{currentUser.dailyLog[selectedDayInfo.dateKey]?.pillTaken ? 'Tomada' : 'Pastilla'}</span>
+                                <div className="flex gap-4 mb-4">
+                                    {user.config.pill && (
+                                        <button onClick={() => updateLog(selectedDay.k, 'pill', !user.logs[selectedDay.k]?.pill)} className={`flex-1 p-4 rounded-2xl flex items-center justify-center gap-2 border ${user.logs[selectedDay.k]?.pill ? 'bg-green-100 border-green-500 text-green-700' : (darkMode ? 'border-slate-700' : 'border-slate-200')}`}>
+                                            {user.logs[selectedDay.k]?.pill ? <Icons.CheckCircle className="w-5 h-5"/> : <Icons.Pill className="w-5 h-5"/>} <span className="font-bold text-sm">Pastilla</span>
                                         </button>
                                     )}
-                                    <div className={`flex-1 rounded-2xl p-2 px-4 flex items-center justify-between ${darkMode ? 'bg-slate-800' : 'bg-slate-50'}`}>
-                                        <Icons.Scale className="w-5 h-5 text-slate-400" />
-                                        <input type="number" placeholder="Kg" value={currentUser.dailyLog[selectedDayInfo.dateKey]?.weight || ''} onChange={(e) => updateDailyLog(selectedDayInfo.dateKey, 'weight', e.target.value)} className={`w-16 bg-transparent text-right font-bold focus:outline-none ${theme.text}`}/>
-                                        <span className="text-xs text-slate-400 ml-1">kg</span>
+                                    <div className={`flex-1 p-4 rounded-2xl flex items-center justify-between border ${darkMode ? 'border-slate-700' : 'border-slate-200'}`}>
+                                        <Icons.Scale className="w-5 h-5 opacity-50"/>
+                                        <input type="number" placeholder="Kg" value={user.logs[selectedDay.k]?.weight || ''} onChange={(e) => updateLog(selectedDay.k, 'weight', e.target.value)} className="w-16 bg-transparent text-right font-bold focus:outline-none"/>
                                     </div>
                                 </div>
-                                
-                                <div className={`p-4 rounded-2xl mb-6 flex items-center justify-between ${darkMode ? 'bg-slate-800' : 'bg-slate-50'}`}>
-                                    <div className="flex items-center gap-2"><Icons.Thermometer className="w-5 h-5 text-rose-400"/> <span className={`text-sm font-bold ${theme.subText}`}>Temp. Basal</span></div>
-                                    <input type="number" step="0.1" placeholder="36.5" value={currentUser.dailyLog[selectedDayInfo.dateKey]?.temp || ''} onChange={(e) => updateDailyLog(selectedDayInfo.dateKey, 'temp', e.target.value)} className={`w-20 bg-transparent text-right font-bold focus:outline-none ${theme.text}`}/>
+
+                                <div className={`p-4 rounded-2xl mb-4 flex items-center justify-between border ${darkMode ? 'border-slate-700' : 'border-slate-200'}`}>
+                                    <div className="flex gap-2 items-center text-sm font-bold text-rose-400"><Icons.Thermometer className="w-5 h-5"/> Temperatura</div>
+                                    <input type="number" step="0.1" placeholder="36.5" value={user.logs[selectedDay.k]?.temp || ''} onChange={(e) => updateLog(selectedDay.k, 'temp', e.target.value)} className="w-20 bg-transparent text-right font-bold text-lg focus:outline-none"/>
                                 </div>
 
-                                <div className={`h-px my-4 ${darkMode ? 'bg-slate-800' : 'bg-slate-100'}`}></div>
-
-                                {/* SECCIÓN DE SÍNTOMAS */}
-                                <div className="grid grid-cols-4 gap-2 mb-4">
+                                <div className="grid grid-cols-4 gap-2">
                                     {SYMPTOMS_LIST.map(s => {
-                                        const active = (currentUser.symptomsLog[selectedDayInfo.dateKey] || []).includes(s.id);
+                                        const active = (user.logs[selectedDay.k]?.symptoms || []).includes(s.id);
                                         return (
-                                            <button key={s.id} onClick={() => toggleSymptom(selectedDayInfo.dateKey, s.id)} className={`p-2 rounded-lg border flex flex-col items-center ${active ? 'bg-indigo-500/10 border-indigo-500 text-indigo-500' : `${theme.card} ${theme.subText}`}`}>
-                                                <s.icon className="w-5 h-5 mb-1"/>
-                                                <span className="text-[10px]">{s.label}</span>
+                                            <button key={s.id} onClick={() => {
+                                                const current = user.logs[selectedDay.k]?.symptoms || [];
+                                                const newS = active ? current.filter(x => x !== s.id) : [...current, s.id];
+                                                updateLog(selectedDay.k, 'symptoms', newS);
+                                            }} className={`p-3 rounded-xl border flex flex-col items-center gap-1 ${active ? `${currentTheme.light} ${currentTheme.text} border-transparent` : (darkMode ? 'border-slate-700 text-slate-500' : 'border-slate-100 text-slate-400')}`}>
+                                                <s.icon className="w-6 h-6"/>
+                                                <span className="text-[10px] font-medium">{s.label}</span>
                                             </button>
                                         )
                                     })}
@@ -526,6 +467,8 @@
                             </div>
                         </div>
                     )}
+
+                    <footer className="text-center py-6 text-xs opacity-40 no-print"><p>Creado por Juan Miguel Rios Redondo</p></footer>
                 </div>
             );
         };
