@@ -3,456 +3,386 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Lunea - Completa</title>
-    
-    <!-- Librerías (React 17 - Estabilidad) -->
+    <title>Lunea - Tu Guía</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
     <style>
-        body { background-color: #f8fafc; color: #1e293b; font-family: -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
-        .day-cell:active { transform: scale(0.95); }
-        .animate-in { animation: fadeIn 0.3s ease-out; }
+        body { background-color: #f8fafc; color: #1e293b; font-family: system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
+        .day-cell:active { transform: scale(0.95); transition: 0.1s; }
+        .hidden { display: none !important; }
+        .fade-in { animation: fadeIn 0.3s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        ::-webkit-scrollbar { width: 0; }
-        @media print { .no-print { display: none !important; } body { background: white; } #root { height: auto; overflow: visible; } }
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white; color: black; }
+            #app { height: auto; overflow: visible; }
+        }
     </style>
 </head>
 <body>
 
-    <div id="root">
-        <div style="height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-            <p style="color: #64748b; margin-bottom: 20px;">Cargando Lunea v50...</p>
-            <button onclick="localStorage.removeItem('lunea_v50_db'); location.reload()" style="padding: 10px 20px; background: #ef4444; color: white; border:none; border-radius: 8px;">Restablecer Todo</button>
-        </div>
+    <!-- CONTENEDOR PRINCIPAL -->
+    <div id="app" class="min-h-screen pb-24 relative"></div>
+
+    <!-- PANTALLA DE ERROR -->
+    <div id="error-screen" class="hidden fixed inset-0 bg-white z-[9999] flex flex-col items-center justify-center p-8 text-center">
+        <h2 class="text-red-500 font-bold text-xl mb-4">Error Crítico</h2>
+        <button onclick="hardReset()" class="bg-red-500 text-white px-6 py-3 rounded-lg font-bold">Reiniciar de Fábrica</button>
     </div>
 
-    <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
-
-        // --- ICONOS SEGUROS ---
-        const Svg = ({d, c, click}) => <svg onClick={click} className={c} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">{d}</svg>;
-
-        // CORRECCIÓN: Todos los iconos con múltiples elementos están envueltos en <>...</>
-        const Icons = {
-            Heart: <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />,
-            Calendar: <><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></>,
-            Settings: <><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" /></>,
-            Left: <polyline points="15 18 9 12 15 6" />,
-            Right: <polyline points="9 18 15 12 9 6" />,
-            Grid: <><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /></>,
-            Activity: <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />,
-            Droplet: <path d="M12 2.69l5.74 5.88a6 6 0 0 1-8.48 8.48A6 6 0 0 1 5.25 9.56L12 2.69z" />,
-            Moon: <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />,
-            Pill: <rect x="2" y="6" width="20" height="12" rx="6" />,
-            Check: <polyline points="20 6 9 17 4 12" />,
-            Users: <><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /></>,
-            Trash: <><polyline points="3 6 5 6 21 6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></>,
-            Plus: <><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></>,
-            Download: <><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></>,
-            Upload: <><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" /></>,
-            Eye: <><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></>,
-            EyeOff: <><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" /><line x1="1" y1="1" x2="23" y2="23" /></>,
-            FileText: <><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><polyline points="10 9 9 9 8 9" /></>,
-            Sparkles: <><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M9 5H5"/><path d="M19 21v-4"/><path d="M15 19h4"/></>,
-            Thermo: <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z" />,
-            Scale: <><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" /><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" /><path d="M7 21h10" /><path d="M12 3v18" /><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2" /></>,
-            Close: <><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></>,
-            Smile: <><circle cx="12" cy="12" r="10" /><path d="M8 14s1.5 2 4 2 4-2 4-2" /></>,
-            Frown: <><circle cx="12" cy="12" r="10" /><path d="M16 16s-1.5-2-4-2-4 2-4 2" /><line x1="9" y1="9" x2="9.01" y2="9" /><line x1="15" y1="9" x2="15.01" y2="9" /></>,
-            Zap: <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />,
-            Cloud: <><line x1="16" y1="13" x2="16" y2="21" /><line x1="8" y1="13" x2="8" y2="21" /><line x1="12" y1="15" x2="12" y2="23" /><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25" /></>,
-            Edit: <><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></>,
-            Sun: <><circle cx="12" cy="12" r="5" /><line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" /><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" /><line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" /><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" /></>
+    <!-- LÓGICA NATIVA -->
+    <script>
+        // --- ICONOS ---
+        const ICONS = {
+            heart: '<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>',
+            calendar: '<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+            settings: '<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>',
+            left: '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>',
+            right: '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>',
+            activity: '<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',
+            grid: '<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>',
+            droplet: '<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.74 5.88a6 6 0 0 1-8.48 8.48A6 6 0 0 1 5.25 9.56L12 2.69z"/></svg>',
+            moon: '<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>',
+            sun: '<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>',
+            pill: '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="6" ry="6"/></svg>',
+            check: '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+            users: '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>',
+            trash: '<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>',
+            edit: '<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
+            plus: '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+            close: '<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+            file: '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>',
+            thermo: '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>',
+            scale: '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>',
+            sparkles: '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M9 5H5"/><path d="M19 21v-4"/><path d="M15 19h4"/></svg>',
+            
+            // SINTOMAS
+            smile: '<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></svg>',
+            frown: '<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>',
+            zap: '<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+            cloud: '<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="16" y1="13" x2="16" y2="21"/><line x1="8" y1="13" x2="8" y2="21"/><line x1="12" y1="15" x2="12" y2="23"/><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/></svg>'
         };
 
-        const SYMPTOMS = [
-            { id: 'happy', label: 'Feliz', I: Icons.Smile },
-            { id: 'sad', label: 'Triste', I: Icons.Frown },
-            { id: 'irritable', label: 'Irritable', I: Icons.Zap },
-            { id: 'cramps', label: 'Cólicos', I: Icons.Activity },
-            { id: 'headache', label: 'Dolor', I: Icons.Thermo },
-            { id: 'bloating', label: 'Hinchazón', I: Icons.Droplet },
-            { id: 'energetic', label: 'Energía', I: Icons.Sun },
-            { id: 'tired', label: 'Cansada', I: Icons.Cloud }
-        ];
+        // --- ESTADO ---
+        const DB_KEY = 'lunea_v55_tutorial';
+        let tutorialStep = 0; // Control local del tutorial
 
-        const THEMES = {
-            rose: { bg: 'bg-rose-500', text: 'text-rose-600', light: 'bg-rose-100', border: 'border-rose-200' },
-            teal: { bg: 'bg-teal-500', text: 'text-teal-600', light: 'bg-teal-100', border: 'border-teal-200' },
-            indigo: { bg: 'bg-indigo-500', text: 'text-indigo-600', light: 'bg-indigo-100', border: 'border-indigo-200' },
+        let state = {
+            view: 'calendar',
+            currentMonth: new Date(),
+            viewYear: new Date().getFullYear(),
+            selectedDate: null,
+            users: [{ id: '1', name: 'Yo', config: { lastPeriod: new Date().toISOString().split('T')[0], cycleLen: 28, periodLen: 5, pill: false }, logs: {} }],
+            currentUserId: '1',
+            showTutorial: true // Inicia true
         };
 
-        const SimpleChart = ({ data, color, minVal, maxVal }) => {
-            if (!data || data.length < 2) return <div className="h-32 flex items-center justify-center text-xs border border-dashed rounded-xl text-slate-400">Registra al menos 2 datos</div>;
-            const points = data.map((d, i) => {
-                const val = parseFloat(d.val);
-                if(isNaN(val)) return null;
-                const norm = Math.max(0, Math.min(100, ((val - minVal) / (maxVal - minVal)) * 100));
-                const y = 100 - norm;
-                const x = (i / (data.length - 1)) * 100;
-                return `${x},${y}`;
-            }).filter(p=>p).join(' ');
+        // Cargar
+        try {
+            const saved = localStorage.getItem(DB_KEY);
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                state = { ...state, ...parsed, currentMonth: new Date(), viewYear: new Date().getFullYear(), selectedDate: null };
+            }
+        } catch(e) { console.log('Error carga:', e); }
 
-            return (
-                <div className="w-full h-32 relative mt-4">
-                    <svg className="w-full h-full overflow-visible" viewBox="0 0 100 100" preserveAspectRatio="none">
-                        <polyline fill="none" stroke={color} strokeWidth="2" points={points} />
-                    </svg>
-                </div>
-            );
+        // --- LÓGICA ---
+        function save() { localStorage.setItem(DB_KEY, JSON.stringify(state)); render(); }
+        function getUser() { return state.users.find(u => u.id === state.currentUserId) || state.users[0]; }
+        
+        function toKey(d) { const o = d.getTimezoneOffset() * 60000; return new Date(d.getTime() - o).toISOString().split('T')[0]; }
+
+        function getCycleDay(dateStr) {
+            const user = getUser();
+            const start = new Date(user.config.lastPeriod + 'T00:00:00');
+            const target = new Date(dateStr + 'T00:00:00');
+            if (target < start) return null;
+            const diff = Math.floor((target - start) / 86400000);
+            return (diff % user.config.cycleLen) + 1;
+        }
+
+        function getPhase(dateStr) {
+            const cd = getCycleDay(dateStr);
+            const user = getUser();
+            if (!cd) return null;
+            const ov = user.config.cycleLen - 14;
+            if (cd <= user.config.periodLen) return {l:'Menstruación', bg:'bg-rose-500', t:'text-rose-600', light:'bg-rose-100'};
+            if (cd >= ov - 5 && cd < ov) return {l:'Fértil', bg:'bg-purple-400', t:'text-purple-600', light:'bg-purple-100'};
+            if (cd === ov) return {l:'Ovulación', bg:'bg-purple-600', t:'text-purple-700', light:'bg-purple-200'};
+            if (cd > ov) return {l:'Lútea', bg:'bg-amber-400', t:'text-amber-600', light:'bg-amber-100'};
+            return {l:'Folicular', bg:'bg-pink-300', t:'text-pink-600', light:'bg-pink-50'};
+        }
+
+        // --- ACCIONES GLOBAL ---
+        window.hardReset = () => { localStorage.clear(); location.reload(); };
+        window.setView = (v) => { state.view = v; render(); };
+        window.closeModal = () => { state.selectedDate = null; render(); };
+        window.setMonth = (delta) => { state.currentMonth.setMonth(state.currentMonth.getMonth() + delta); render(); };
+        window.setYear = (delta) => { state.viewYear += delta; render(); };
+        window.selectDate = (k) => { state.selectedDate = k; render(); };
+        
+        window.updateLog = (key, field, val) => {
+            const user = getUser();
+            if (!user.logs[key]) user.logs[key] = {};
+            if (field === 'water' || field === 'sleep') {
+                let current = user.logs[key][field] || 0;
+                if (val === 'inc') current++; else if (val === 'dec') current = Math.max(0, current - 1);
+                user.logs[key][field] = current;
+            } else if (field === 'pill') { user.logs[key].pill = !user.logs[key].pill; }
+            else if (field === 'symptoms') {
+                let current = user.logs[key].symptoms || [];
+                if(current.includes(val)) current = current.filter(s => s !== val); else current.push(val);
+                user.logs[key].symptoms = current;
+            }
+            else { user.logs[key][field] = val; }
+            save();
         };
 
-        const TutorialModal = ({ onComplete }) => {
-            const steps = [
-                {t:"Bienvenida a Lunea", d:"Tu ciclo, tu privacidad. Todo se guarda aquí.", I:Icons.Heart},
-                {t:"Calendario", d:"Registra tu ciclo. El número grande es la fecha, el pequeño es el día del ciclo.", I:Icons.Calendar},
-                {t:"Salud e IA", d:"Registra síntomas y recibe análisis inteligentes.", I:Icons.Sparkles},
-                {t:"Planificador", d:"Usa la vista anual para ver meses futuros.", I:Icons.Grid}
-            ];
-            const [step, setStep] = useState(0);
-            const StepIcon = steps[step].I;
-            return (
-                <div className="fixed inset-0 z-50 bg-white flex flex-col items-center justify-center p-8 text-center animate-in">
-                    <div className="bg-rose-100 p-6 rounded-full text-rose-500 mb-6"><Svg d={StepIcon} c="w-12 h-12"/></div>
-                    <h2 className="text-2xl font-bold mb-4 text-slate-800">{steps[step].t}</h2>
-                    <p className="text-slate-500 mb-8">{steps[step].d}</p>
-                    <button onClick={() => step < steps.length - 1 ? setStep(step+1) : onComplete()} className="w-full py-3 bg-rose-500 text-white rounded-xl font-bold shadow-lg">
-                        {step === steps.length - 1 ? "Comenzar" : "Siguiente"}
-                    </button>
-                </div>
-            );
+        window.updateConfig = (field, val) => {
+            const user = getUser();
+            if(field !== 'lastPeriod' && field !== 'pill') val = parseInt(val);
+            if(field === 'pill') val = val === 'true'; 
+            user.config[field] = val;
+            save();
         };
 
-        const PinPad = ({ onUnlock, onSetPin, isSetting, onCancel }) => {
-            const [val, setVal] = useState('');
-            const handle = (n) => {
-                const next = val + n;
-                setVal(next);
-                if (next.length === 4) { if(isSetting) onSetPin(next); else onUnlock(next); setVal(''); }
-            };
-            return (
-                <div className="fixed inset-0 bg-slate-900 z-[60] flex flex-col items-center justify-center text-white p-4">
-                    <h2 className="text-xl font-bold mb-8">{isSetting?'Crear PIN':'Bloqueado'}</h2>
-                    <div className="flex gap-4 mb-8">{[0,1,2,3].map(i=><div key={i} className={`w-4 h-4 rounded-full ${val.length>i?'bg-white':'bg-slate-700'}`}/>)}</div>
-                    <div className="grid grid-cols-3 gap-6">
-                        {[1,2,3,4,5,6,7,8,9].map(n=><button key={n} onClick={()=>handle(n.toString())} className="w-16 h-16 rounded-full bg-slate-800 text-xl font-bold">{n}</button>)}
-                        <div/><button onClick={()=>handle('0')} className="w-16 h-16 rounded-full bg-slate-800 text-xl font-bold">0</button>
-                        <button onClick={()=>isSetting?onCancel():setVal('')} className="w-16 h-16 rounded-full flex items-center justify-center"><Svg d={Icons.Left} c="w-8 h-8"/></button>
-                    </div>
-                </div>
-            )
+        window.addUser = () => { const n = prompt("Nombre:"); if (n) { const id = Date.now().toString(); state.users.push({ id, name: n, config: {...getUser().config}, logs: {} }); state.currentUserId = id; save(); } };
+        window.switchUser = (id) => { state.currentUserId = id; save(); };
+        window.deleteUser = (id) => { if(state.users.length <= 1) return alert("Mínimo un usuario"); if(confirm("¿Borrar?")) { state.users = state.users.filter(u => u.id !== id); state.currentUserId = state.users[0].id; save(); } };
+        window.editUser = (id) => { const u = state.users.find(u => u.id === id); const n = prompt("Nuevo nombre:", u.name); if (n) { u.name = n; save(); } };
+        
+        // TUTORIAL LOGIC
+        window.nextSlide = () => {
+            tutorialStep++;
+            render();
         };
+        window.endTutorial = () => {
+            state.showTutorial = false;
+            tutorialStep = 0;
+            save();
+        };
+        window.openTutorial = () => {
+            state.showTutorial = true;
+            tutorialStep = 0;
+            render();
+        }
 
-        const App = () => {
-            const [db, setDb] = useState(() => {
-                try {
-                    const saved = localStorage.getItem('lunea_v50_db');
-                    if (saved) return JSON.parse(saved);
-                } catch(e) {}
-                const uid = Date.now().toString();
-                // Fecha HOY en formato YYYY-MM-DD
-                const today = new Date();
-                const todayStr = new Date(today.getTime() - today.getTimezoneOffset() * 60000).toISOString().split('T')[0];
-                return {
-                    currentUserId: uid,
-                    users: [{ id: uid, name: 'Yo', config: { lastPeriod: todayStr, cycleLen: 28, periodLen: 5, pill: false }, logs: {} }],
-                    theme: 'rose', darkMode: false, pin: null, showTutorial: true
-                };
-            });
+        // --- RENDERIZADO ---
+        function render() {
+            const app = document.getElementById('app');
+            let html = '';
 
-            const [view, setView] = useState('calendar');
-            const [selDay, setSelDay] = useState(null);
-            const [currentMonth, setCurrentMonth] = useState(new Date());
-            const [viewYear, setViewYear] = useState(new Date().getFullYear());
-            const [locked, setLocked] = useState(!!db.pin);
-            const [showPinSetup, setShowPinSetup] = useState(false);
-            const fileRef = useRef(null);
-
-            useEffect(() => localStorage.setItem('lunea_v50_db', JSON.stringify(db)), [db]);
-
-            const user = db.users.find(u => u.id === db.currentUserId) || db.users[0];
-            const theme = THEMES[db.theme] || THEMES.rose;
-            const dark = db.darkMode;
-
-            useEffect(() => { document.body.className = dark ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-800'; }, [dark]);
-
-            // Lógica
-            const toKey = d => new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().split('T')[0];
-            const getCycleDay = (dStr) => {
-                if (!user.config.lastPeriod) return null;
-                const start = new Date(user.config.lastPeriod); start.setHours(0,0,0,0);
-                const target = new Date(dStr); target.setHours(0,0,0,0);
-                const diffTime = target.getTime() - start.getTime();
-                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-                if(diffDays < 0) return null;
-                return (diffDays % user.config.cycleLen) + 1;
-            };
-            const getPhase = (dStr) => {
-                const cd = getCycleDay(dStr);
-                if (!cd) return null;
-                const ov = user.config.cycleLen - 14;
-                if(cd <= user.config.periodLen) return {l:'Menstruación', bg:'bg-rose-500', t:'text-rose-600', light:'bg-rose-100'};
-                if(cd >= ov-5 && cd < ov) return {l:'Fértil', bg:'bg-purple-400', t:'text-purple-600', light:'bg-purple-100'};
-                if(cd === ov) return {l:'Ovulación', bg:'bg-purple-600', t:'text-purple-700', light:'bg-purple-200'};
-                return {l:'Fase Segura', bg:'bg-slate-300', t:'text-slate-500', light:'bg-slate-100'};
-            };
-
-            const updateLog = (k, f, v) => {
-                const newLogs = { ...user.logs };
-                if (!newLogs[k]) newLogs[k] = {};
-                newLogs[k][f] = v;
-                setDb(p => ({...p, users: p.users.map(u => u.id === user.id ? {...u, logs: newLogs} : u)}));
-            };
-            const updateConfig = (f, v) => setDb(p => ({...p, users: p.users.map(u => u.id === user.id ? {...u, config: {...user.config, [f]: v}} : u)}));
-
-            const handleExport = () => { const a=document.createElement('a'); a.href="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(db)); a.download="lunea.json"; a.click(); };
-            const handleImport = (e) => { const r=new FileReader(); r.onload=ev=>{ try{ setDb(JSON.parse(ev.target.result)); alert("Importado"); }catch(er){alert("Error");} }; r.readAsText(e.target.files[0]); };
-            const handleAddUser = () => { const n = prompt("Nombre:"); if(n) { const id = Date.now().toString(); setDb(p => ({...p, currentUserId: id, users: [...p.users, {id, name: n, config: user.config, logs: {}}]})); } };
-            const handleEditUser = (id) => { const u = db.users.find(x => x.id === id); const n = prompt("Nuevo nombre:", u.name); if(n) setDb(p => ({...p, users: p.users.map(x => x.id === id ? {...x, name: n} : x)})); };
-            const handleDeleteUser = (id) => { if(db.users.length>1 && confirm("¿Borrar?")) setDb(p => ({...p, users: p.users.filter(x => x.id !== id), currentUserId: p.users[0].id})); };
-
-            const getInsights = () => {
-                const logs = Object.values(user.logs);
-                const ins = [`📅 Ciclo promedio: ${user.config.cycleLen} días.`];
-                if (logs.filter(l => l.water < 4).length > 2) ins.push("💧 Hidratación baja detectada.");
-                return ins;
-            };
-
-            if (db.showTutorial) return <TutorialModal onComplete={() => setDb({...db, showTutorial: false})} />;
-            if (locked) return <PinPad onUnlock={c => c===db.pin?setLocked(false):alert("Mal")} isSetting={false} />;
-            if (showPinSetup) return <PinPad isSetting={true} onSetPin={c => {setDb({...db, pin:c}); setShowPinSetup(false);}} onCancel={()=>setShowPinSetup(false)} />;
-
-            if (view === 'pdf') {
-                return (
-                    <div className="bg-white text-black p-8 min-h-screen">
-                        <div className="flex justify-between border-b pb-4 mb-6"><h1 className="text-2xl font-bold text-rose-600">Reporte Médico</h1><p>{new Date().toLocaleDateString()}</p></div>
-                        <div className="mb-6 p-4 bg-gray-100 rounded flex gap-8">
-                            <div><p className="text-xs text-gray-500 uppercase">Ciclo</p><p className="font-bold text-xl">{user.config.cycleLen} días</p></div>
-                            <div><p className="text-xs text-gray-500 uppercase">Periodo</p><p className="font-bold text-xl">{user.config.periodLen} días</p></div>
+            // TUTORIAL WIZARD
+            if (state.showTutorial) {
+                const slides = [
+                    { t: "Bienvenida a Lunea", d: "Tu espacio privado para conocer tu ciclo. Sin internet, 100% seguro en tu dispositivo.", i: ICONS.heart, c: "text-rose-500 bg-rose-100" },
+                    { t: "Los Colores del Ciclo", d: `
+                        <ul class="text-left text-sm space-y-2 bg-slate-50 p-4 rounded-xl">
+                            <li class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-rose-500"></div> <b>Rojo (Menstruación):</b> Días de sangrado.</li>
+                            <li class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-pink-400"></div> <b>Rosa (Folicular):</b> Energía subiendo.</li>
+                            <li class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-purple-400"></div> <b>Morado (Fértil):</b> Alta probabilidad de embarazo.</li>
+                            <li class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-amber-400"></div> <b>Ámbar (Lútea):</b> Preparación pre-menstrual.</li>
+                        </ul>
+                    `, i: ICONS.droplet, c: "text-indigo-500 bg-indigo-100" },
+                    { t: "Funciones Principales", d: `
+                         <div class="text-left text-sm space-y-2 bg-slate-50 p-4 rounded-xl">
+                            <p><b>📅 Calendario:</b> Toca un día para registrar síntomas y ver predicciones.</p>
+                            <p><b>📊 Salud:</b> Gráficos de temperatura, peso y reporte médico PDF.</p>
+                            <p><b>⚙️ Ajustes:</b> Crea usuarios (para ti o tu hija) y haz copias de seguridad.</p>
+                         </div>
+                    `, i: ICONS.settings, c: "text-teal-500 bg-teal-100" },
+                    { t: "¡Todo Listo!", d: "Ya puedes empezar a registrar tu ciclo.", i: ICONS.check, c: "text-green-500 bg-green-100" }
+                ];
+                
+                const slide = slides[tutorialStep];
+                
+                app.innerHTML = `
+                    <div class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center p-8 text-center fade-in">
+                        <div class="p-6 rounded-full mb-6 ${slide.c.split(' ')[1]} ${slide.c.split(' ')[0]}">${slide.i}</div>
+                        <h2 class="text-2xl font-bold mb-4 text-slate-800">${slide.t}</h2>
+                        <div class="text-slate-500 mb-8 w-full max-w-xs">${slide.d}</div>
+                        <div class="flex gap-2 mb-8">
+                            ${slides.map((_,i) => `<div class="h-2 rounded-full transition-all duration-300 ${i===tutorialStep ? 'w-8 bg-slate-800' : 'w-2 bg-slate-200'}"></div>`).join('')}
                         </div>
-                        <table className="w-full text-sm text-left border-collapse">
-                            <thead><tr className="border-b bg-gray-50"><th className="py-2 px-2">Fecha</th><th>Día</th><th>Fase</th><th>Síntomas</th><th>Notas</th><th>Temp</th></tr></thead>
-                            <tbody>{Object.keys(user.logs).sort().reverse().slice(0,30).map(k=>(
-                                <tr key={k} className="border-b">
-                                    <td className="py-2 px-2">{k}</td><td>{getCycleDay(k)}</td><td>{getPhase(k)?.l}</td>
-                                    <td>{(user.logs[k].symptoms||[]).map(s=>SYMPTOMS.find(x=>x.id===s)?.label).join(', ')}</td><td className="italic text-gray-500">{user.logs[k].notes}</td><td>{user.logs[k].temp}</td>
-                                </tr>
-                            ))}</tbody>
-                        </table>
-                        <div className="mt-8 no-print text-center"><button onClick={()=>window.print()} className="bg-black text-white px-6 py-2 rounded font-bold">Imprimir</button><button onClick={()=>setView('report')} className="ml-6 underline">Volver</button></div>
+                        <button onclick="${tutorialStep < slides.length - 1 ? 'nextSlide()' : 'endTutorial()'}" class="w-full max-w-xs py-3 bg-slate-900 text-white rounded-xl font-bold shadow-lg">
+                            ${tutorialStep < slides.length - 1 ? 'Siguiente' : 'Empezar'}
+                        </button>
                     </div>
-                );
+                `;
+                return;
             }
 
-            const renderYear = () => (
-                <div className="p-4 animate-in">
-                    <div className="flex justify-between items-center mb-6">
-                        <button onClick={()=>setView('calendar')}><Svg d={Icons.Left} c="w-6 h-6"/></button>
-                        <div className="flex items-center gap-4"><button onClick={()=>setViewYear(y=>y-1)}><Svg d={Icons.Left} c="w-4 h-4"/></button><h2 className="text-xl font-bold">Año {viewYear}</h2><button onClick={()=>setViewYear(y=>y+1)}><Svg d={Icons.Right} c="w-4 h-4"/></button></div><div className="w-6"/>
-                    </div>
-                    <div className="grid grid-cols-3 gap-2">
-                        {Array.from({length:12}).map((_,m) => (
-                            <div key={m} className={`p-1 rounded border text-[7px] ${dark?'bg-slate-900 border-slate-700':'bg-white'}`}>
-                                <div className="font-bold text-center mb-1">{new Date(viewYear, m).toLocaleDateString('es-ES',{month:'short'})}</div>
-                                <div className="grid grid-cols-7 gap-[1px]">
-                                    {Array.from({length: new Date(viewYear, m+1, 0).getDate()}).map((_, d) => {
-                                        const p = getPhase(toKey(new Date(viewYear, m, d+1)));
-                                        return <div key={d} className={`aspect-square rounded-[1px] ${p ? p.bg : 'bg-slate-100 opacity-20'}`}></div>
-                                    })}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            );
+            // PDF
+            if (state.view === 'pdf') {
+                const user = getUser();
+                const logs = Object.keys(user.logs).sort().reverse().slice(0, 30);
+                const rows = logs.map(k => {
+                    const log = user.logs[k];
+                    return `<tr class="border-b"><td class="py-2">${k}</td><td>${getCycleDay(k)}</td><td>${getPhase(k)?.l}</td><td>${(log.symptoms||[]).length}</td><td class="italic text-gray-500">${log.notes||'-'}</td></tr>`;
+                }).join('');
 
-            const renderCalendar = () => {
-                const startDay = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1).getDay();
-                const daysInMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth()+1, 0).getDate();
-                const days = [];
-                for(let i=0; i<startDay; i++) days.push(<div key={`e-${i}`}/>);
+                app.innerHTML = `
+                    <div class="bg-white text-black p-8 min-h-screen">
+                        <h1 class="text-2xl font-bold text-rose-600 mb-4">Reporte Médico</h1>
+                        <p class="mb-4">Paciente: ${user.name} | Ciclo: ${user.config.cycleLen} días</p>
+                        <table class="w-full text-sm text-left border-collapse">
+                            <thead><tr class="border-b bg-gray-50"><th class="p-2">Fecha</th><th>Día</th><th>Fase</th><th>Sínt.</th><th>Notas</th></tr></thead>
+                            <tbody>${rows}</tbody>
+                        </table>
+                        <div class="mt-8 no-print text-center"><button onclick="window.print()" class="bg-black text-white px-6 py-2 rounded font-bold">Imprimir</button><button onclick="setView('report')" class="ml-4 underline">Volver</button></div>
+                    </div>
+                `;
+                return;
+            }
+
+            // --- LAYOUT APP ---
+            html += `<div class="px-6 py-4 flex justify-between items-center bg-white shadow-sm sticky top-0 z-20">
+                <div class="flex items-center gap-2 text-rose-500">${ICONS.heart} <h1 class="text-xl font-bold text-slate-800">Lunea</h1></div>
+                <button onclick="setView('settings')" class="text-slate-400 p-2">${ICONS.settings}</button>
+            </div>`;
+
+            // CALENDARIO
+            if (state.view === 'calendar') {
+                const user = getUser();
+                const year = state.currentMonth.getFullYear();
+                const month = state.currentMonth.getMonth();
+                const startDay = new Date(year, month, 1).getDay();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                const todayK = toKey(new Date());
+                const todayCD = getCycleDay(todayK);
+                const todayP = getPhase(todayK);
+
+                let daysHtml = '';
+                for(let i=0; i<startDay; i++) daysHtml += `<div></div>`;
                 for(let i=1; i<=daysInMonth; i++) {
-                    const d = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), i);
+                    const d = new Date(year, month, i);
                     const k = toKey(d);
                     const cd = getCycleDay(k);
                     const p = getPhase(k);
-                    const isToday = k === toKey(new Date());
+                    const isToday = k === todayK;
                     const log = user.logs[k] || {};
-                    days.push(
-                        <button key={k} onClick={() => setSelDay({d, k})} className={`day-cell h-14 rounded-xl flex flex-col items-center justify-center border border-transparent ${p ? p.light : ''} ${isToday ? 'ring-2 ring-rose-500 z-10' : ''}`}>
-                            <span className={`text-sm font-bold ${p ? p.text : (dark?'text-slate-400':'text-slate-600')}`}>{i}</span>
-                            {cd && <span className={`absolute top-1 right-1 text-[9px] ${dark?'text-slate-500':'text-slate-400'}`}>{cd}</span>}
-                            <div className="flex gap-0.5 mt-1">
-                                {p && <div className={`w-1.5 h-1.5 rounded-full ${p.bg}`}></div>}
-                                {(log.water || log.sleep) && <div className="w-1.5 h-1.5 rounded-full bg-blue-400"></div>}
-                                {log.notes && <div className="w-1.5 h-1.5 rounded-full bg-yellow-400"></div>}
-                            </div>
+                    
+                    let dots = '';
+                    if(p) dots += `<div class="w-1.5 h-1.5 rounded-full ${p.bg}"></div>`;
+                    if(log.water || log.sleep) dots += `<div class="w-1.5 h-1.5 rounded-full bg-blue-500"></div>`;
+                    if(log.symptoms && log.symptoms.length > 0) dots += `<div class="w-1.5 h-1.5 rounded-full bg-purple-500"></div>`;
+
+                    daysHtml += `
+                        <button onclick="selectDate('${k}')" class="h-16 rounded-xl flex flex-col items-center justify-center relative day-cell border ${isToday ? 'border-rose-500 border-2' : 'border-slate-100'} ${p ? p.light : 'bg-white'}">
+                            ${cd ? `<span class="absolute top-1 right-1 text-[10px] font-bold text-slate-400 font-mono">${cd}</span>` : ''}
+                            <span class="text-sm font-bold ${p ? p.t : 'text-slate-600'}">${i}</span>
+                            <div class="flex gap-0.5 mt-1">${dots}</div>
                         </button>
-                    );
+                    `;
                 }
-                return (
-                    <div className={`p-4 rounded-3xl mb-6 ${dark?'bg-slate-900':'bg-white shadow-sm'}`}>
-                        <div className="flex justify-between items-center mb-4">
-                            <button onClick={()=>setCurrentMonth(new Date(currentMonth.setMonth(currentMonth.getMonth()-1)))} className="p-2"><Svg d={Icons.Left} c="w-5 h-5"/></button>
-                            <div className="flex items-center gap-2"><span className="font-bold capitalize">{currentMonth.toLocaleDateString('es-ES', {month:'long', year:'numeric'})}</span><button onClick={()=>setCurrentMonth(new Date())} className="text-[10px] px-2 py-1 rounded font-bold bg-rose-100 text-rose-600">HOY</button></div>
-                            <button onClick={()=>setCurrentMonth(new Date(currentMonth.setMonth(currentMonth.getMonth()+1)))} className="p-2"><Svg d={Icons.Right} c="w-5 h-5"/></button>
+
+                html += `
+                    <div class="p-4 max-w-md mx-auto animate-in">
+                        <div class="rounded-[2rem] p-6 mb-6 text-center bg-white shadow-sm border border-slate-100">
+                            <h2 class="text-xs font-bold uppercase text-slate-400 mb-2">${new Date().toLocaleDateString('es-ES', {weekday:'long', day:'numeric'})}</h2>
+                            <div class="text-5xl font-black text-slate-800 mb-1">${todayCD || '?'}</div>
+                            <div class="text-sm text-slate-500 mb-4">Día del Ciclo</div>
+                            ${todayCD ? `<div class="inline-block px-4 py-1 rounded-full text-sm font-bold ${todayP.light} ${todayP.t}">${todayP.l}</div>` : `<button onclick="setView('settings')" class="bg-rose-500 text-white px-4 py-2 rounded animate-pulse">Configurar Inicio</button>`}
                         </div>
-                        <div className="grid grid-cols-7 text-center text-xs text-slate-400 font-bold mb-2"><span>D</span><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span></div>
-                        <div className="grid grid-cols-7 gap-1">{days}</div>
+                        <div class="p-4 bg-white rounded-3xl shadow-sm mb-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <button onclick="setMonth(-1)" class="p-2 text-slate-400">${ICONS.left}</button>
+                                <div class="text-center"><div class="font-bold capitalize">${state.currentMonth.toLocaleDateString('es-ES', {month:'long', year:'numeric'})}</div><button onclick="goToToday()" class="text-[10px] text-rose-500 font-bold">HOY</button></div>
+                                <button onclick="setMonth(1)" class="p-2 text-slate-400">${ICONS.right}</button>
+                            </div>
+                            <div class="grid grid-cols-7 text-center text-xs text-slate-400 font-bold mb-2"><span>D</span><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span></div>
+                            <div class="grid grid-cols-7 gap-1">${daysHtml}</div>
+                        </div>
                     </div>
-                );
-            };
+                `;
+            }
 
-            // PRINCIPAL
-            return (
-                <div className={`min-h-screen pb-20 ${dark ? 'text-white' : 'text-slate-800'}`}>
-                    {view !== 'pdf' && view !== 'year' && (
-                        <header className="px-6 py-4 flex justify-between items-center">
-                            <div className={`flex items-center gap-2 ${theme.text}`}><Svg d={Icons.Heart} c="w-6 h-6 fill-current"/><h1 className="text-xl font-bold">Lunea</h1></div>
-                            <button onClick={()=>setView('settings')}><Svg d={Icons.Settings} c="w-6 h-6 text-slate-400"/></button>
-                        </header>
-                    )}
-
-                    {view === 'calendar' ? (
-                        <div className="max-w-md mx-auto p-4">
-                            <div className={`rounded-[2rem] p-6 mb-6 text-center shadow-sm border ${dark?'bg-slate-900 border-slate-800':'bg-white border-slate-100'}`}>
-                                <h2 className="text-xs font-bold uppercase text-slate-400 mb-2">{new Date().toLocaleDateString('es-ES', {weekday:'long', day:'numeric'})}</h2>
-                                <div className="text-5xl font-black text-slate-800 mb-1">{getCycleDay(toKey(new Date())) || '?'}</div>
-                                <div className="text-sm text-slate-500 mb-4">Día del Ciclo</div>
-                                <div className={`inline-block px-4 py-1 rounded-full text-sm font-bold ${getPhase(toKey(new Date()))?.light || 'bg-gray-100'} ${getPhase(toKey(new Date()))?.text || 'text-gray-500'}`}>{getPhase(toKey(new Date()))?.l || 'Sin datos'}</div>
-                            </div>
-                            {renderCalendar()}
+            // VISTA ANUAL
+            else if (state.view === 'year') {
+                let monthsHtml = '';
+                for(let m=0; m<12; m++) {
+                    const daysInM = new Date(state.viewYear, m+1, 0).getDate();
+                    let dots = '';
+                    for(let d=1; d<=daysInM; d++) {
+                        const k = toKey(new Date(state.viewYear, m, d));
+                        const p = getPhase(k);
+                        dots += `<div class="w-1.5 h-1.5 rounded-full ${p ? p.bg : 'bg-slate-100'}"></div>`;
+                    }
+                    monthsHtml += `<div class="p-1 border rounded bg-white"><div class="font-bold text-[8px] text-center mb-1">${new Date(state.viewYear, m).toLocaleDateString('es-ES',{month:'short'})}</div><div class="flex flex-wrap gap-[1px] justify-center">${dots}</div></div>`;
+                }
+                html += `
+                    <div class="p-4 max-w-md mx-auto animate-in mb-24">
+                        <div class="flex justify-between items-center mb-6">
+                            <button onclick="setView('calendar')">${ICONS.left}</button>
+                            <div class="flex gap-4 items-center"><button onclick="setYear(-1)">${ICONS.left}</button><h2 class="text-xl font-bold">${state.viewYear}</h2><button onclick="setYear(1)">${ICONS.right}</button></div><div class="w-6"></div>
                         </div>
-                    ) : view === 'report' ? (
-                        <div className="max-w-md mx-auto p-6 space-y-6 animate-in pb-24">
-                            <div className="flex justify-between"><button onClick={()=>setView('calendar')}><Svg d={Icons.Left} c="w-6 h-6"/></button><h2 className="text-xl font-bold">Salud & IA</h2></div>
-                            <div className={`p-6 rounded-3xl border ${dark?'bg-slate-900 border-slate-800':'bg-white shadow-sm'}`}>
-                                <div className="flex gap-2 items-center text-indigo-500 font-bold mb-2"><Svg d={Icons.Sparkles} c="w-5 h-5"/> Lunea AI</div>
-                                {getInsights().map((t,i)=><p key={i} className="text-sm text-slate-600 mb-1">• {t}</p>)}
-                            </div>
-                            <button onClick={()=>setView('pdf')} className={`w-full py-3 rounded-xl font-bold ${theme.light} ${theme.text} flex justify-center gap-2`}><Svg d={Icons.FileText} c="w-5 h-5"/> Ver Reporte PDF</button>
-                            <div className={`p-6 rounded-3xl border ${dark?'bg-slate-900 border-slate-800':'bg-white shadow-sm'}`}>
-                                <h3 className="font-bold mb-2">Temperatura</h3>
-                                <SimpleChart data={Object.keys(user.logs).sort().slice(-14).map(k=>({val: user.logs[k].temp})).filter(x=>x.val)} color="#f43f5e" minVal={35} maxVal={38} />
-                            </div>
-                            <div className={`p-6 rounded-3xl border ${dark?'bg-slate-900 border-slate-800':'bg-white shadow-sm'}`}>
-                                <h3 className="font-bold mb-2">Peso</h3>
-                                <SimpleChart data={Object.keys(user.logs).sort().slice(-14).map(k=>({val: user.logs[k].weight})).filter(x=>x.val)} color="#14b8a6" minVal={40} maxVal={100} />
-                            </div>
-                        </div>
-                    ) : view === 'year' ? renderYear() : (
-                        <div className="p-6 max-w-md mx-auto animate-in">
-                            <div className="flex justify-between mb-6"><button onClick={()=>setView('calendar')}><Svg d={Icons.Left} c="w-6 h-6"/></button><h2 className="text-xl font-bold">Ajustes</h2><div/></div>
-                            <div className={`p-4 rounded-xl mb-4 ${dark?'bg-slate-900':'bg-white shadow-sm'}`}>
-                                <div className="flex justify-between mb-4 font-bold"><h3>Usuarios</h3><button onClick={handleAddUser}><Svg d={Icons.Plus} c="w-5 h-5"/></button></div>
-                                {db.users.map(u=><div key={u.id} className="flex justify-between items-center py-2 border-b last:border-0">
-                                    <button onClick={()=>setDb({...db, currentUserId:u.id})} className={u.id===db.currentUserId?'text-rose-500 font-bold':''}>{u.name}</button>
-                                    <div className="flex gap-2">
-                                        <button onClick={()=>handleEditUser(u.id)} className="text-slate-400"><Svg d={Icons.Edit} c="w-4 h-4"/></button>
-                                        {db.users.length>1 && <button onClick={()=>handleDeleteUser(u.id)} className="text-red-400"><Svg d={Icons.Trash} c="w-4 h-4"/></button>}
-                                    </div>
-                                </div>)}
-                            </div>
-                            <div className={`p-4 rounded-xl mb-4 ${dark?'bg-slate-900':'bg-white shadow-sm'}`}>
-                                <h3 className="font-bold mb-4">Ciclo</h3>
-                                <div className="space-y-4 text-sm">
-                                    <div><label>Inicio</label><input type="date" value={user.config.lastPeriod} onChange={(e)=>updateConfig('lastPeriod', e.target.value)} className="border p-1 rounded ml-2"/></div>
-                                    <div className="flex gap-4">
-                                        <label>Ciclo <input type="number" value={user.config.cycleLen} onChange={(e)=>updateConfig('cycleLen', parseInt(e.target.value))} className="border p-1 rounded w-12"/></label>
-                                        <label>Periodo <input type="number" value={user.config.periodLen} onChange={(e)=>updateConfig('periodLen', parseInt(e.target.value))} className="border p-1 rounded w-12"/></label>
-                                    </div>
-                                    <button onClick={()=>{ alert("Guardado"); setView('calendar'); }} className="w-full py-2 rounded text-white font-bold bg-green-500 mt-2 shadow-lg">Guardar Cambios</button>
-                                </div>
-                            </div>
-                            <div className={`p-4 rounded-xl mb-4 ${dark?'bg-slate-900':'bg-white shadow-sm'}`}>
-                                <h3 className="font-bold mb-3">Datos y App</h3>
-                                <div className="flex gap-2 mb-4">{Object.keys(THEMES).map(k=><button key={k} onClick={()=>setDb({...db, theme:k})} className={`w-6 h-6 rounded-full ${THEMES[k].bg} ${db.theme===k?'ring-2 ring-gray-400':''}`}/>)}</div>
-                                <div className="flex justify-between items-center mb-4">
-                                    {db.pin ? <button onClick={()=>setDb({...db, pin:null})} className="text-red-500">Quitar PIN</button> : <button onClick={()=>setShowPinSetup(true)} className="text-indigo-500 font-bold">Poner PIN</button>}
-                                    <button onClick={()=>setDb({...db, showTutorial:true})} className="underline">Ver Tutorial</button>
-                                </div>
-                                <div className="flex gap-2 text-xs"><button onClick={handleExport} className="flex-1 py-2 border rounded">Exportar</button><button onClick={()=>fileRef.current.click()} className="flex-1 py-2 border rounded">Importar</button><input type="file" ref={fileRef} onChange={handleImport} className="hidden"/></div>
-                            </div>
-                        </div>
-                    )}
+                        <div class="grid grid-cols-3 gap-2">${monthsHtml}</div>
+                    </div>
+                `;
+            }
 
-                    {/* NAV */}
-                    {view !== 'pdf' && (
-                        <div className="fixed bottom-0 w-full bg-white border-t p-2 flex justify-around z-40 no-print">
-                            <button onClick={()=>setView('calendar')} className={view==='calendar'?'text-rose-500':'text-slate-400'}><Svg d={Icons.Calendar} c="w-6 h-6"/></button>
-                            <button onClick={()=>setView('year')} className={view==='year'?'text-rose-500':'text-slate-400'}><Svg d={Icons.Grid} c="w-6 h-6"/></button>
-                            <button onClick={()=>setView('report')} className={view==='report'?'text-rose-500':'text-slate-400'}><Svg d={Icons.Activity} c="w-6 h-6"/></button>
-                        </div>
-                    )}
+            // AJUSTES
+            else if (state.view === 'settings') {
+                const user = getUser();
+                let usersHtml = state.users.map(u => `<div class="flex justify-between items-center py-2 border-b"><button onclick="switchUser('${u.id}')" class="${u.id===state.currentUserId?'text-rose-500 font-bold':''}">${u.name}</button><div class="flex gap-2"><button onclick="editUser('${u.id}')" class="text-slate-400">${ICONS.edit}</button>${state.users.length>1?`<button onclick="deleteUser('${u.id}')" class="text-red-400">${ICONS.trash}</button>`:''}</div></div>`).join('');
+                html += `
+                    <div class="p-6 max-w-md mx-auto animate-in">
+                        <div class="flex justify-between mb-6"><button onclick="setView('calendar')">${ICONS.left}</button><h2 class="text-xl font-bold">Ajustes</h2><div></div></div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm mb-4"><div class="flex justify-between mb-4 font-bold"><h3>Usuarios</h3><button onclick="addUser()" class="text-rose-500">${ICONS.plus}</button></div>${usersHtml}</div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm mb-4"><h3 class="font-bold mb-4">Ciclo</h3><div class="space-y-4 text-sm"><label class="block">Inicio: <input type="date" value="${user.config.lastPeriod}" onchange="updateConfig('lastPeriod', this.value)" class="border p-2 rounded w-full mt-1"/></label><div class="flex gap-4"><label class="flex-1">Ciclo: <input type="number" value="${user.config.cycleLen}" onchange="updateConfig('cycleLen', this.value)" class="border p-2 rounded w-full mt-1"/></label><label class="flex-1">Periodo: <input type="number" value="${user.config.periodLen}" onchange="updateConfig('periodLen', this.value)" class="border p-2 rounded w-full mt-1"/></label></div><label class="flex items-center gap-2 mt-2"><input type="checkbox" ${user.config.pill ? 'checked' : ''} onchange="updateConfig('pill', this.checked ? 'true' : 'false')"> Rastrear Pastilla</label><button onclick="alert('Guardado'); setView('calendar')" class="w-full py-2 bg-green-500 text-white rounded font-bold mt-2">Guardar Cambios</button></div></div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm text-center"><button onclick="openTutorial()" class="underline text-sm mb-4 block w-full">Ver Guía Educativa</button></div>
+                    </div>
+                `;
+            }
 
-                    {/* MODAL */}
-                    {selDay && (
-                        <div className="fixed inset-0 z-50 bg-black/60 flex items-end justify-center animate-in" onClick={()=>setSelDay(null)}>
-                            <div className="w-full max-w-sm bg-white rounded-t-3xl p-6 h-[85vh] overflow-y-auto" onClick={e=>e.stopPropagation()}>
-                                <div className="flex justify-between items-center mb-6">
-                                    <h3 className="text-2xl font-bold capitalize">{selDay.d.toLocaleDateString('es-ES',{weekday:'long',day:'numeric'})}</h3>
-                                    <button onClick={()=>setSelDay(null)} className="p-2 bg-gray-100 rounded-full">✕</button>
-                                </div>
-
-                                {/* SALUD COMPLETA */}
-                                <div className="grid grid-cols-2 gap-4 mb-4">
-                                    <div className="bg-blue-50 p-4 rounded-xl flex flex-col items-center">
-                                        <div className="text-blue-500 font-bold text-xs mb-2 flex gap-1"><Svg d={Icons.Droplet} c="w-4 h-4"/> AGUA</div>
-                                        <div className="flex items-center gap-3">
-                                            <button onClick={()=>updateLog(selDay.k,'water',Math.max(0,(user.logs[selDay.k]?.water||0)-1))} className="w-8 h-8 bg-white rounded-full font-bold shadow">-</button>
-                                            <span className="font-bold text-xl">{user.logs[selDay.k]?.water||0}</span>
-                                            <button onClick={()=>updateLog(selDay.k,'water',(user.logs[selDay.k]?.water||0)+1)} className="w-8 h-8 bg-blue-500 text-white rounded-full font-bold shadow">+</button>
-                                        </div>
-                                    </div>
-                                    <div className="bg-indigo-50 p-4 rounded-xl flex flex-col items-center">
-                                        <div className="text-indigo-500 font-bold text-xs mb-2 flex gap-1"><Svg d={Icons.Moon} c="w-4 h-4"/> SUEÑO</div>
-                                        <div className="flex items-center gap-3">
-                                            <button onClick={()=>updateLog(selDay.k,'sleep',Math.max(0,(user.logs[selDay.k]?.sleep||0)-1))} className="w-8 h-8 bg-white rounded-full font-bold shadow">-</button>
-                                            <span className="font-bold text-xl">{user.logs[selDay.k]?.sleep||0}h</span>
-                                            <button onClick={()=>updateLog(selDay.k,'sleep',(user.logs[selDay.k]?.sleep||0)+1)} className="w-8 h-8 bg-indigo-500 text-white rounded-full font-bold shadow">+</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="flex gap-4 mb-4">
-                                    <button onClick={()=>updateLog(selDay.k,'pill',!user.logs[selDay.k]?.pill)} className={`flex-1 p-4 rounded-xl flex items-center justify-center gap-2 border ${user.logs[selDay.k]?.pill?'bg-green-100 border-green-500 text-green-700':'border-slate-100'}`}>
-                                        {user.logs[selDay.k]?.pill?<Svg d={Icons.Check} c="w-5 h-5"/>:<Svg d={Icons.Pill} c="w-5 h-5"/>} <span className="font-bold text-sm">Pastilla</span>
-                                    </button>
-                                    <div className="flex-1 p-4 rounded-xl flex items-center justify-between border border-slate-100">
-                                        <Svg d={Icons.Scale} c="w-5 h-5 opacity-50"/><input type="number" placeholder="Kg" value={user.logs[selDay.k]?.weight||''} onChange={(e)=>updateLog(selDay.k,'weight',e.target.value)} className="w-16 text-right font-bold outline-none"/>
-                                    </div>
-                                </div>
-
-                                <div className="p-4 rounded-xl mb-4 flex items-center justify-between border border-slate-100">
-                                    <div className="flex gap-2 text-rose-400 font-bold text-sm"><Svg d={Icons.Thermo} c="w-5 h-5"/> Temp</div>
-                                    <input type="number" step="0.1" placeholder="36.5" value={user.logs[selDay.k]?.temp||''} onChange={(e)=>updateLog(selDay.k,'temp',e.target.value)} className="w-20 text-right font-bold text-lg outline-none"/>
-                                </div>
-
-                                <div className="mb-4">
-                                    <label className="text-xs font-bold text-slate-400 mb-2 block">NOTAS</label>
-                                    <textarea className="w-full p-3 rounded-xl border border-slate-200 outline-none" rows="2" placeholder="¿Cómo te sientes?" value={user.logs[selDay.k]?.notes||''} onChange={(e)=>updateLog(selDay.k,'notes',e.target.value)}></textarea>
-                                </div>
-
-                                <div className="grid grid-cols-4 gap-2">
-                                    {SYMPTOMS.map(s => {
-                                        const active = (user.logs[selDay.k]?.symptoms||[]).includes(s.id);
-                                        const SIcon = s.I;
-                                        return <button key={s.id} onClick={()=>{const curr=user.logs[selDay.k]?.symptoms||[]; updateLog(selDay.k,'symptoms',active?curr.filter(x=>x!==s.id):[...curr,s.id])}} className={`p-3 rounded-xl border flex flex-col items-center gap-1 ${active?`${theme.light} border-transparent ${theme.text}`:(dark?'border-slate-700':'border-slate-100')}`}><Svg d={SIcon} c="w-6 h-6"/><span className="text-[10px] font-medium">{s.label}</span></button>
-                                    })}
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    <footer className="text-center py-6 text-xs opacity-40 no-print pb-24"><p>Creado por ❤️ Juan Miguel Rios Redondo ❤️</p></footer>
+            // MENU NAV
+            const activeClass = "text-rose-500";
+            const inactiveClass = "text-slate-400";
+            html += `
+                <div class="fixed bottom-0 w-full bg-white border-t border-slate-100 flex justify-around p-2 pb-4 z-40 no-print">
+                    <button onclick="setView('calendar')" class="flex flex-col items-center p-2 ${state.view === 'calendar' ? activeClass : inactiveClass}">${ICONS.calendar} <span class="text-[10px] font-bold">Calendario</span></button>
+                    <button onclick="setView('year')" class="flex flex-col items-center p-2 ${state.view === 'year' ? activeClass : inactiveClass}">${ICONS.grid} <span class="text-[10px] font-bold">Año</span></button>
+                    <button onclick="setView('settings')" class="flex flex-col items-center p-2 ${state.view === 'settings' ? activeClass : inactiveClass}">${ICONS.settings} <span class="text-[10px] font-bold">Ajustes</span></button>
                 </div>
-            );
-        };
+            `;
 
-        ReactDOM.render(<App />, document.getElementById('root'));
+            // MODAL
+            if (state.selectedDate) {
+                const k = state.selectedDate;
+                const user = getUser();
+                const log = user.logs[k] || {};
+                const displayDate = new Date(k + 'T00:00:00').toLocaleDateString('es-ES', {weekday:'long', day:'numeric'});
+                
+                // Síntomas HTML
+                const symptomsHtml = ['happy','sad','irritable','cramps','bloating','tired'].map(s => {
+                    const isActive = (log.symptoms || []).includes(s);
+                    return `<button onclick="updateLog('symptoms', '${s}')" class="p-3 rounded-xl border flex flex-col items-center gap-1 ${isActive ? 'bg-rose-100 border-rose-200 text-rose-600' : 'border-slate-100 text-slate-400'}"><span class="capitalize text-xs font-bold">${s}</span></button>`;
+                }).join('');
+
+                html += `
+                    <div class="fixed inset-0 z-50 bg-black/60 flex items-end justify-center animate-in" onclick="closeModal()">
+                        <div class="w-full max-w-sm bg-white rounded-t-3xl p-6 h-[85vh] overflow-y-auto" onclick="event.stopPropagation()">
+                            <div class="flex justify-between items-center mb-6"><h3 class="text-2xl font-bold capitalize">${displayDate}</h3><button onclick="closeModal()" class="p-2 bg-gray-100 rounded-full">${ICONS.close}</button></div>
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div class="bg-blue-50 p-4 rounded-xl flex flex-col items-center"><div class="text-xs font-bold text-blue-500 mb-2 flex gap-1">${ICONS.droplet} AGUA</div><div class="flex items-center gap-3"><button onclick="updateLog('water', 'dec')" class="w-8 h-8 bg-white rounded-full font-bold shadow text-blue-500">-</button><span class="font-bold text-xl">${log.water||0}</span><button onclick="updateLog('water', 'inc')" class="w-8 h-8 bg-blue-500 text-white rounded-full font-bold shadow">+</button></div></div>
+                                <div class="bg-indigo-50 p-4 rounded-xl flex flex-col items-center"><div class="text-xs font-bold text-indigo-500 mb-2 flex gap-1">${ICONS.moon} SUEÑO</div><div class="flex items-center gap-3"><button onclick="updateLog('sleep', 'dec')" class="w-8 h-8 bg-white rounded-full font-bold shadow text-indigo-500">-</button><span class="font-bold text-xl">${log.sleep||0}h</span><button onclick="updateLog('sleep', 'inc')" class="w-8 h-8 bg-indigo-500 text-white rounded-full font-bold shadow">+</button></div></div>
+                            </div>
+                            <div class="mb-4"><label class="text-xs font-bold text-slate-400 mb-2 block uppercase">Notas</label><textarea onchange="updateLog('notes', this.value)" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl" rows="3">${log.notes||''}</textarea></div>
+                            <div class="grid grid-cols-3 gap-2 mb-6">${symptomsHtml}</div>
+                            <button onclick="closeModal()" class="w-full py-3 bg-slate-900 text-white rounded-xl font-bold shadow-lg">Guardar</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            app.innerHTML = html;
+        }
+
+        render();
     </script>
 </body>
 </html>
+
