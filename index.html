@@ -15,6 +15,15 @@
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         
+        /* Toggle Switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #f43f5e;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #f43f5e;
+        }
+        
         @media print {
             .no-print { display: none !important; }
             body { background: white; color: black; }
@@ -42,42 +51,31 @@
             settings: '<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>',
             left: '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>',
             right: '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>',
-            activity: '<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',
             grid: '<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>',
             droplet: '<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.74 5.88a6 6 0 0 1-8.48 8.48A6 6 0 0 1 5.25 9.56L12 2.69z"/></svg>',
             moon: '<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>',
-            sun: '<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>',
-            pill: '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="6" ry="6"/></svg>',
-            check: '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
             users: '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>',
             trash: '<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>',
             edit: '<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
             plus: '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
             close: '<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
-            file: '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>',
-            thermo: '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>',
-            scale: '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>',
-            sparkles: '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M9 5H5"/><path d="M19 21v-4"/><path d="M15 19h4"/></svg>',
-            
-            // SINTOMAS
-            smile: '<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></svg>',
-            frown: '<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>',
-            zap: '<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
-            cloud: '<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="16" y1="13" x2="16" y2="21"/><line x1="8" y1="13" x2="8" y2="21"/><line x1="12" y1="15" x2="12" y2="23"/><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/></svg>'
+            check: '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+            history: '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/></svg>',
+            pill: '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 10 10 10 10 0 0 1-10 10"/><path d="M12 12 2 12"/></svg>'
         };
 
         // --- ESTADO ---
-        const DB_KEY = 'lunea_v55_tutorial';
-        let tutorialStep = 0; // Control local del tutorial
+        const DB_KEY = 'lunea_v58_pill';
+        let tutorialStep = 0; 
 
         let state = {
             view: 'calendar',
             currentMonth: new Date(),
             viewYear: new Date().getFullYear(),
             selectedDate: null,
-            users: [{ id: '1', name: 'Yo', config: { lastPeriod: new Date().toISOString().split('T')[0], cycleLen: 28, periodLen: 5, pill: false }, logs: {} }],
+            users: [{ id: '1', name: 'Yo', config: { lastPeriod: new Date().toISOString().split('T')[0], cycleLen: 28, periodLen: 5, pill: false }, periodHistory: [], logs: {} }],
             currentUserId: '1',
-            showTutorial: true // Inicia true
+            showTutorial: true
         };
 
         // Cargar
@@ -86,6 +84,10 @@
             if (saved) {
                 const parsed = JSON.parse(saved);
                 state = { ...state, ...parsed, currentMonth: new Date(), viewYear: new Date().getFullYear(), selectedDate: null };
+                // Asegurar array de historial
+                state.users.forEach(u => {
+                    if (!u.periodHistory) u.periodHistory = [u.config.lastPeriod];
+                });
             }
         } catch(e) { console.log('Error carga:', e); }
 
@@ -95,12 +97,84 @@
         
         function toKey(d) { const o = d.getTimezoneOffset() * 60000; return new Date(d.getTime() - o).toISOString().split('T')[0]; }
 
+        function recalculateCycleStats(user) {
+            if (!user.periodHistory || user.periodHistory.length < 2) return;
+
+            const sortedHistory = [...user.periodHistory].sort((a, b) => new Date(a) - new Date(b));
+            
+            // Actualizar último periodo conocido
+            const latest = sortedHistory[sortedHistory.length - 1];
+            user.config.lastPeriod = latest;
+
+            let totalDays = 0;
+            let count = 0;
+
+            for (let i = 1; i < sortedHistory.length; i++) {
+                const prev = new Date(sortedHistory[i-1]);
+                const curr = new Date(sortedHistory[i]);
+                const diffTime = Math.abs(curr - prev);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                // Permitir ciclos entre 15 y 50 días para el promedio
+                if (diffDays >= 15 && diffDays <= 50) {
+                    totalDays += diffDays;
+                    count++;
+                }
+            }
+
+            if (count > 0) {
+                user.config.cycleLen = Math.round(totalDays / count);
+            }
+        }
+
+        function togglePeriodStart(dateStr) {
+            const user = getUser();
+            if (!user.periodHistory) user.periodHistory = [];
+
+            if (user.periodHistory.includes(dateStr)) {
+                user.periodHistory = user.periodHistory.filter(d => d !== dateStr);
+            } else {
+                user.periodHistory.push(dateStr);
+            }
+            recalculateCycleStats(user);
+            save();
+        }
+
+        // Nueva función para ir a hoy
+        window.goToToday = () => {
+            state.currentMonth = new Date();
+            state.viewYear = new Date().getFullYear();
+            render();
+        };
+
+        window.deleteHistoryItem = (dateStr) => {
+            if(confirm('¿Borrar este inicio de periodo del historial?')) {
+                const user = getUser();
+                user.periodHistory = user.periodHistory.filter(d => d !== dateStr);
+                recalculateCycleStats(user);
+                save();
+            }
+        };
+
         function getCycleDay(dateStr) {
             const user = getUser();
             const start = new Date(user.config.lastPeriod + 'T00:00:00');
             const target = new Date(dateStr + 'T00:00:00');
-            if (target < start) return null;
+            
+            // Búsqueda histórica retrospectiva
+            if (target < start && user.periodHistory && user.periodHistory.length > 0) {
+                const sorted = [...user.periodHistory].sort((a, b) => new Date(b) - new Date(a));
+                const relevantStart = sorted.find(d => new Date(d + 'T00:00:00') <= target);
+                
+                if (relevantStart) {
+                    const rStart = new Date(relevantStart + 'T00:00:00');
+                    const diff = Math.floor((target - rStart) / 86400000);
+                    return diff + 1;
+                }
+            }
+
             const diff = Math.floor((target - start) / 86400000);
+            if (diff < 0) return null;
             return (diff % user.config.cycleLen) + 1;
         }
 
@@ -109,11 +183,13 @@
             const user = getUser();
             if (!cd) return null;
             const ov = user.config.cycleLen - 14;
-            if (cd <= user.config.periodLen) return {l:'Menstruación', bg:'bg-rose-500', t:'text-rose-600', light:'bg-rose-100'};
-            if (cd >= ov - 5 && cd < ov) return {l:'Fértil', bg:'bg-purple-400', t:'text-purple-600', light:'bg-purple-100'};
-            if (cd === ov) return {l:'Ovulación', bg:'bg-purple-600', t:'text-purple-700', light:'bg-purple-200'};
-            if (cd > ov) return {l:'Lútea', bg:'bg-amber-400', t:'text-amber-600', light:'bg-amber-100'};
-            return {l:'Folicular', bg:'bg-pink-300', t:'text-pink-600', light:'bg-pink-50'};
+            const isStart = user.periodHistory && user.periodHistory.includes(dateStr);
+
+            if (cd <= user.config.periodLen) return {l:'Menstruación', bg:'bg-rose-500', t:'text-rose-600', light:'bg-rose-100', isStart};
+            if (cd >= ov - 5 && cd < ov) return {l:'Fértil', bg:'bg-purple-400', t:'text-purple-600', light:'bg-purple-100', isStart};
+            if (cd === ov) return {l:'Ovulación', bg:'bg-purple-600', t:'text-purple-700', light:'bg-purple-200', isStart};
+            if (cd > ov) return {l:'Lútea', bg:'bg-amber-400', t:'text-amber-600', light:'bg-amber-100', isStart};
+            return {l:'Folicular', bg:'bg-pink-300', t:'text-pink-600', light:'bg-pink-50', isStart};
         }
 
         // --- ACCIONES GLOBAL ---
@@ -131,7 +207,9 @@
                 let current = user.logs[key][field] || 0;
                 if (val === 'inc') current++; else if (val === 'dec') current = Math.max(0, current - 1);
                 user.logs[key][field] = current;
-            } else if (field === 'pill') { user.logs[key].pill = !user.logs[key].pill; }
+            } else if (field === 'pill') { 
+                user.logs[key].pill = !user.logs[key].pill; 
+            }
             else if (field === 'symptoms') {
                 let current = user.logs[key].symptoms || [];
                 if(current.includes(val)) current = current.filter(s => s !== val); else current.push(val);
@@ -146,55 +224,49 @@
             if(field !== 'lastPeriod' && field !== 'pill') val = parseInt(val);
             if(field === 'pill') val = val === 'true'; 
             user.config[field] = val;
+            
+            if (field === 'lastPeriod') {
+                if (!user.periodHistory.includes(val)) {
+                    user.periodHistory.push(val);
+                    recalculateCycleStats(user);
+                }
+            }
             save();
         };
+        
+        window.handlePeriodToggle = (dateStr) => {
+            togglePeriodStart(dateStr);
+            render(); 
+        };
 
-        window.addUser = () => { const n = prompt("Nombre:"); if (n) { const id = Date.now().toString(); state.users.push({ id, name: n, config: {...getUser().config}, logs: {} }); state.currentUserId = id; save(); } };
+        window.addUser = () => { const n = prompt("Nombre:"); if (n) { const id = Date.now().toString(); state.users.push({ id, name: n, config: {...getUser().config}, periodHistory: [], logs: {} }); state.currentUserId = id; save(); } };
         window.switchUser = (id) => { state.currentUserId = id; save(); };
         window.deleteUser = (id) => { if(state.users.length <= 1) return alert("Mínimo un usuario"); if(confirm("¿Borrar?")) { state.users = state.users.filter(u => u.id !== id); state.currentUserId = state.users[0].id; save(); } };
         window.editUser = (id) => { const u = state.users.find(u => u.id === id); const n = prompt("Nuevo nombre:", u.name); if (n) { u.name = n; save(); } };
         
         // TUTORIAL LOGIC
-        window.nextSlide = () => {
-            tutorialStep++;
-            render();
-        };
-        window.endTutorial = () => {
-            state.showTutorial = false;
-            tutorialStep = 0;
-            save();
-        };
-        window.openTutorial = () => {
-            state.showTutorial = true;
-            tutorialStep = 0;
-            render();
-        }
+        window.nextSlide = () => { tutorialStep++; render(); };
+        window.endTutorial = () => { state.showTutorial = false; tutorialStep = 0; save(); };
+        window.openTutorial = () => { state.showTutorial = true; tutorialStep = 0; render(); };
 
         // --- RENDERIZADO ---
         function render() {
             const app = document.getElementById('app');
             let html = '';
 
-            // TUTORIAL WIZARD
+            // TUTORIAL
             if (state.showTutorial) {
                 const slides = [
                     { t: "Bienvenida a Lunea", d: "Tu espacio privado para conocer tu ciclo. Sin internet, 100% seguro en tu dispositivo.", i: ICONS.heart, c: "text-rose-500 bg-rose-100" },
-                    { t: "Los Colores del Ciclo", d: `
+                    { t: "Historial Inteligente", d: "Marca tus inicios de periodo. Lunea calculará tu promedio real automáticamente.", i: ICONS.history, c: "text-indigo-500 bg-indigo-100" },
+                    { t: "Los Colores", d: `
                         <ul class="text-left text-sm space-y-2 bg-slate-50 p-4 rounded-xl">
-                            <li class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-rose-500"></div> <b>Rojo (Menstruación):</b> Días de sangrado.</li>
-                            <li class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-pink-400"></div> <b>Rosa (Folicular):</b> Energía subiendo.</li>
-                            <li class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-purple-400"></div> <b>Morado (Fértil):</b> Alta probabilidad de embarazo.</li>
-                            <li class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-amber-400"></div> <b>Ámbar (Lútea):</b> Preparación pre-menstrual.</li>
+                            <li class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-rose-500"></div> <b>Rojo:</b> Menstruación</li>
+                            <li class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-purple-400"></div> <b>Morado:</b> Fértil</li>
+                            <li class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-amber-400"></div> <b>Ámbar:</b> Lútea</li>
                         </ul>
-                    `, i: ICONS.droplet, c: "text-indigo-500 bg-indigo-100" },
-                    { t: "Funciones Principales", d: `
-                         <div class="text-left text-sm space-y-2 bg-slate-50 p-4 rounded-xl">
-                            <p><b>📅 Calendario:</b> Toca un día para registrar síntomas y ver predicciones.</p>
-                            <p><b>📊 Salud:</b> Gráficos de temperatura, peso y reporte médico PDF.</p>
-                            <p><b>⚙️ Ajustes:</b> Crea usuarios (para ti o tu hija) y haz copias de seguridad.</p>
-                         </div>
-                    `, i: ICONS.settings, c: "text-teal-500 bg-teal-100" },
-                    { t: "¡Todo Listo!", d: "Ya puedes empezar a registrar tu ciclo.", i: ICONS.check, c: "text-green-500 bg-green-100" }
+                    `, i: ICONS.droplet, c: "text-teal-500 bg-teal-100" },
+                    { t: "¡Empezar!", d: "Todo listo para comenzar.", i: ICONS.check, c: "text-green-500 bg-green-100" }
                 ];
                 
                 const slide = slides[tutorialStep];
@@ -204,9 +276,6 @@
                         <div class="p-6 rounded-full mb-6 ${slide.c.split(' ')[1]} ${slide.c.split(' ')[0]}">${slide.i}</div>
                         <h2 class="text-2xl font-bold mb-4 text-slate-800">${slide.t}</h2>
                         <div class="text-slate-500 mb-8 w-full max-w-xs">${slide.d}</div>
-                        <div class="flex gap-2 mb-8">
-                            ${slides.map((_,i) => `<div class="h-2 rounded-full transition-all duration-300 ${i===tutorialStep ? 'w-8 bg-slate-800' : 'w-2 bg-slate-200'}"></div>`).join('')}
-                        </div>
                         <button onclick="${tutorialStep < slides.length - 1 ? 'nextSlide()' : 'endTutorial()'}" class="w-full max-w-xs py-3 bg-slate-900 text-white rounded-xl font-bold shadow-lg">
                             ${tutorialStep < slides.length - 1 ? 'Siguiente' : 'Empezar'}
                         </button>
@@ -221,15 +290,16 @@
                 const logs = Object.keys(user.logs).sort().reverse().slice(0, 30);
                 const rows = logs.map(k => {
                     const log = user.logs[k];
-                    return `<tr class="border-b"><td class="py-2">${k}</td><td>${getCycleDay(k)}</td><td>${getPhase(k)?.l}</td><td>${(log.symptoms||[]).length}</td><td class="italic text-gray-500">${log.notes||'-'}</td></tr>`;
+                    const pillText = user.config.pill ? (log.pill ? 'SÍ' : 'NO') : '-';
+                    return `<tr class="border-b"><td class="py-2">${k}</td><td>${getCycleDay(k)}</td><td>${getPhase(k)?.l}</td><td>${pillText}</td><td>${(log.symptoms||[]).length}</td><td class="italic text-gray-500">${log.notes||'-'}</td></tr>`;
                 }).join('');
 
                 app.innerHTML = `
                     <div class="bg-white text-black p-8 min-h-screen">
                         <h1 class="text-2xl font-bold text-rose-600 mb-4">Reporte Médico</h1>
-                        <p class="mb-4">Paciente: ${user.name} | Ciclo: ${user.config.cycleLen} días</p>
+                        <p class="mb-4">Paciente: ${user.name} | Ciclo Promedio: ${user.config.cycleLen} días</p>
                         <table class="w-full text-sm text-left border-collapse">
-                            <thead><tr class="border-b bg-gray-50"><th class="p-2">Fecha</th><th>Día</th><th>Fase</th><th>Sínt.</th><th>Notas</th></tr></thead>
+                            <thead><tr class="border-b bg-gray-50"><th class="p-2">Fecha</th><th>Día</th><th>Fase</th><th>Pastilla</th><th>Sínt.</th><th>Notas</th></tr></thead>
                             <tbody>${rows}</tbody>
                         </table>
                         <div class="mt-8 no-print text-center"><button onclick="window.print()" class="bg-black text-white px-6 py-2 rounded font-bold">Imprimir</button><button onclick="setView('report')" class="ml-4 underline">Volver</button></div>
@@ -238,13 +308,13 @@
                 return;
             }
 
-            // --- LAYOUT APP ---
+            // HEADER APP
             html += `<div class="px-6 py-4 flex justify-between items-center bg-white shadow-sm sticky top-0 z-20">
                 <div class="flex items-center gap-2 text-rose-500">${ICONS.heart} <h1 class="text-xl font-bold text-slate-800">Lunea</h1></div>
                 <button onclick="setView('settings')" class="text-slate-400 p-2">${ICONS.settings}</button>
             </div>`;
 
-            // CALENDARIO
+            // CALENDARIO MES
             if (state.view === 'calendar') {
                 const user = getUser();
                 const year = state.currentMonth.getFullYear();
@@ -255,6 +325,9 @@
                 const todayCD = getCycleDay(todayK);
                 const todayP = getPhase(todayK);
 
+                // Verificar si estamos en el mes actual para mostrar el botón HOY o no
+                const isCurrentMonth = todayK.startsWith(`${year}-${String(month+1).padStart(2,'0')}`);
+
                 let daysHtml = '';
                 for(let i=0; i<startDay; i++) daysHtml += `<div></div>`;
                 for(let i=1; i<=daysInMonth; i++) {
@@ -264,33 +337,40 @@
                     const p = getPhase(k);
                     const isToday = k === todayK;
                     const log = user.logs[k] || {};
+                    const isPeriodStart = user.periodHistory && user.periodHistory.includes(k);
                     
                     let dots = '';
                     if(p) dots += `<div class="w-1.5 h-1.5 rounded-full ${p.bg}"></div>`;
+                    if(log.pill) dots += `<div class="w-1.5 h-1.5 rounded-full bg-teal-400"></div>`; // Punto pastilla
                     if(log.water || log.sleep) dots += `<div class="w-1.5 h-1.5 rounded-full bg-blue-500"></div>`;
                     if(log.symptoms && log.symptoms.length > 0) dots += `<div class="w-1.5 h-1.5 rounded-full bg-purple-500"></div>`;
+                    if(isPeriodStart) dots = `<div class="w-2 h-2 rounded-full bg-red-600 border border-white ring-1 ring-red-200"></div>` + dots;
 
                     daysHtml += `
-                        <button onclick="selectDate('${k}')" class="h-16 rounded-xl flex flex-col items-center justify-center relative day-cell border ${isToday ? 'border-rose-500 border-2' : 'border-slate-100'} ${p ? p.light : 'bg-white'}">
+                        <button onclick="selectDate('${k}')" class="h-16 rounded-xl flex flex-col items-center justify-center relative day-cell border ${isToday ? 'border-rose-500 border-2' : (isPeriodStart ? 'border-rose-300 bg-rose-50' : 'border-slate-100')} ${p ? p.light : 'bg-white'}">
                             ${cd ? `<span class="absolute top-1 right-1 text-[10px] font-bold text-slate-400 font-mono">${cd}</span>` : ''}
                             <span class="text-sm font-bold ${p ? p.t : 'text-slate-600'}">${i}</span>
-                            <div class="flex gap-0.5 mt-1">${dots}</div>
+                            <div class="flex gap-0.5 mt-1 items-center">${dots}</div>
                         </button>
                     `;
                 }
 
                 html += `
                     <div class="p-4 max-w-md mx-auto animate-in">
-                        <div class="rounded-[2rem] p-6 mb-6 text-center bg-white shadow-sm border border-slate-100">
+                        <div class="rounded-[2rem] p-6 mb-6 text-center bg-white shadow-sm border border-slate-100 relative overflow-hidden">
+                             ${todayP && todayP.l === 'Menstruación' ? '<div class="absolute top-0 left-0 w-full h-1 bg-rose-500"></div>' : ''}
                             <h2 class="text-xs font-bold uppercase text-slate-400 mb-2">${new Date().toLocaleDateString('es-ES', {weekday:'long', day:'numeric'})}</h2>
                             <div class="text-5xl font-black text-slate-800 mb-1">${todayCD || '?'}</div>
-                            <div class="text-sm text-slate-500 mb-4">Día del Ciclo</div>
-                            ${todayCD ? `<div class="inline-block px-4 py-1 rounded-full text-sm font-bold ${todayP.light} ${todayP.t}">${todayP.l}</div>` : `<button onclick="setView('settings')" class="bg-rose-500 text-white px-4 py-2 rounded animate-pulse">Configurar Inicio</button>`}
+                            <div class="text-sm text-slate-500 mb-4">Día del Ciclo (Promedio: ${user.config.cycleLen} días)</div>
+                            ${todayCD ? `<div class="inline-block px-4 py-1 rounded-full text-sm font-bold ${todayP.light} ${todayP.t}">${todayP.l}</div>` : `<button onclick="setView('settings')" class="bg-rose-500 text-white px-4 py-2 rounded animate-pulse">Configurar</button>`}
                         </div>
                         <div class="p-4 bg-white rounded-3xl shadow-sm mb-6">
                             <div class="flex justify-between items-center mb-4">
                                 <button onclick="setMonth(-1)" class="p-2 text-slate-400">${ICONS.left}</button>
-                                <div class="text-center"><div class="font-bold capitalize">${state.currentMonth.toLocaleDateString('es-ES', {month:'long', year:'numeric'})}</div><button onclick="goToToday()" class="text-[10px] text-rose-500 font-bold">HOY</button></div>
+                                <div class="text-center">
+                                    <div class="font-bold capitalize text-lg">${state.currentMonth.toLocaleDateString('es-ES', {month:'long', year:'numeric'})}</div>
+                                    ${!isCurrentMonth ? `<button onclick="goToToday()" class="mt-1 text-[10px] text-white bg-rose-500 px-2 py-0.5 rounded-full font-bold shadow-sm hover:bg-rose-600 transition">Volver a Hoy</button>` : ''}
+                                </div>
                                 <button onclick="setMonth(1)" class="p-2 text-slate-400">${ICONS.right}</button>
                             </div>
                             <div class="grid grid-cols-7 text-center text-xs text-slate-400 font-bold mb-2"><span>D</span><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span></div>
@@ -304,22 +384,53 @@
             else if (state.view === 'year') {
                 let monthsHtml = '';
                 for(let m=0; m<12; m++) {
-                    const daysInM = new Date(state.viewYear, m+1, 0).getDate();
-                    let dots = '';
+                    const currentY = state.viewYear;
+                    const date = new Date(currentY, m, 1);
+                    const daysInM = new Date(currentY, m+1, 0).getDate();
+                    const startDay = date.getDay(); 
+                    
+                    let daysGrid = '';
+                    for(let i=0; i<startDay; i++) daysGrid += `<div></div>`;
+                    
                     for(let d=1; d<=daysInM; d++) {
-                        const k = toKey(new Date(state.viewYear, m, d));
+                        const k = toKey(new Date(currentY, m, d));
                         const p = getPhase(k);
-                        dots += `<div class="w-1.5 h-1.5 rounded-full ${p ? p.bg : 'bg-slate-100'}"></div>`;
+                        const isStart = getUser().periodHistory.includes(k);
+                        
+                        let bg = 'bg-slate-100 text-slate-300';
+                        if (isStart) bg = 'bg-red-600 text-white font-bold';
+                        else if (p && p.l === 'Menstruación') bg = 'bg-rose-400 text-white';
+                        else if (p && p.l === 'Fértil') bg = 'bg-purple-300 text-purple-900';
+                        else if (p && p.l === 'Ovulación') bg = 'bg-purple-600 text-white font-bold';
+                        else if (p) bg = 'bg-slate-100 text-slate-900';
+
+                        daysGrid += `<div class="w-full aspect-square rounded-sm text-[6px] flex items-center justify-center ${bg}">${d}</div>`;
                     }
-                    monthsHtml += `<div class="p-1 border rounded bg-white"><div class="font-bold text-[8px] text-center mb-1">${new Date(state.viewYear, m).toLocaleDateString('es-ES',{month:'short'})}</div><div class="flex flex-wrap gap-[1px] justify-center">${dots}</div></div>`;
+
+                    monthsHtml += `
+                        <div class="bg-white p-2 rounded-lg border border-slate-100">
+                            <div class="font-bold text-xs text-center mb-1 capitalize text-slate-700">${date.toLocaleDateString('es-ES',{month:'long'})}</div>
+                            <div class="grid grid-cols-7 gap-[1px] mb-1">
+                                ${['D','L','M','M','J','V','S'].map(day => `<div class="text-[6px] text-center text-slate-400">${day}</div>`).join('')}
+                            </div>
+                            <div class="grid grid-cols-7 gap-[1px]">
+                                ${daysGrid}
+                            </div>
+                        </div>`;
                 }
+                
                 html += `
-                    <div class="p-4 max-w-md mx-auto animate-in mb-24">
-                        <div class="flex justify-between items-center mb-6">
+                    <div class="p-4 animate-in mb-24">
+                        <div class="flex justify-between items-center mb-6 sticky top-0 bg-[#f8fafc] py-2 z-10">
                             <button onclick="setView('calendar')">${ICONS.left}</button>
-                            <div class="flex gap-4 items-center"><button onclick="setYear(-1)">${ICONS.left}</button><h2 class="text-xl font-bold">${state.viewYear}</h2><button onclick="setYear(1)">${ICONS.right}</button></div><div class="w-6"></div>
+                            <div class="flex gap-4 items-center">
+                                <button onclick="setYear(-1)" class="p-2 bg-white rounded-full shadow-sm">${ICONS.left}</button>
+                                <h2 class="text-xl font-bold text-slate-800">${state.viewYear}</h2>
+                                <button onclick="setYear(1)" class="p-2 bg-white rounded-full shadow-sm">${ICONS.right}</button>
+                            </div>
+                            <div class="w-6"></div>
                         </div>
-                        <div class="grid grid-cols-3 gap-2">${monthsHtml}</div>
+                        <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">${monthsHtml}</div>
                     </div>
                 `;
             }
@@ -327,25 +438,102 @@
             // AJUSTES
             else if (state.view === 'settings') {
                 const user = getUser();
-                let usersHtml = state.users.map(u => `<div class="flex justify-between items-center py-2 border-b"><button onclick="switchUser('${u.id}')" class="${u.id===state.currentUserId?'text-rose-500 font-bold':''}">${u.name}</button><div class="flex gap-2"><button onclick="editUser('${u.id}')" class="text-slate-400">${ICONS.edit}</button>${state.users.length>1?`<button onclick="deleteUser('${u.id}')" class="text-red-400">${ICONS.trash}</button>`:''}</div></div>`).join('');
+                let usersHtml = state.users.map(u => `
+                    <div class="flex justify-between items-center py-3 border-b last:border-0">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 font-bold">${u.name[0]}</div>
+                            <div class="flex flex-col">
+                                <button onclick="switchUser('${u.id}')" class="text-left font-bold ${u.id===state.currentUserId?'text-rose-600':'text-slate-700'}">${u.name}</button>
+                                <span class="text-[10px] text-slate-400">ID: ${u.id.substr(0,4)}</span>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="editUser('${u.id}')" class="p-2 text-blue-500 bg-blue-50 rounded-lg hover:bg-blue-100 transition">${ICONS.edit}</button>
+                            ${state.users.length>1 ? `<button onclick="deleteUser('${u.id}')" class="p-2 text-red-500 bg-red-50 rounded-lg hover:bg-red-100 transition">${ICONS.trash}</button>` : ''}
+                        </div>
+                    </div>
+                `).join('');
+                
+                let historyHtml = '<div class="text-center py-4 text-slate-400 italic text-sm">No hay registros aún.</div>';
+                if(user.periodHistory && user.periodHistory.length > 0) {
+                     historyHtml = user.periodHistory
+                        .sort((a,b) => new Date(b) - new Date(a))
+                        .map(d => `
+                            <div class="flex justify-between items-center text-sm py-2 border-b border-slate-50 last:border-0">
+                                <span class="font-mono text-slate-600">${d}</span>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-[10px] font-bold text-rose-500 bg-rose-50 px-2 py-1 rounded-full">Inicio</span>
+                                    <button onclick="deleteHistoryItem('${d}')" class="text-slate-400 hover:text-red-500 p-1">${ICONS.trash}</button>
+                                </div>
+                            </div>`)
+                        .join('');
+                }
+
                 html += `
                     <div class="p-6 max-w-md mx-auto animate-in">
                         <div class="flex justify-between mb-6"><button onclick="setView('calendar')">${ICONS.left}</button><h2 class="text-xl font-bold">Ajustes</h2><div></div></div>
-                        <div class="bg-white p-4 rounded-xl shadow-sm mb-4"><div class="flex justify-between mb-4 font-bold"><h3>Usuarios</h3><button onclick="addUser()" class="text-rose-500">${ICONS.plus}</button></div>${usersHtml}</div>
-                        <div class="bg-white p-4 rounded-xl shadow-sm mb-4"><h3 class="font-bold mb-4">Ciclo</h3><div class="space-y-4 text-sm"><label class="block">Inicio: <input type="date" value="${user.config.lastPeriod}" onchange="updateConfig('lastPeriod', this.value)" class="border p-2 rounded w-full mt-1"/></label><div class="flex gap-4"><label class="flex-1">Ciclo: <input type="number" value="${user.config.cycleLen}" onchange="updateConfig('cycleLen', this.value)" class="border p-2 rounded w-full mt-1"/></label><label class="flex-1">Periodo: <input type="number" value="${user.config.periodLen}" onchange="updateConfig('periodLen', this.value)" class="border p-2 rounded w-full mt-1"/></label></div><label class="flex items-center gap-2 mt-2"><input type="checkbox" ${user.config.pill ? 'checked' : ''} onchange="updateConfig('pill', this.checked ? 'true' : 'false')"> Rastrear Pastilla</label><button onclick="alert('Guardado'); setView('calendar')" class="w-full py-2 bg-green-500 text-white rounded font-bold mt-2">Guardar Cambios</button></div></div>
-                        <div class="bg-white p-4 rounded-xl shadow-sm text-center"><button onclick="openTutorial()" class="underline text-sm mb-4 block w-full">Ver Guía Educativa</button></div>
+                        
+                        <div class="bg-white p-5 rounded-2xl shadow-sm mb-6">
+                             <h3 class="font-bold mb-4 flex gap-2 items-center text-rose-500 text-lg">${ICONS.history} Historial</h3>
+                             <div class="bg-indigo-50 p-4 rounded-xl mb-4">
+                                <div class="text-xs text-indigo-400 font-bold uppercase mb-1">Promedio Calculado</div>
+                                <div class="text-2xl font-black text-indigo-900">${user.config.cycleLen} días</div>
+                                <div class="text-[10px] text-indigo-400 mt-1">Basado en tus últimos registros válidos</div>
+                             </div>
+                             <div class="max-h-64 overflow-y-auto pr-2 custom-scroll">${historyHtml}</div>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-2xl shadow-sm mb-6">
+                            <div class="flex justify-between mb-4 items-center">
+                                <h3 class="font-bold text-lg text-slate-800">Usuarios</h3>
+                                <button onclick="addUser()" class="text-white bg-rose-500 p-1 rounded-lg">${ICONS.plus}</button>
+                            </div>
+                            <div class="flex flex-col">${usersHtml}</div>
+                        </div>
+                        
+                        <div class="bg-white p-5 rounded-2xl shadow-sm mb-6">
+                            <h3 class="font-bold mb-4 text-slate-800 text-lg">Configuración Manual</h3>
+                            <div class="space-y-4 text-sm">
+                                <label class="block">
+                                    <span class="text-slate-500 text-xs font-bold uppercase">Último Periodo</span>
+                                    <input type="date" value="${user.config.lastPeriod}" onchange="updateConfig('lastPeriod', this.value)" class="border border-slate-200 p-3 rounded-xl w-full mt-1 bg-slate-50"/>
+                                </label>
+                                <div class="flex gap-4">
+                                    <label class="flex-1">
+                                        <span class="text-slate-500 text-xs font-bold uppercase">Ciclo (Días)</span>
+                                        <input type="number" value="${user.config.cycleLen}" onchange="updateConfig('cycleLen', this.value)" class="border border-slate-200 p-3 rounded-xl w-full mt-1 bg-slate-50"/>
+                                    </label>
+                                    <label class="flex-1">
+                                        <span class="text-slate-500 text-xs font-bold uppercase">Sangrado (Días)</span>
+                                        <input type="number" value="${user.config.periodLen}" onchange="updateConfig('periodLen', this.value)" class="border border-slate-200 p-3 rounded-xl w-full mt-1 bg-slate-50"/>
+                                    </label>
+                                </div>
+                                <label class="flex items-center gap-3 p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-teal-50 hover:border-teal-200 transition">
+                                    <input type="checkbox" ${user.config.pill ? 'checked' : ''} onchange="updateConfig('pill', this.checked ? 'true' : 'false')" class="w-5 h-5 accent-teal-500"> 
+                                    <div class="flex flex-col">
+                                        <span class="font-bold text-slate-700">Modo Pastilla Anticonceptiva</span>
+                                        <span class="text-xs text-slate-400">Activa el registro diario de toma</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center opacity-50 mb-12">
+                            <button onclick="openTutorial()" class="underline text-sm">Ver Tutorial de Nuevo</button>
+                            <div class="text-[10px] mt-2">v5.8.0 Local Storage</div>
+                        </div>
                     </div>
                 `;
             }
 
             // MENU NAV
-            const activeClass = "text-rose-500";
-            const inactiveClass = "text-slate-400";
+            const activeClass = "text-rose-500 scale-110 transition-transform";
+            const inactiveClass = "text-slate-300";
             html += `
-                <div class="fixed bottom-0 w-full bg-white border-t border-slate-100 flex justify-around p-2 pb-4 z-40 no-print">
-                    <button onclick="setView('calendar')" class="flex flex-col items-center p-2 ${state.view === 'calendar' ? activeClass : inactiveClass}">${ICONS.calendar} <span class="text-[10px] font-bold">Calendario</span></button>
-                    <button onclick="setView('year')" class="flex flex-col items-center p-2 ${state.view === 'year' ? activeClass : inactiveClass}">${ICONS.grid} <span class="text-[10px] font-bold">Año</span></button>
-                    <button onclick="setView('settings')" class="flex flex-col items-center p-2 ${state.view === 'settings' ? activeClass : inactiveClass}">${ICONS.settings} <span class="text-[10px] font-bold">Ajustes</span></button>
+                <div class="fixed bottom-0 w-full bg-white border-t border-slate-100 flex justify-around p-2 pb-6 z-40 no-print shadow-[0_-5px_20px_rgba(0,0,0,0.02)]">
+                    <button onclick="setView('calendar')" class="flex flex-col items-center p-2 ${state.view === 'calendar' ? activeClass : inactiveClass}">${ICONS.calendar} <span class="text-[10px] font-bold mt-1">Hoy</span></button>
+                    <button onclick="setView('year')" class="flex flex-col items-center p-2 ${state.view === 'year' ? activeClass : inactiveClass}">${ICONS.grid} <span class="text-[10px] font-bold mt-1">Año</span></button>
+                    <button onclick="setView('settings')" class="flex flex-col items-center p-2 ${state.view === 'settings' ? activeClass : inactiveClass}">${ICONS.settings} <span class="text-[10px] font-bold mt-1">Perfil</span></button>
                 </div>
             `;
 
@@ -355,6 +543,7 @@
                 const user = getUser();
                 const log = user.logs[k] || {};
                 const displayDate = new Date(k + 'T00:00:00').toLocaleDateString('es-ES', {weekday:'long', day:'numeric'});
+                const isPeriodStart = user.periodHistory && user.periodHistory.includes(k);
                 
                 // Síntomas HTML
                 const symptomsHtml = ['happy','sad','irritable','cramps','bloating','tired'].map(s => {
@@ -362,17 +551,60 @@
                     return `<button onclick="updateLog('symptoms', '${s}')" class="p-3 rounded-xl border flex flex-col items-center gap-1 ${isActive ? 'bg-rose-100 border-rose-200 text-rose-600' : 'border-slate-100 text-slate-400'}"><span class="capitalize text-xs font-bold">${s}</span></button>`;
                 }).join('');
 
+                // Sección Pastilla (Condicional)
+                let pillSection = '';
+                if (user.config.pill) {
+                    const taken = log.pill;
+                    pillSection = `
+                        <div class="bg-teal-50 p-4 rounded-xl mb-4 flex justify-between items-center border border-teal-100 animate-in">
+                            <div class="flex items-center gap-3">
+                                <div class="bg-white p-2 rounded-full text-teal-500 shadow-sm">${ICONS.pill}</div>
+                                <div>
+                                    <h4 class="font-bold text-slate-800">Anticonceptivo</h4>
+                                    <p class="text-xs text-teal-600">${taken ? 'Tomada hoy' : 'Pendiente'}</p>
+                                </div>
+                            </div>
+                            <button onclick="updateLog('pill')" class="px-4 py-2 rounded-lg font-bold text-sm transition ${taken ? 'bg-teal-500 text-white shadow-lg shadow-teal-200' : 'bg-white text-teal-500 border border-teal-200'}">
+                                ${taken ? 'Tomada' : 'Marcar'}
+                            </button>
+                        </div>
+                    `;
+                }
+
                 html += `
                     <div class="fixed inset-0 z-50 bg-black/60 flex items-end justify-center animate-in" onclick="closeModal()">
-                        <div class="w-full max-w-sm bg-white rounded-t-3xl p-6 h-[85vh] overflow-y-auto" onclick="event.stopPropagation()">
-                            <div class="flex justify-between items-center mb-6"><h3 class="text-2xl font-bold capitalize">${displayDate}</h3><button onclick="closeModal()" class="p-2 bg-gray-100 rounded-full">${ICONS.close}</button></div>
-                            <div class="grid grid-cols-2 gap-4 mb-4">
-                                <div class="bg-blue-50 p-4 rounded-xl flex flex-col items-center"><div class="text-xs font-bold text-blue-500 mb-2 flex gap-1">${ICONS.droplet} AGUA</div><div class="flex items-center gap-3"><button onclick="updateLog('water', 'dec')" class="w-8 h-8 bg-white rounded-full font-bold shadow text-blue-500">-</button><span class="font-bold text-xl">${log.water||0}</span><button onclick="updateLog('water', 'inc')" class="w-8 h-8 bg-blue-500 text-white rounded-full font-bold shadow">+</button></div></div>
-                                <div class="bg-indigo-50 p-4 rounded-xl flex flex-col items-center"><div class="text-xs font-bold text-indigo-500 mb-2 flex gap-1">${ICONS.moon} SUEÑO</div><div class="flex items-center gap-3"><button onclick="updateLog('sleep', 'dec')" class="w-8 h-8 bg-white rounded-full font-bold shadow text-indigo-500">-</button><span class="font-bold text-xl">${log.sleep||0}h</span><button onclick="updateLog('sleep', 'inc')" class="w-8 h-8 bg-indigo-500 text-white rounded-full font-bold shadow">+</button></div></div>
+                        <div class="w-full max-w-sm bg-white rounded-t-[2rem] p-6 h-[85vh] overflow-y-auto shadow-2xl" onclick="event.stopPropagation()">
+                            <div class="flex justify-between items-center mb-6"><h3 class="text-2xl font-bold capitalize text-slate-800">${displayDate}</h3><button onclick="closeModal()" class="p-2 bg-slate-100 rounded-full hover:bg-slate-200 text-slate-500">${ICONS.close}</button></div>
+                            
+                            <!-- SECCIÓN INICIO DE PERIODO -->
+                            <div class="bg-rose-50 p-5 rounded-2xl mb-4 border border-rose-100 relative overflow-hidden">
+                                ${isPeriodStart ? '<div class="absolute -right-4 -top-4 w-16 h-16 bg-rose-200 rounded-full opacity-50"></div>' : ''}
+                                <div class="flex justify-between items-center relative z-10">
+                                    <div class="flex items-center gap-4">
+                                        <div class="bg-white p-3 rounded-full text-rose-500 shadow-sm">${ICONS.droplet}</div>
+                                        <div>
+                                            <h4 class="font-bold text-slate-800">Menstruación</h4>
+                                            <p class="text-xs text-slate-500">¿Inició hoy?</p>
+                                        </div>
+                                    </div>
+                                    <div class="relative inline-block w-14 h-8 align-middle select-none transition duration-200 ease-in">
+                                        <input type="checkbox" name="toggle" id="periodToggle" class="toggle-checkbox absolute block w-8 h-8 rounded-full bg-white border-4 appearance-none cursor-pointer border-slate-300 transition-all duration-300" ${isPeriodStart ? 'checked' : ''} onclick="handlePeriodToggle('${k}')"/>
+                                        <label for="periodToggle" class="toggle-label block overflow-hidden h-8 rounded-full bg-slate-300 cursor-pointer transition-all duration-300"></label>
+                                    </div>
+                                </div>
+                                ${isPeriodStart ? '<p class="text-xs text-rose-600 mt-3 font-bold text-center bg-white/50 py-1 rounded-lg">✅ Inicio registrado</p>' : ''}
                             </div>
-                            <div class="mb-4"><label class="text-xs font-bold text-slate-400 mb-2 block uppercase">Notas</label><textarea onchange="updateLog('notes', this.value)" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl" rows="3">${log.notes||''}</textarea></div>
-                            <div class="grid grid-cols-3 gap-2 mb-6">${symptomsHtml}</div>
-                            <button onclick="closeModal()" class="w-full py-3 bg-slate-900 text-white rounded-xl font-bold shadow-lg">Guardar</button>
+
+                            <!-- SECCIÓN PASTILLA -->
+                            ${pillSection}
+
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div class="bg-blue-50 p-4 rounded-2xl flex flex-col items-center"><div class="text-xs font-bold text-blue-400 mb-2 flex gap-1 uppercase tracking-wider">${ICONS.droplet} Agua</div><div class="flex items-center gap-3"><button onclick="updateLog('water', 'dec')" class="w-8 h-8 bg-white rounded-full font-bold shadow-sm text-blue-500 hover:scale-105 transition">-</button><span class="font-black text-xl text-slate-700">${log.water||0}</span><button onclick="updateLog('water', 'inc')" class="w-8 h-8 bg-blue-500 text-white rounded-full font-bold shadow-lg shadow-blue-200 hover:scale-105 transition">+</button></div></div>
+                                <div class="bg-indigo-50 p-4 rounded-2xl flex flex-col items-center"><div class="text-xs font-bold text-indigo-400 mb-2 flex gap-1 uppercase tracking-wider">${ICONS.moon} Sueño</div><div class="flex items-center gap-3"><button onclick="updateLog('sleep', 'dec')" class="w-8 h-8 bg-white rounded-full font-bold shadow-sm text-indigo-500 hover:scale-105 transition">-</button><span class="font-black text-xl text-slate-700">${log.sleep||0}h</span><button onclick="updateLog('sleep', 'inc')" class="w-8 h-8 bg-indigo-500 text-white rounded-full font-bold shadow-lg shadow-indigo-200 hover:scale-105 transition">+</button></div></div>
+                            </div>
+                            <div class="mb-6"><label class="text-xs font-bold text-slate-400 mb-2 block uppercase tracking-wider">Notas del día</label><textarea onchange="updateLog('notes', this.value)" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:border-rose-300 focus:ring-2 focus:ring-rose-100 transition" rows="3" placeholder="¿Cómo te sentiste hoy?">${log.notes||''}</textarea></div>
+                            <div class="grid grid-cols-3 gap-3 mb-8">${symptomsHtml}</div>
+                            <button onclick="closeModal()" class="w-full py-4 bg-slate-900 text-white rounded-2xl font-bold shadow-xl active:scale-95 transition">Guardar Cambios</button>
                         </div>
                     </div>
                 `;
@@ -385,4 +617,3 @@
     </script>
 </body>
 </html>
-
