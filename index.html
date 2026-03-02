@@ -360,11 +360,10 @@
                 return;
             }
 
-            // --- VISTA: REPORTE MEDICO EN PDF LIMPIO Y TABULAR ---
+            // --- VISTA: REPORTE MEDICO EN PDF ---
             if (state.view === 'pdf') {
                 const user = getUser();
                 
-                // Determinar el máximo de meses disponibles
                 let oldestDate = new Date();
                 if (user.periodHistory && user.periodHistory.length > 0) {
                     const sortedHistory = [...user.periodHistory].sort();
@@ -387,7 +386,6 @@
                 limitDate.setMonth(limitDate.getMonth() - monthsLimit);
                 const limitStr = toKey(limitDate);
 
-                // --- 1. Tabla de Menstruación y Detección de Irregularidad ---
                 const allSortedAsc = [...(user.periodHistory || [])].sort((a, b) => new Date(a) - new Date(b));
                 const relevantHistoryDesc = allSortedAsc.filter(d => d >= limitStr).reverse();
 
@@ -422,16 +420,24 @@
                 
                 if(!periodSummaryHtml) periodSummaryHtml = '<tr><td colspan="3" style="text-align:center; padding:15px; font-size:13px; color:#94a3b8; font-style: italic;">No hay periodos menstruales registrados en este lapso.</td></tr>';
 
-                // --- 2. Tabla Registro Diario Limpia ---
                 const logs = Object.keys(user.logs).filter(k => k >= limitStr).sort().reverse();
+                const symptomCounts = {};
 
                 const rows = logs.map(k => {
                     const log = user.logs[k];
                     const pillText = user.config.pill ? (log.pill ? 'SÍ' : 'NO') : '-';
                     const ptText = log.pregnancyTest ? (log.pregnancyTest === 'positive' ? 'Positiva' : 'Negativa') : '-';
                     
+                    if(log.symptoms) {
+                        log.symptoms.forEach(s => { symptomCounts[s] = (symptomCounts[s] || 0) + 1; });
+                    }
+
                     return `<tr style="border-bottom: 1px solid #e2e8f0;"><td style="padding: 8px 4px; font-size: 12px; color: #334155;">${k}</td><td style="font-size: 12px; color: #334155;">${getCycleDay(k)||'-'}</td><td style="font-size: 12px; color: #334155;">${getPhase(k)?.l||'-'}</td><td style="font-size: 12px; color: #334155;">${log.bbt||'-'}°</td><td style="font-size: 12px; color: #334155;">${pillText}</td><td style="font-size: 12px; color: #334155;">${ptText}</td><td style="font-size: 12px; color: #64748b; font-style: italic;">${log.notes||'-'}</td></tr>`;
                 }).join('');
+
+                const symptomSummaryHtml = Object.keys(symptomCounts).length > 0 
+                    ? Object.entries(symptomCounts).map(([s, c]) => `<span style="display:inline-block; background:#f1f5f9; padding:4px 8px; border-radius:4px; margin:2px; font-size:12px; text-transform:capitalize; border: 1px solid #e2e8f0; color:#334155;">${s}: ${c} vez/veces</span>`).join('')
+                    : '<span style="color:#64748b; font-size:12px; font-style:italic;">Ningún síntoma reportado.</span>';
 
                 let selectorOptions = '';
                 for (let m = 1; m <= maxAvailableMonths; m++) {
@@ -453,10 +459,15 @@
                             </div>
 
                             <h3 style="font-size: 16px; font-weight: bold; margin-bottom: 8px; color: #0f172a; border-bottom: 1px solid #cbd5e1; padding-bottom: 4px;">Resumen de Ciclos Menstruales</h3>
-                            <table style="width: 100%; text-align: left; border-collapse: collapse; margin-bottom: 32px;">
+                            <table style="width: 100%; text-align: left; border-collapse: collapse; margin-bottom: 24px;">
                                 <thead><tr style="background: #f1f5f9;"><th style="padding: 8px 4px; font-size: 12px; color: #475569;">Fechas de Menstruación</th><th style="padding: 8px 4px; font-size: 12px; color: #475569;">Duración del Sangrado</th><th style="padding: 8px 4px; font-size: 12px; color: #475569;">Duración del Ciclo</th></tr></thead>
                                 <tbody>${periodSummaryHtml}</tbody>
                             </table>
+
+                            <h3 style="font-size: 16px; font-weight: bold; margin-bottom: 8px; color: #0f172a; border-bottom: 1px solid #cbd5e1; padding-bottom: 4px;">Frecuencia de Síntomas Reportados</h3>
+                            <div style="margin-bottom: 24px;">
+                                ${symptomSummaryHtml}
+                            </div>
 
                             <h3 style="font-size: 16px; font-weight: bold; margin-bottom: 8px; color: #0f172a; border-bottom: 1px solid #cbd5e1; padding-bottom: 4px;">Registro Diario de Datos</h3>
                             <table style="width: 100%; text-align: left; border-collapse: collapse; margin-bottom: 24px;">
@@ -466,6 +477,11 @@
 
                             <div style="margin-top: 40px; padding-top: 15px; border-top: 2px dashed #cbd5e1; font-size: 11px; color: #64748b; text-align: justify; line-height: 1.5;">
                                 <strong>Nota informativa:</strong> Este reporte ha sido generado automáticamente a partir de los datos ingresados manualmente por la usuaria en la aplicación Lunea. Los cálculos presentados son promedios estandarizados y tienen un fin estrictamente informativo. No constituyen un diagnóstico ni evaluación médica profesional. Si usted nota alguna anomalía, dolores inusuales o irregularidades significativas en los datos presentados, le sugerimos que visite a su médico de cabecera o especialista para una valoración adecuada.
+                            </div>
+                            
+                            <!-- FIRMA EN EL PDF -->
+                            <div style="margin-top: 15px; text-align: center; font-size: 10px; color: #94a3b8; font-weight: bold;">
+                                Generado con Lunea - Desarrollado por Juan Miguel Rios Redondo
                             </div>
                         </div>
                         
@@ -607,7 +623,12 @@
                         <div class="bg-white dark:bg-darkCard p-5 rounded-2xl shadow-sm mb-6 border border-slate-50 dark:border-darkBorder"><h3 class="font-bold mb-4 flex gap-2 items-center text-rose-500 text-lg">Historial de Periodos</h3><p class="text-xs text-slate-400 mb-4 leading-tight">Aquí puedes ver tus inicios de periodo registrados manualmente y eliminar los que tengan error.</p><div class="max-h-64 overflow-y-auto pr-2 custom-scroll">${historyHtml}</div></div>
                         <div class="bg-white dark:bg-darkCard p-5 rounded-2xl shadow-sm mb-6 border border-slate-50 dark:border-darkBorder"><h3 class="font-bold mb-4 text-slate-800 dark:text-darkText text-lg flex gap-2 items-center text-blue-500">${ICONS.lock} Seguridad PIN</h3>${state.pin ? `<div class="flex justify-between items-center bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border border-blue-100 dark:border-blue-800"><div class="flex gap-3 items-center"><div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div><span class="text-sm font-bold text-blue-900 dark:text-blue-300">App Protegida</span></div><button onclick="removePin()" class="text-red-500 text-sm font-bold underline">Eliminar</button></div>` : `<button onclick="startPinSetup()" class="w-full py-3 border-2 border-dashed border-slate-200 dark:border-darkBorder rounded-xl text-slate-500 dark:text-darkTextMuted font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition flex items-center justify-center gap-2">${ICONS.plus} Crear PIN de Acceso</button>`}</div>
                         <div class="bg-white dark:bg-darkCard p-5 rounded-2xl shadow-sm mb-6 border border-slate-50 dark:border-darkBorder"><h3 class="font-bold mb-4 text-slate-800 dark:text-darkText text-lg flex gap-2 items-center text-emerald-500">${ICONS.download} Copia de Seguridad</h3><div class="grid grid-cols-2 gap-4"><button onclick="exportData()" class="flex flex-col items-center justify-center p-3 rounded-xl bg-slate-50 dark:bg-darkBg border border-slate-200 dark:border-darkBorder hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition gap-2 shadow-sm"><div class="text-emerald-500">${ICONS.download}</div><span class="text-xs font-bold text-slate-700 dark:text-darkText">Exportar</span></button><button onclick="triggerImport()" class="flex flex-col items-center justify-center p-3 rounded-xl bg-slate-50 dark:bg-darkBg border border-slate-200 dark:border-darkBorder hover:bg-blue-50 dark:hover:bg-blue-900/20 transition gap-2 shadow-sm"><div class="text-blue-500">${ICONS.upload}</div><span class="text-xs font-bold text-slate-700 dark:text-darkText">Importar</span></button></div></div>
-                        <div class="text-center opacity-50 mb-12"><button onclick="openTutorial()" class="underline text-sm text-slate-600 dark:text-darkTextMuted">Ver Tutorial de Nuevo</button></div>
+                        
+                        <!-- FIRMA / CRÉDITOS EN AJUSTES -->
+                        <div class="text-center opacity-60 mb-12">
+                            <button onclick="openTutorial()" class="underline text-sm text-slate-600 dark:text-darkTextMuted mb-3 block w-full">Ver Tutorial de Nuevo</button>
+                            <p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 tracking-wider">DESARROLLADO POR JUAN MIGUEL RIOS REDONDO</p>
+                        </div>
                     </div>`;
             }
             
