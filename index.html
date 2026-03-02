@@ -30,7 +30,7 @@
 
     <style>
         /* Variables de Temas */
-        :root { --theme-50: #fff1f2; --theme-100: #ffe4e6; --theme-200: #fecdd3; --theme-300: #fda4af; --theme-400: #fb7185; --theme-500: #f43f5e; --theme-600: #e11d48; --theme-700: #be123c; --theme-800: #9f1239; --theme-900: #881337; }
+        :root { --theme-50: #fff1f2; --theme-100: #ffe4e4; --theme-200: #fecdd3; --theme-300: #fda4af; --theme-400: #fb7185; --theme-500: #f43f5e; --theme-600: #e11d48; --theme-700: #be123c; --theme-800: #9f1239; --theme-900: #881337; }
         body.theme-lavender { --theme-50: #f5f3ff; --theme-100: #ede9fe; --theme-200: #ddd6fe; --theme-300: #c4b5fd; --theme-400: #a78bfa; --theme-500: #8b5cf6; --theme-600: #7c3aed; --theme-700: #6d28d9; --theme-800: #5b21b6; --theme-900: #4c1d95; }
         body.theme-emerald { --theme-50: #ecfdf5; --theme-100: #d1fae5; --theme-200: #a7f3d0; --theme-300: #6ee7b7; --theme-400: #34d399; --theme-500: #10b981; --theme-600: #059669; --theme-700: #047857; --theme-800: #065f46; --theme-900: #064e3b; }
         body.theme-orange { --theme-50: #fff7ed; --theme-100: #ffedd5; --theme-200: #fed7aa; --theme-300: #fdba74; --theme-400: #fb923c; --theme-500: #f97316; --theme-600: #ea580c; --theme-700: #c2410c; --theme-800: #9a3412; --theme-900: #7c2d12; }
@@ -63,7 +63,7 @@
     <input type="file" id="importFile" class="hidden" accept=".json" onchange="importData(this)">
 
     <script>
-        // --- INYECCIÓN PWA (NUEVO) ---
+        // --- INYECCIÓN PWA ---
         if (!document.getElementById('lunea-manifest')) {
             const manifest = {
                 name: "Lunea", short_name: "Lunea", start_url: ".", display: "standalone",
@@ -80,7 +80,7 @@
             if ('serviceWorker' in navigator) navigator.serviceWorker.register(swUrl).catch(()=>{});
         }
 
-        // --- ICONOS CORREGIDOS ---
+        // --- ICONOS ---
         const ICONS = {
             heart: '<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 fill-current" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>',
             calendar: '<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
@@ -108,7 +108,9 @@
             upload: '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>',
             fileText: '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>',
             activity: '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',
-            footprints: '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16v-2.38C4 11.5 2.97 10.5 3 8c.03-2.72 1.49-6 4.5-6C9.37 2 10 3.8 10 5.5c0 3.11-2 5.66-2 8.68V16a2 2 0 1 1-4 0Z"/><path d="M20 20v-2.38c0-2.12 1.03-3.12 1-5.62-.03-2.72-1.49-6-4.5-6C14.63 6 14 7.8 14 9.5c0 3.11 2 5.66 2 8.68V20a2 2 0 1 0 4 0Z"/><path d="M16 17h4"/><path d="M4 13h4"/></svg>'
+            footprints: '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16v-2.38C4 11.5 2.97 10.5 3 8c.03-2.72 1.49-6 4.5-6C9.37 2 10 3.8 10 5.5c0 3.11-2 5.66-2 8.68V16a2 2 0 1 1-4 0Z"/><path d="M20 20v-2.38c0-2.12 1.03-3.12 1-5.62-.03-2.72-1.49-6-4.5-6C14.63 6 14 7.8 14 9.5c0 3.11 2 5.66 2 8.68V20a2 2 0 1 0 4 0Z"/><path d="M16 17h4"/><path d="M4 13h4"/></svg>',
+            sparkles: '<svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>',
+            shieldCheck: '<svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>'
         };
 
         const TIPS = {
@@ -177,6 +179,7 @@
             if (!user.periodHistory || user.periodHistory.length < 2) return;
             const sortedHistory = [...user.periodHistory].sort((a, b) => new Date(a) - new Date(b));
             user.config.lastPeriod = sortedHistory[sortedHistory.length - 1];
+
             let totalDays = 0, count = 0;
             for (let i = 1; i < sortedHistory.length; i++) {
                 const diffDays = Math.ceil(Math.abs(new Date(sortedHistory[i]) - new Date(sortedHistory[i-1])) / 86400000);
@@ -197,13 +200,13 @@
             const user = getUser();
             const start = new Date(user.config.lastPeriod + 'T00:00:00');
             const target = new Date(dateStr + 'T00:00:00');
-            if (target < start && user.periodHistory && user.periodHistory.length > 0) {
+            if (target < start && user.periodHistory?.length > 0) {
                 const sorted = [...user.periodHistory].sort((a, b) => new Date(b) - new Date(a));
                 const relevantStart = sorted.find(d => new Date(d + 'T00:00:00') <= target);
                 if (relevantStart) return Math.floor((target - new Date(relevantStart + 'T00:00:00')) / 86400000) + 1;
             }
             const diff = Math.floor((target - start) / 86400000);
-            return diff < 0 ? null : diff + 1; 
+            return diff < 0 ? null : diff + 1;
         }
 
         function getPhase(dateStr) {
@@ -211,18 +214,64 @@
             if (user.config.pregnancyMode) return {l:'Embarazo', bg:'bg-fuchsia-400', t:'text-fuchsia-600 dark:text-fuchsia-400', light:'bg-fuchsia-50 dark:bg-fuchsia-900/30 border-fuchsia-100 dark:border-fuchsia-800', isStart:false};
             let cd = getCycleDay(dateStr);
             if (!cd) return null;
-            if (cd > user.config.cycleLen) cd = ((cd - 1) % user.config.cycleLen) + 1; 
+            if (cd > user.config.cycleLen) cd = ((cd - 1) % user.config.cycleLen) + 1;
             const ov = user.config.cycleLen - 14;
-            const isStart = user.periodHistory && user.periodHistory.includes(dateStr);
-            if (cd <= user.config.periodLen) return { ...PHASE_INFO['Menstruación'], isStart, l: 'Menstruación'};
-            if (cd >= ov - 5 && cd < ov) return { ...PHASE_INFO['Fértil'], isStart, l: 'Fértil' };
-            if (cd === ov) return { ...PHASE_INFO['Ovulación'], isStart, l: 'Ovulación' };
-            if (cd > ov) return { ...PHASE_INFO['Lútea'], isStart, l: 'Lútea' };
-            return { ...PHASE_INFO['Folicular'], isStart, l: 'Folicular' };
+            const isStart = user.periodHistory?.includes(dateStr);
+            
+            if (cd <= user.config.periodLen) return { ...PHASE_INFO['Menstruación'], isStart, l: 'Menstruación', risk: 'safe' };
+            if (cd >= ov - 5 && cd < ov) return { ...PHASE_INFO['Fértil'], isStart, l: 'Fértil', risk: 'fertile' };
+            if (cd === ov) return { ...PHASE_INFO['Ovulación'], isStart, l: 'Ovulación', risk: 'fertile' };
+            if (cd > ov + 2) return { ...PHASE_INFO['Lútea'], isStart, l: 'Lútea', risk: 'safe' };
+            if (cd > ov && cd <= ov + 2) return { ...PHASE_INFO['Lútea'], isStart, l: 'Lútea', risk: 'fertile' }; 
+            return { ...PHASE_INFO['Folicular'], isStart, l: 'Folicular', risk: (cd >= ov - 7 ? 'fertile' : 'safe') };
         }
 
-        window.toggleDarkMode = () => { state.darkMode = !state.darkMode; if(state.darkMode) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark'); save(); };
+        // --- ACCIONES ---
+        window.setView = (v) => { state.view = v; render(); };
+        window.toggleDarkMode = () => { state.darkMode = !state.darkMode; document.documentElement.classList.toggle('dark'); save(); };
         window.toggleBlur = () => { state.isBlurred = !state.isBlurred; render(); };
+        window.selectDate = (k) => { state.selectedDate = k; render(); };
+        window.closeModal = () => { state.selectedDate = null; render(); };
+        window.setMonth = (delta) => { state.currentMonth.setMonth(state.currentMonth.getMonth() + delta); render(); };
+        window.updateConfig = (field, val) => {
+            const u = getUser();
+            if (field === 'theme') { u.config.theme = val; document.getElementById('main-body').className = `theme-${val}`; }
+            else if (['cycleLen', 'periodLen'].includes(field)) val = parseInt(val);
+            else if (['pill', 'pregnancyMode'].includes(field)) val = val === 'true';
+            if (field !== 'theme') u.config[field] = val;
+            if (field === 'lastPeriod' && !u.periodHistory.includes(val)) { u.periodHistory.push(val); recalculateCycleStats(u); }
+            save();
+        };
+        window.handlePeriodToggle = (dateStr) => {
+            const u = getUser();
+            if (!u.periodHistory) u.periodHistory = [];
+            u.periodHistory = u.periodHistory.includes(dateStr) ? u.periodHistory.filter(d => d !== dateStr) : [...u.periodHistory, dateStr];
+            recalculateCycleStats(u);
+            save();
+        };
+        window.updateLog = (key, field, val) => {
+            const u = getUser();
+            if (!u.logs[key]) u.logs[key] = {};
+            if (field === 'water' || field === 'sleep') {
+                let current = u.logs[key][field] || 0;
+                u.logs[key][field] = val === 'inc' ? current + 1 : Math.max(0, current - 1);
+            } else if (field === 'pill') { u.logs[key].pill = val !== undefined ? val : !u.logs[key].pill; } 
+            else if (field === 'pregnancyTest') {
+                if (u.logs[key].pregnancyTest === val) delete u.logs[key].pregnancyTest; else u.logs[key].pregnancyTest = val;
+            } else if (field === 'symptoms') {
+                let cur = u.logs[key].symptoms || [];
+                u.logs[key].symptoms = cur.includes(val) ? cur.filter(s => s !== val) : [...cur, val];
+            } else { u.logs[key][field] = val; }
+            save();
+        };
+        window.updateReportMonths = (v) => { state.reportMonths = parseInt(v); save(); };
+        window.downloadPDF = () => {
+            const el = document.getElementById('report-content');
+            window.scrollTo(0,0);
+            const opt = { margin: 10, filename: 'Lunea_Reporte.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, scrollY: 0 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
+            html2pdf().set(opt).from(el).save();
+        };
+
         window.goToToday = () => { state.currentMonth = new Date(); state.viewYear = new Date().getFullYear(); render(); };
         window.deleteHistoryItem = (dateStr) => { if(confirm('¿Borrar este inicio de periodo?')) { const u = getUser(); u.periodHistory = u.periodHistory.filter(d => d !== dateStr); recalculateCycleStats(u); save(); } };
         window.exportData = () => { const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(JSON.stringify(state)); const a = document.createElement('a'); a.setAttribute('href', dataUri); a.setAttribute('download', `lunea_backup_${new Date().toISOString().split('T')[0]}.json`); a.click(); };
@@ -248,40 +297,6 @@
         document.addEventListener('keydown', (e) => { if (state.view === 'locked' || state.view === 'setup_pin') { if (e.key >= '0' && e.key <= '9') window.typePin(e.key); else if (e.key === 'Backspace') window.deletePinDigit(); } });
 
         window.hardReset = () => { localStorage.clear(); location.reload(); };
-        window.setView = (v) => { state.view = v; render(); };
-        window.closeModal = () => { state.selectedDate = null; render(); };
-        window.setMonth = (delta) => { state.currentMonth.setMonth(state.currentMonth.getMonth() + delta); render(); };
-        window.setYear = (delta) => { state.viewYear += delta; render(); };
-        window.selectDate = (k) => { state.selectedDate = k; render(); };
-        window.updateReportMonths = (val) => { state.reportMonths = parseInt(val); save(); };
-
-        window.updateLog = (key, field, val) => {
-            const user = getUser();
-            if (!user.logs[key]) user.logs[key] = {};
-            if (field === 'water' || field === 'sleep') {
-                let current = user.logs[key][field] || 0;
-                user.logs[key][field] = val === 'inc' ? current + 1 : Math.max(0, current - 1);
-            } else if (field === 'pill') { user.logs[key].pill = val !== undefined ? val : !user.logs[key].pill; } 
-            else if (field === 'pregnancyTest') {
-                if (user.logs[key].pregnancyTest === val) delete user.logs[key].pregnancyTest; else user.logs[key].pregnancyTest = val;
-            } else if (field === 'symptoms') {
-                let current = user.logs[key].symptoms || [];
-                user.logs[key].symptoms = current.includes(val) ? current.filter(s => s !== val) : [...current, val];
-            } else { user.logs[key][field] = val; }
-            save();
-        };
-
-        window.updateConfig = (field, val) => {
-            const user = getUser();
-            if (field === 'theme') { user.config.theme = val; document.getElementById('main-body').className = `transition-colors duration-300 theme-${val}`; }
-            else if(field !== 'lastPeriod' && field !== 'pill' && field !== 'pregnancyMode') val = parseInt(val);
-            else if(field === 'pill' || field === 'pregnancyMode') val = val === 'true'; 
-            if (field !== 'theme') user.config[field] = val;
-            if (field === 'lastPeriod' && !user.periodHistory.includes(val)) { user.periodHistory.push(val); recalculateCycleStats(user); }
-            save();
-        };
-        
-        window.handlePeriodToggle = (dateStr) => { togglePeriodStart(dateStr); render(); };
         window.addUser = () => { const n = prompt("Nombre:"); if (n) { const id = Date.now().toString(); state.users.push({ id, name: n, config: {...getUser().config}, periodHistory: [], logs: {}, pregnancyData: { kicks:0, kickStart:null, kickLogs:[], contractions:[], contractionStart:null } }); state.currentUserId = id; save(); } };
         window.switchUser = (id) => { state.currentUserId = id; document.getElementById('main-body').className = `transition-colors duration-300 theme-${getUser().config.theme || 'rose'}`; save(); };
         window.deleteUser = (id) => { if(state.users.length <= 1) return alert("Mínimo un usuario"); if(confirm("¿Borrar?")) { state.users = state.users.filter(u => u.id !== id); state.currentUserId = state.users[0].id; save(); } };
@@ -290,7 +305,6 @@
         window.endTutorial = () => { state.showTutorial = false; tutorialStep = 0; save(); };
         window.openTutorial = () => { state.showTutorial = true; tutorialStep = 0; render(); };
 
-        // Lógicas Embarazo Avanzado
         window.addKick = () => {
             const u = getUser();
             if(u.pregnancyData.kicks === 0) u.pregnancyData.kickStart = Date.now();
@@ -317,35 +331,18 @@
         };
         window.clearContractions = () => { if(confirm('¿Limpiar historial?')) { getUser().pregnancyData.contractions = []; save(); } };
 
-        window.downloadPDF = () => {
-            const element = document.getElementById('report-content');
-            if(!element) return;
-            const btn = document.getElementById('btn-descargar-pdf');
-            const originalText = btn.innerText;
-            btn.innerText = "Generando PDF...";
-            btn.disabled = true;
-            window.scrollTo(0, 0);
-
-            const opt = { margin: 10, filename: `Lunea_Reporte_${new Date().toISOString().split('T')[0]}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true, scrollY: 0 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
-            const wasDark = document.documentElement.classList.contains('dark');
-            if(wasDark) document.documentElement.classList.remove('dark');
-
-            html2pdf().set(opt).from(element).save().then(() => {
-                btn.innerText = originalText; btn.disabled = false;
-                if(wasDark) document.documentElement.classList.add('dark');
-            }).catch(err => { console.error(err); btn.innerText = originalText; btn.disabled = false; alert("Error generando PDF."); });
-        };
-
         // --- RENDERIZADO PRINCIPAL ---
         function render() {
             const app = document.getElementById('app');
             let html = '';
+            const user = getUser();
+            document.body.className = `theme-${user.config.theme || 'rose'} transition-colors duration-300 ${state.darkMode ? 'dark' : ''}`;
 
             if (state.view === 'locked' || state.view === 'setup_pin') {
                 const isSetup = state.view === 'setup_pin';
                 const dots = [0,1,2,3].map(i => `<div class="w-4 h-4 rounded-full border-2 border-slate-400 dark:border-slate-600 ${i < state.inputPin.length ? 'bg-theme-500 border-theme-500' : 'bg-transparent'} transition-all duration-200"></div>`).join('');
                 const keys = [1,2,3,4,5,6,7,8,9].map(n => `<button onclick="typePin('${n}')" class="key-btn w-16 h-16 rounded-full bg-slate-50 dark:bg-darkCard text-xl font-bold text-slate-700 dark:text-darkText shadow-sm border border-slate-200 dark:border-darkBorder flex items-center justify-center mx-auto">${n}</button>`).join('');
-                app.innerHTML = `<div class="fixed inset-0 z-[100] bg-white dark:bg-darkBg flex flex-col items-center justify-center p-8 fade-in"><div class="mb-8 p-4 bg-theme-50 text-theme-500 dark:bg-darkCard rounded-full">${ICONS.lock}</div><h2 class="text-2xl font-bold mb-2 text-slate-800 dark:text-darkText">${isSetup ? 'Crea tu PIN' : 'Lunea Bloqueado'}</h2><p class="text-slate-400 dark:text-darkTextMuted mb-8 text-sm">${isSetup ? 'Introduce 4 dígitos' : 'Ingresa tu PIN'}</p><div class="flex gap-4 mb-10">${dots}</div><div class="grid grid-cols-3 gap-6 mb-8 w-full max-w-xs">${keys}<div class="w-16"></div><button onclick="typePin('0')" class="key-btn w-16 h-16 rounded-full bg-slate-50 dark:bg-darkCard text-xl font-bold text-slate-700 dark:text-darkText shadow-sm border border-slate-200 dark:border-darkBorder flex items-center justify-center mx-auto">0</button><button onclick="deletePinDigit()" class="key-btn w-16 h-16 rounded-full bg-transparent text-slate-400 dark:text-darkTextMuted flex items-center justify-center mx-auto hover:text-theme-500 transition">${ICONS.delete}</button></div>${isSetup ? `<button onclick="setView('settings')" class="text-slate-400 dark:text-darkTextMuted text-sm underline mt-4">Cancelar</button>` : ''}</div>`;
+                app.innerHTML = `<div class="fixed inset-0 bg-white dark:bg-darkBg z-[100] flex flex-col items-center justify-center p-8"><div class="mb-8 p-4 bg-theme-50 text-theme-500 rounded-full">${ICONS.lock}</div><h2 class="text-2xl font-bold dark:text-darkText">${isSetup ? 'Crea tu PIN' : 'Lunea Bloqueado'}</h2><p class="text-slate-400 dark:text-darkTextMuted mb-8 text-sm">${isSetup ? 'Introduce 4 dígitos' : 'Ingresa tu PIN'}</p><div class="flex gap-4 mb-10">${dots}</div><div class="grid grid-cols-3 gap-6 mb-8 w-full max-w-xs">${keys}<div></div><button onclick="typePin('0')" class="key-btn w-16 h-16 rounded-full bg-slate-50 dark:bg-darkCard text-xl font-bold dark:text-darkText mx-auto">0</button><button onclick="deletePinDigit()" class="key-btn w-16 h-16 rounded-full bg-transparent text-slate-400 dark:text-darkTextMuted flex items-center justify-center mx-auto hover:text-theme-500 transition">${ICONS.delete}</button></div>${isSetup ? `<button onclick="setView('settings')" class="text-slate-400 dark:text-darkTextMuted text-sm underline mt-4">Cancelar</button>` : ''}</div>`;
                 return;
             }
 
@@ -362,27 +359,13 @@
                 return;
             }
 
-            // --- VISTAS ESPECÍFICAS ---
+            // --- VISTA: REPORTE MEDICO EN PDF ---
             if (state.view === 'pdf') {
-                const user = getUser();
-                let oldestDate = new Date();
-                if (user.periodHistory && user.periodHistory.length > 0) oldestDate = new Date([...user.periodHistory].sort()[0] + 'T00:00:00');
-                const logKeys = Object.keys(user.logs);
-                if (logKeys.length > 0) {
-                    const oldestLogDate = new Date(logKeys.sort()[0] + 'T00:00:00');
-                    if (oldestLogDate < oldestDate) oldestDate = oldestLogDate;
-                }
-                const today = new Date();
-                let maxAvailableMonths = (today.getFullYear() - oldestDate.getFullYear()) * 12 + today.getMonth() - oldestDate.getMonth() + 1;
-                if (maxAvailableMonths < 1) maxAvailableMonths = 1;
-                if (maxAvailableMonths > 6) maxAvailableMonths = 6;
-                const monthsLimit = state.reportMonths > maxAvailableMonths ? maxAvailableMonths : (state.reportMonths || 1);
-                const limitDate = new Date();
-                limitDate.setMonth(limitDate.getMonth() - monthsLimit);
+                const limitDate = new Date(); limitDate.setMonth(limitDate.getMonth() - (state.reportMonths || 1));
                 const limitStr = toKey(limitDate);
                 const allSortedAsc = [...(user.periodHistory || [])].sort((a, b) => new Date(a) - new Date(b));
                 const relevantHistoryDesc = allSortedAsc.filter(d => d >= limitStr).reverse();
-
+                
                 let periodSummaryHtml = relevantHistoryDesc.map(startDate => {
                     const myIdx = allSortedAsc.indexOf(startDate);
                     let cycleLen = '-', cycleStyle = "font-weight: bold; color: #0f172a;", cycleLenText = "-";
@@ -400,139 +383,99 @@
                 const logs = Object.keys(user.logs).filter(k => k >= limitStr).sort().reverse();
                 const symptomCounts = {};
                 const rows = logs.map(k => {
-                    const log = user.logs[k];
-                    const pillText = user.config.pill ? (log.pill ? 'SÍ' : 'NO') : '-';
-                    if(log.symptoms) log.symptoms.forEach(s => { symptomCounts[s] = (symptomCounts[s] || 0) + 1; });
-                    return `<tr style="border-bottom: 1px solid #e2e8f0;"><td style="padding: 8px 4px; font-size: 12px; color: #334155;">${k}</td><td style="font-size: 12px; color: #334155;">${getCycleDay(k)||'-'}</td><td style="font-size: 12px; color: #334155;">${getPhase(k)?.l||'-'}</td><td style="font-size: 12px; color: #334155;">${log.bbt?log.bbt+'°':'-'}</td><td style="font-size: 12px; color: #334155;">${log.weight?log.weight+'kg':'-'}</td><td style="font-size: 12px; color: #334155;">${pillText}</td><td style="font-size: 12px; color: #64748b; font-style: italic;">${log.notes||'-'}</td></tr>`;
+                    const l = user.logs[k];
+                    const pillText = user.config.pill ? (l.pill ? 'SÍ' : 'NO') : '-';
+                    if(l.symptoms) l.symptoms.forEach(s => { symptomCounts[s] = (symptomCounts[s] || 0) + 1; });
+                    return `<tr style="border-bottom: 1px solid #e2e8f0;"><td style="padding: 8px 4px; font-size: 12px; color: #334155;">${k}</td><td style="font-size: 12px; color: #334155;">${getCycleDay(k)||'-'}</td><td style="font-size: 12px; color: #334155;">${getPhase(k)?.l||'-'}</td><td style="font-size: 12px; color: #334155;">${l.bbt||'-'}°</td><td style="font-size: 12px; color: #334155;">${pillText}</td><td style="font-size: 12px; color: #64748b; font-style: italic;">${l.notes||'-'}</td></tr>`;
                 }).join('');
 
                 const symptomSummaryHtml = Object.keys(symptomCounts).length > 0 ? Object.entries(symptomCounts).map(([s, c]) => `<span style="display:inline-block; background:#f1f5f9; padding:4px 8px; border-radius:4px; margin:2px; font-size:12px; text-transform:capitalize; border: 1px solid #e2e8f0; color:#334155;">${s}: ${c} vez/veces</span>`).join('') : '<span style="color:#64748b; font-size:12px; font-style:italic;">Ningún síntoma reportado.</span>';
-                let selectorOptions = ''; for (let m = 1; m <= maxAvailableMonths; m++) selectorOptions += `<option value="${m}" ${monthsLimit === m ? 'selected' : ''}>Último${m > 1 ? 's '+m : ''} mes${m > 1 ? 'es' : ''}</option>`;
+                
+                let oldestDate = new Date();
+                if (user.periodHistory && user.periodHistory.length > 0) oldestDate = new Date([...user.periodHistory].sort()[0] + 'T00:00:00');
+                let maxAvailableMonths = (new Date().getFullYear() - oldestDate.getFullYear()) * 12 + new Date().getMonth() - oldestDate.getMonth() + 1;
+                maxAvailableMonths = Math.max(1, Math.min(6, maxAvailableMonths));
+                let selectorOptions = ''; for (let m = 1; m <= maxAvailableMonths; m++) selectorOptions += `<option value="${m}" ${state.reportMonths===m?'selected':''}>Último${m>1?'s '+m:''} mes${m>1?'es':''}</option>`;
 
-                app.innerHTML = `<div class="bg-slate-200 dark:bg-slate-900 text-black p-4 min-h-screen flex flex-col items-center pb-24"><div class="no-print w-full max-w-[800px] mb-6 flex justify-between items-center bg-white dark:bg-darkCard p-4 rounded-xl shadow-md border border-slate-300 dark:border-darkBorder"><div class="flex items-center gap-2"><span class="text-theme-500">${ICONS.calendar}</span><label class="font-bold text-sm text-slate-700 dark:text-darkText">Rango del reporte:</label></div><select onchange="updateReportMonths(this.value)" class="p-2 rounded-lg border-2 border-theme-200 dark:border-theme-800/50 bg-theme-50 dark:bg-darkBg text-theme-700 dark:text-theme-300 font-bold text-sm focus:outline-none cursor-pointer hover:bg-theme-100 transition">${selectorOptions}</select></div><div id="report-content" style="background: white; color: black; padding: 40px; width: 100%; max-width: 800px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); border-radius: 4px; box-sizing: border-box;"><h1 style="font-size: 24px; font-weight: bold; color: #e11d48; margin-bottom: 8px; border-bottom: 2px solid #e11d48; padding-bottom: 8px;">Reporte Médico Lunea</h1><div style="margin-bottom: 24px; display: flex; justify-content: space-between;"><div><p style="font-weight: bold; margin: 0; font-size: 16px;">Paciente: ${user.name}</p><p style="margin: 4px 0; font-size: 14px; color: #475569;">Generado el: ${new Date().toLocaleDateString('es-ES')}</p><p style="margin: 4px 0; font-size: 14px; color: #64748b;">Mostrando datos de: Último(s) ${monthsLimit} mes(es)</p></div><div style="text-align: right; font-size: 14px; background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; color: #334155;"><p style="margin: 0 0 4px 0;"><strong>Ciclo Promedio:</strong> ${user.config.cycleLen} días</p><p style="margin: 0 0 4px 0;"><strong>Sangrado Promedio:</strong> ${user.config.periodLen} días</p><p style="margin: 0;"><strong>Modo Embarazo:</strong> ${user.config.pregnancyMode ? 'Activo' : 'Inactivo'}</p></div></div><h3 style="font-size: 16px; font-weight: bold; margin-bottom: 8px; color: #0f172a; border-bottom: 1px solid #cbd5e1; padding-bottom: 4px;">Resumen de Ciclos Menstruales</h3><table style="width: 100%; text-align: left; border-collapse: collapse; margin-bottom: 24px;"><thead><tr style="background: #f1f5f9;"><th style="padding: 8px 4px; font-size: 12px; color: #475569;">Fechas de Menstruación</th><th style="padding: 8px 4px; font-size: 12px; color: #475569;">Duración del Sangrado</th><th style="padding: 8px 4px; font-size: 12px; color: #475569;">Duración del Ciclo</th></tr></thead><tbody>${periodSummaryHtml}</tbody></table><h3 style="font-size: 16px; font-weight: bold; margin-bottom: 8px; color: #0f172a; border-bottom: 1px solid #cbd5e1; padding-bottom: 4px;">Frecuencia de Síntomas Reportados</h3><div style="margin-bottom: 24px;">${symptomSummaryHtml}</div><h3 style="font-size: 16px; font-weight: bold; margin-bottom: 8px; color: #0f172a; border-bottom: 1px solid #cbd5e1; padding-bottom: 4px;">Registro Diario de Datos</h3><table style="width: 100%; text-align: left; border-collapse: collapse; margin-bottom: 24px;"><thead><tr style="background: #f1f5f9;"><th style="padding: 8px 4px; font-size: 12px; color: #475569;">Fecha</th><th style="font-size: 12px; color: #475569;">Día</th><th style="font-size: 12px; color: #475569;">Fase</th><th style="font-size: 12px; color: #475569;">Temp.</th><th style="font-size: 12px; color: #475569;">Peso</th><th style="font-size: 12px; color: #475569;">Pastilla</th><th style="font-size: 12px; color: #475569;">Notas</th></tr></thead><tbody>${rows || '<tr><td colspan="7" style="text-align: center; padding: 20px; color: #94a3b8; font-style: italic;">No hay registros diarios en este periodo de tiempo.</td></tr>'}</tbody></table><div style="margin-top: 40px; padding-top: 15px; border-top: 2px dashed #cbd5e1; font-size: 11px; color: #64748b; text-align: justify; line-height: 1.5;"><strong>Nota informativa:</strong> Este reporte ha sido generado automáticamente a partir de los datos ingresados manualmente por la usuaria en la aplicación Lunea. Los cálculos presentados son promedios estandarizados y tienen un fin estrictamente informativo. No constituyen un diagnóstico ni evaluación médica profesional. Si usted nota alguna anomalía, dolores inusuales o irregularidades significativas en los datos presentados, le sugerimos que visite a su médico de cabecera o especialista para una valoración adecuada.</div><div style="margin-top: 15px; text-align: center; font-size: 10px; color: #94a3b8; font-weight: bold;">Generado con Lunea - Desarrollado por Juan Miguel Rios Redondo</div></div><div class="mt-8 no-print w-full max-w-[800px] text-center flex flex-col sm:flex-row gap-4 mb-12"><button id="btn-descargar-pdf" onclick="downloadPDF()" class="flex-1 bg-theme-600 text-white px-8 py-4 rounded-xl font-black text-lg shadow-lg hover:bg-theme-700 transition hover:scale-[1.02]">Descargar PDF Directo</button><button onclick="setView('settings')" class="px-8 py-4 rounded-xl border-2 border-slate-300 dark:border-darkBorder font-bold text-slate-700 dark:text-darkText hover:bg-slate-200 dark:hover:bg-darkCard transition">Volver a Ajustes</button></div></div>`;
+                app.innerHTML = `<div class="bg-slate-100 p-4 min-h-screen flex flex-col items-center pb-24"><div class="no-print w-full max-w-[800px] mb-6 flex justify-between bg-white p-4 rounded-xl shadow-sm border"><label class="font-bold text-sm">Rango de tiempo:</label><select onchange="updateReportMonths(this.value)" class="p-1 border rounded">${selectorOptions}</select></div><div id="report-content" style="background:white; color:black; padding:40px; width:100%; max-width:800px; border-radius:4px;"><h1 style="color:#e11d48; border-bottom:2px solid #e11d48; padding-bottom:10px;">Reporte Médico Lunea</h1><p><b>Paciente:</b> ${user.name}</p><p>Generado: ${new Date().toLocaleDateString()}</p><h3 style="margin-top:20px; font-size:16px; border-bottom:1px solid #cbd5e1;">Resumen de Ciclos</h3><table style="width:100%; border-collapse:collapse;"><thead><tr style="background:#f8fafc;"><th style="padding:8px; text-align:left;">Fechas</th><th>Duración Sangrado</th><th>Duración Ciclo</th></tr></thead><tbody>${periodSummaryHtml}</tbody></table><h3 style="margin-top:20px; font-size:16px; border-bottom:1px solid #cbd5e1;">Síntomas Frecuentes</h3><div style="margin-bottom:20px;">${symptomSummaryHtml}</div><h3 style="font-size:16px; border-bottom:1px solid #cbd5e1;">Registro Diario</h3><table style="width:100%; border-collapse:collapse;"><thead><tr style="background:#f8fafc;"><th style="padding:8px; text-align:left;">Fecha</th><th>Día</th><th>Fase</th><th>Temp</th><th>Píldora</th><th>Notas</th></tr></thead><tbody>${rows || '<tr><td colspan="6" style="text-align: center; padding: 20px; color: #94a3b8;">Sin registros</td></tr>'}</tbody></table><div style="margin-top:40px; font-size:11px; color:#64748b; text-align:justify; border-top:1px dashed #cbd5e1; padding-top:10px;"><b>Nota:</b> Reporte informativo. No sustituye diagnóstico médico. Visite a su médico de cabecera ante cualquier anomalía.</div><div style="margin-top:20px; text-align:center; font-size:10px; color:#94a3b8;">Desarrollado por Juan Miguel Rios Redondo</div></div><div class="mt-8 flex gap-4 no-print"><button id="btn-descargar-pdf" onclick="downloadPDF()" class="bg-theme-500 text-white px-8 py-3 rounded-xl font-bold">Descargar PDF</button><button onclick="setView('settings')" class="px-8 py-3 border rounded-xl bg-white">Volver</button></div></div>`;
                 return;
             }
 
             if (state.view === 'pregnancy_tools') {
-                const u = getUser();
-                const p = u.pregnancyData;
-                
+                const u = getUser(), p = u.pregnancyData;
                 const kickBtnText = p.kickStart ? `Patada #${p.kicks + 1}` : 'Empezar a Contar';
                 const kicksList = p.kickLogs.map(l => `<div class="flex justify-between items-center py-2 border-b border-slate-100 dark:border-darkBorder text-sm"><span class="text-slate-600 dark:text-darkTextMuted">${l.date}</span><span class="font-bold text-fuchsia-600 dark:text-fuchsia-400">10 mov. en ${l.duration} min</span></div>`).join('') || '<div class="text-sm text-slate-400 py-2">Sin registros aún.</div>';
                 
-                let contractionStatus = 'Detenido';
-                let contractionBtnClass = 'bg-theme-500 hover:bg-theme-600 text-white';
-                let contractionBtnText = 'Iniciar Contracción';
-                if(p.contractionStart) {
-                    contractionStatus = '🔴 Contracción Activa...';
-                    contractionBtnClass = 'bg-red-500 hover:bg-red-600 text-white animate-pulse';
-                    contractionBtnText = 'Detener Contracción';
-                }
+                let contractionStatus = 'Detenido', contractionBtnClass = 'bg-theme-500 hover:bg-theme-600 text-white', contractionBtnText = 'Iniciar Contracción';
+                if(p.contractionStart) { contractionStatus = '🔴 Contracción Activa...'; contractionBtnClass = 'bg-red-500 hover:bg-red-600 text-white animate-pulse'; contractionBtnText = 'Detener Contracción'; }
 
                 const cList = p.contractions.map((c, i, arr) => {
                     let freq = '-';
-                    if (i < arr.length - 1) {
-                        const mins = Math.round((c.start - arr[i+1].start) / 60000);
-                        freq = `hace ${mins} min`;
-                    }
+                    if (i < arr.length - 1) freq = `hace ${Math.round((c.start - arr[i+1].start) / 60000)} min`;
                     return `<div class="flex justify-between items-center py-2 border-b border-slate-100 dark:border-darkBorder text-sm"><div class="flex flex-col"><span class="font-bold text-slate-700 dark:text-darkText">${c.timeStr}</span><span class="text-[10px] text-slate-400">Frec: ${freq}</span></div><span class="font-bold text-rose-500 dark:text-rose-400">${c.duration} seg</span></div>`;
                 }).join('') || '<div class="text-sm text-slate-400 py-2">Sin registros aún.</div>';
 
-                app.innerHTML = `<div class="px-6 py-4 flex justify-between items-center bg-white dark:bg-darkCard shadow-sm sticky top-0 z-20 transition-colors"><div class="flex items-center gap-2 text-fuchsia-500">${ICONS.baby} <h1 class="text-xl font-bold text-slate-800 dark:text-darkText">Maternidad</h1></div><button onclick="setView('calendar')" class="text-theme-500 font-bold text-sm">Cerrar</button></div>
-                <div class="p-6 max-w-md mx-auto animate-in pb-24">
-                    <div class="bg-white dark:bg-darkCard p-6 rounded-2xl shadow-sm mb-6 border border-fuchsia-100 dark:border-fuchsia-900/30 text-center">
-                        <h2 class="font-bold text-fuchsia-600 dark:text-fuchsia-400 text-lg mb-2">${ICONS.footprints} Contador de Pataditas</h2>
-                        <p class="text-xs text-slate-500 dark:text-darkTextMuted mb-4">Toca el botón cada vez que sientas a tu bebé. Mediremos cuánto tarda en moverse 10 veces.</p>
-                        <div class="text-5xl font-black text-fuchsia-500 mb-4">${p.kicks} <span class="text-lg text-slate-300">/ 10</span></div>
-                        <div class="flex gap-2">
-                            <button onclick="addKick()" class="flex-1 py-4 bg-fuchsia-500 text-white rounded-xl font-bold shadow-lg shadow-fuchsia-200 dark:shadow-none hover:bg-fuchsia-600 transition active:scale-95">${kickBtnText}</button>
-                            ${p.kicks > 0 ? `<button onclick="resetKicks()" class="px-4 py-4 bg-slate-100 dark:bg-darkBg text-slate-500 rounded-xl font-bold hover:bg-slate-200 transition">Reiniciar</button>` : ''}
-                        </div>
-                        <div class="mt-6 text-left border-t border-slate-100 dark:border-darkBorder pt-4">
-                            <h3 class="font-bold text-xs text-slate-400 mb-2 uppercase">Últimos Registros</h3>
-                            ${kicksList}
-                        </div>
-                    </div>
-                    <div class="bg-white dark:bg-darkCard p-6 rounded-2xl shadow-sm border border-rose-100 dark:border-rose-900/30 text-center">
-                        <h2 class="font-bold text-rose-600 dark:text-rose-400 text-lg mb-2">${ICONS.activity} Cronómetro de Contracciones</h2>
-                        <p class="text-xs text-slate-500 dark:text-darkTextMuted mb-4">Registra la duración de cada contracción y la frecuencia entre ellas para saber si es el momento.</p>
-                        <div class="text-sm font-bold text-rose-500 mb-4">${contractionStatus}</div>
-                        <button onclick="toggleContraction()" class="w-full py-4 rounded-xl font-bold shadow-lg transition active:scale-95 ${contractionBtnClass}">${contractionBtnText}</button>
-                        <div class="mt-6 text-left border-t border-slate-100 dark:border-darkBorder pt-4">
-                            <div class="flex justify-between items-center mb-2"><h3 class="font-bold text-xs text-slate-400 uppercase">Historial</h3>${p.contractions.length > 0 ? `<button onclick="clearContractions()" class="text-[10px] text-red-500 underline">Limpiar</button>` : ''}</div>
-                            ${cList}
-                        </div>
-                    </div>
-                </div>`;
+                app.innerHTML = `<div class="px-6 py-4 flex justify-between items-center bg-white dark:bg-darkCard shadow-sm sticky top-0 z-20"><div class="flex items-center gap-2 text-fuchsia-500">${ICONS.baby} <h1 class="text-xl font-bold dark:text-darkText">Maternidad</h1></div><button onclick="setView('calendar')" class="text-theme-500 font-bold text-sm">Cerrar</button></div><div class="p-6 max-w-md mx-auto animate-in pb-24"><div class="bg-white dark:bg-darkCard p-6 rounded-2xl shadow-sm mb-6 border border-fuchsia-100 text-center"><h2 class="font-bold text-fuchsia-600 text-lg mb-2">${ICONS.footprints} Contador de Pataditas</h2><p class="text-xs text-slate-500 mb-4">Mediremos cuánto tarda en moverse 10 veces.</p><div class="text-5xl font-black text-fuchsia-500 mb-4">${p.kicks} <span class="text-lg text-slate-300">/ 10</span></div><div class="flex gap-2"><button onclick="addKick()" class="flex-1 py-4 bg-fuchsia-500 text-white rounded-xl font-bold shadow-lg">${kickBtnText}</button>${p.kicks > 0 ? `<button onclick="resetKicks()" class="px-4 py-4 bg-slate-100 text-slate-500 rounded-xl font-bold">Reiniciar</button>` : ''}</div><div class="mt-6 text-left border-t border-slate-100 pt-4"><h3 class="font-bold text-xs text-slate-400 mb-2 uppercase">Últimos Registros</h3>${kicksList}</div></div><div class="bg-white dark:bg-darkCard p-6 rounded-2xl shadow-sm border border-rose-100 text-center"><h2 class="font-bold text-rose-600 text-lg mb-2">${ICONS.activity} Cronómetro de Contracciones</h2><p class="text-xs text-slate-500 mb-4">Registra duración y frecuencia.</p><div class="text-sm font-bold text-rose-500 mb-4">${contractionStatus}</div><button onclick="toggleContraction()" class="w-full py-4 rounded-xl font-bold shadow-lg ${contractionBtnClass}">${contractionBtnText}</button><div class="mt-6 text-left border-t border-slate-100 pt-4"><div class="flex justify-between items-center mb-2"><h3 class="font-bold text-xs text-slate-400 uppercase">Historial</h3>${p.contractions.length > 0 ? `<button onclick="clearContractions()" class="text-[10px] text-red-500 underline">Limpiar</button>` : ''}</div>${cList}</div></div></div>`;
                 return;
             }
 
-            // VISTAS COMUNES
-            html += `<div class="px-6 py-4 flex justify-between items-center bg-white dark:bg-darkCard shadow-sm sticky top-0 z-20 transition-colors"><div class="flex items-center gap-2 text-theme-500">${ICONS.heart} <h1 class="text-xl font-bold text-slate-800 dark:text-darkText">Lunea</h1></div><div class="flex gap-1"><button onclick="toggleBlur()" class="text-slate-400 hover:text-indigo-500 p-2 transition ${state.isBlurred ? 'text-indigo-500' : ''}">${state.isBlurred ? ICONS.eyeOff : ICONS.eye}</button><button onclick="toggleDarkMode()" class="text-slate-400 hover:text-amber-500 p-2 transition">${state.darkMode ? ICONS.sun : ICONS.moon}</button></div></div>`;
+            // VISTA PRINCIPAL (HEADER Y NAV)
+            html += `<div class="px-6 py-4 flex justify-between items-center bg-white dark:bg-darkCard shadow-sm sticky top-0 z-20"><div class="flex items-center gap-2 text-theme-500">${ICONS.heart} <h1 class="text-xl font-bold dark:text-darkText">Lunea</h1></div><div class="flex gap-1"><button onclick="toggleBlur()" class="text-slate-400 p-2">${state.isBlurred ? ICONS.eyeOff : ICONS.eye}</button><button onclick="toggleDarkMode()" class="text-slate-400 p-2">${state.darkMode ? ICONS.sun : ICONS.moon}</button></div></div>`;
             const blurClass = state.isBlurred ? 'privacy-blur' : '';
-            html += `<div id="main-content" class="${blurClass}">`; 
+            html += `<div class="${blurClass}">`; 
 
             if (state.view === 'calendar') {
-                const user = getUser();
-                const year = state.currentMonth.getFullYear();
-                const month = state.currentMonth.getMonth();
-                const startDay = new Date(year, month, 1).getDay();
-                const daysInMonth = new Date(year, month + 1, 0).getDate();
-                const todayK = toKey(new Date());
-                const todayAbsCD = getCycleDay(todayK); 
-                const todayCD = todayAbsCD ? ((todayAbsCD - 1) % user.config.cycleLen) + 1 : null; 
-                const todayP = getPhase(todayK);
+                const year = state.currentMonth.getFullYear(), month = state.currentMonth.getMonth();
+                const startDay = new Date(year, month, 1).getDay(), daysInM = new Date(year, month + 1, 0).getDate();
+                const todayK = toKey(new Date()), todayAbsCD = getCycleDay(todayK), todayCD = todayAbsCD ? ((todayAbsCD - 1) % user.config.cycleLen) + 1 : null, todayP = getPhase(todayK);
                 const isCurrentMonth = todayK.startsWith(`${year}-${String(month+1).padStart(2,'0')}`);
 
                 let alertsHtml = '';
                 if (user.config.pregnancyMode) {
-                    alertsHtml += `<button onclick="setView('pregnancy_tools')" class="w-full mb-4 bg-fuchsia-500 hover:bg-fuchsia-600 text-white p-4 rounded-[1.5rem] shadow-lg shadow-fuchsia-200 dark:shadow-none flex justify-between items-center transition active:scale-95"><div class="flex items-center gap-3"><div class="bg-white/20 p-2 rounded-full">${ICONS.baby}</div><div class="text-left"><div class="font-bold text-sm">Herramientas Maternidad</div><div class="text-[10px] text-fuchsia-100">Pataditas y contracciones</div></div></div>${ICONS.right}</button>`;
+                    alertsHtml += `<button onclick="setView('pregnancy_tools')" class="w-full mb-4 bg-fuchsia-500 text-white p-4 rounded-[1.5rem] shadow-lg flex justify-between items-center"><div class="flex items-center gap-3"><div class="bg-white/20 p-2 rounded-full">${ICONS.baby}</div><div class="text-left"><div class="font-bold text-sm">Herramientas Maternidad</div><div class="text-[10px] text-fuchsia-100">Pataditas y contracciones</div></div></div>${ICONS.right}</button>`;
                 } else {
                     if (todayAbsCD && todayAbsCD > user.config.cycleLen) {
-                        const daysLate = todayAbsCD - user.config.cycleLen;
-                        alertsHtml += `<div class="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-[1.5rem] mb-4 border border-orange-200 dark:border-orange-800 flex items-start gap-4 animate-in shadow-sm"><div class="bg-white dark:bg-orange-900 p-3 rounded-full text-orange-500 dark:text-orange-400 shadow-sm shrink-0">${ICONS.info}</div><div><h4 class="font-bold text-orange-800 dark:text-orange-300 text-sm">Retraso de ${daysLate} día(s)</h4><p class="text-[11px] text-orange-600 dark:text-orange-400 mt-0.5 leading-snug">Tu periodo está tardando más de lo habitual.</p></div></div>`;
+                        alertsHtml += `<div class="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-[1.5rem] mb-4 border border-orange-200 flex items-start gap-4 shadow-sm"><div class="bg-white dark:bg-orange-900 p-3 rounded-full text-orange-500 shadow-sm">${ICONS.info}</div><div><h4 class="font-bold text-orange-800 dark:text-orange-300 text-sm">Retraso de ${todayAbsCD - user.config.cycleLen} día(s)</h4><p class="text-[11px] text-orange-600 dark:text-orange-400 mt-0.5">Tu periodo está tardando más de lo habitual.</p></div></div>`;
                     }
                     if (user.config.pill) {
-                        const todayLog = user.logs[todayK] || {};
-                        alertsHtml += `<button onclick="updateLog('${todayK}', 'pill')" class="w-full mb-4 p-3 rounded-[1.5rem] border-2 transition ${todayLog.pill ? 'bg-theme-500 text-white border-theme-500 shadow-md' : 'bg-white dark:bg-darkCard text-theme-500 border-theme-200 dark:border-theme-800'} flex items-center justify-center gap-2 font-bold active:scale-95">${ICONS.pill} ${todayLog.pill ? 'Pastilla tomada hoy ✅' : '¿Tomaste tu pastilla hoy?'}</button>`;
+                        const taken = (user.logs[todayK] || {}).pill;
+                        alertsHtml += `<button onclick="updateLog('${todayK}', 'pill')" class="w-full mb-4 p-3 rounded-[1.5rem] border-2 transition ${taken ? 'bg-theme-500 text-white border-theme-500 shadow-md' : 'bg-white dark:bg-darkCard text-theme-500 border-theme-200 dark:border-theme-800'} flex items-center justify-center gap-2 font-bold">${ICONS.pill} ${taken ? 'Pastilla tomada hoy ✅' : '¿Tomaste tu pastilla hoy?'}</button>`;
                     }
                 }
 
                 let daysHtml = '';
                 for(let i=0; i<startDay; i++) daysHtml += `<div></div>`;
-                for(let i=1; i<=daysInMonth; i++) {
-                    const d = new Date(year, month, i);
-                    const k = toKey(d);
-                    const absCd = getCycleDay(k);
-                    const cd = absCd ? ((absCd - 1) % user.config.cycleLen) + 1 : null;
-                    const p = getPhase(k);
-                    const isToday = k === todayK;
-                    const log = user.logs[k] || {};
-                    const isPeriodStart = user.periodHistory && user.periodHistory.includes(k);
+                for(let i=1; i<=daysInM; i++) {
+                    const k = toKey(new Date(year, month, i)), cd = getCycleDay(k) ? ((getCycleDay(k) - 1) % user.config.cycleLen) + 1 : null, p = getPhase(k), isToday = k === todayK;
+                    const log = user.logs[k] || {}, isStart = user.periodHistory?.includes(k);
                     
                     let dots = '';
                     if(p && !user.config.pregnancyMode) dots += `<div class="w-1.5 h-1.5 rounded-full ${p.bg}"></div>`;
                     if(log.pill) dots += `<div class="w-1.5 h-1.5 rounded-full bg-theme-400"></div>`;
                     if(log.pregnancyTest === 'positive') dots += `<div class="w-2 h-2 rounded-full bg-fuchsia-500 border border-white dark:border-darkCard"></div>`;
                     if(log.pregnancyTest === 'negative') dots += `<div class="w-1.5 h-1.5 rounded-full bg-slate-400"></div>`;
-                    if(log.symptoms && log.symptoms.length > 0) dots += `<div class="w-1.5 h-1.5 rounded-full bg-indigo-500"></div>`;
-                    if(isPeriodStart && !user.config.pregnancyMode) dots = `<div class="w-2 h-2 rounded-full bg-rose-600 border border-white dark:border-darkCard ring-1 ring-rose-200 dark:ring-rose-900"></div>` + dots;
+                    if(log.symptoms && log.symptoms.length > 0) dots += `<div class="w-1.5 h-1.5 rounded-full bg-purple-500"></div>`;
+                    if(isStart && !user.config.pregnancyMode) dots = `<div class="w-2 h-2 rounded-full bg-red-600 border border-white dark:border-darkCard ring-1 ring-red-200"></div>` + dots;
 
-                    daysHtml += `<button onclick="selectDate('${k}')" class="h-16 rounded-xl flex flex-col items-center justify-center relative day-cell border ${isToday ? 'border-theme-500 border-2 shadow-md' : (isPeriodStart && !user.config.pregnancyMode ? 'border-rose-300 bg-rose-50 dark:bg-rose-900/30 dark:border-rose-700' : 'border-slate-100 dark:border-darkBorder')} ${p ? p.light : 'bg-white dark:bg-darkCard'}">${cd && !user.config.pregnancyMode ? `<span class="absolute top-1 right-1 text-[10px] font-bold text-slate-400 dark:text-slate-500 font-mono">${cd}</span>` : ''}<span class="text-sm font-bold ${p ? p.t : 'text-slate-600 dark:text-slate-300'}">${i}</span><div class="flex gap-0.5 mt-1 items-center flex-wrap justify-center px-1">${dots}</div></button>`;
+                    let fertilityIcon = '';
+                    if(!user.config.pregnancyMode && p) {
+                        if(p.risk === 'fertile') fertilityIcon = `<div class="absolute top-1.5 right-1.5 text-fuchsia-400 opacity-80" title="Alta probabilidad">${ICONS.sparkles}</div>`;
+                        if(p.risk === 'safe') fertilityIcon = `<div class="absolute top-1.5 right-1.5 text-emerald-400 opacity-70" title="Baja probabilidad">${ICONS.shieldCheck}</div>`;
+                    }
+
+                    daysHtml += `<button onclick="selectDate('${k}')" class="h-16 rounded-xl flex flex-col items-center justify-center relative day-cell border ${isToday ? 'border-theme-500 border-2 shadow-md' : (isStart && !user.config.pregnancyMode ? 'border-rose-300 bg-rose-50 dark:bg-rose-900/30' : 'border-slate-100 dark:border-darkBorder')} ${p ? p.light : 'bg-white dark:bg-darkCard'}">${cd && !user.config.pregnancyMode ? `<span class="absolute top-1 left-1.5 text-[9px] font-bold text-slate-300 dark:text-slate-600 font-mono">${cd}</span>` : ''}${fertilityIcon}<span class="text-sm font-bold ${p ? p.t : 'text-slate-600 dark:text-slate-300'}">${i}</span><div class="flex gap-0.5 mt-1 items-center flex-wrap justify-center px-1">${dots}</div></button>`;
                 }
 
                 let topCardHtml = '';
                 if (user.config.pregnancyMode) {
                     const lpDate = new Date(user.config.lastPeriod + 'T00:00:00');
-                    const diffTime = Math.abs(new Date() - lpDate);
-                    const weeks = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
-                    const days = Math.floor(diffTime / (1000 * 60 * 60 * 24)) % 7;
-                    const dueDate = new Date(lpDate.getTime() + 280 * 24 * 60 * 60 * 1000);
-                    const dueDateStr = dueDate.toLocaleDateString('es-ES', {day: 'numeric', month: 'long', year: 'numeric'});
+                    const weeks = Math.floor(Math.abs(new Date() - lpDate) / 604800000);
+                    const days = Math.floor(Math.abs(new Date() - lpDate) / 86400000) % 7;
+                    const dueDateStr = new Date(lpDate.getTime() + 24192000000).toLocaleDateString('es-ES', {day: 'numeric', month: 'long', year: 'numeric'});
                     let babySizeStr = BABY_SIZES[0].s;
                     for(let b of BABY_SIZES) if(weeks >= b.w) babySizeStr = b.s;
 
-                    topCardHtml = `<div class="rounded-[2rem] p-6 mb-4 text-center bg-gradient-to-br from-fuchsia-50 to-pink-50 dark:from-fuchsia-900/40 dark:to-pink-900/20 shadow-sm border border-fuchsia-100 dark:border-fuchsia-800 relative overflow-hidden"><div class="absolute -right-4 -top-4 text-fuchsia-100 dark:text-fuchsia-900/30 opacity-50 transform scale-[4]">${ICONS.baby}</div><h2 class="text-xs font-bold uppercase text-fuchsia-500 dark:text-fuchsia-400 mb-2 relative z-10">Modo Embarazo</h2><div class="text-5xl font-black text-fuchsia-600 dark:text-fuchsia-300 mb-1 relative z-10">${weeks} <span class="text-xl">sem</span></div><div class="text-sm text-fuchsia-500 dark:text-fuchsia-400 mb-3 font-bold relative z-10">y ${days} días de gestación</div><div class="inline-block px-4 py-2 rounded-xl text-xs font-bold bg-white dark:bg-darkCard text-fuchsia-600 dark:text-fuchsia-400 shadow-sm relative z-10 border border-fuchsia-50 dark:border-darkBorder mb-3 w-full">👶 Tamaño aprox: <span class="text-sm block mt-1">${babySizeStr}</span></div><div class="inline-block px-4 py-2 rounded-xl text-xs font-bold bg-fuchsia-600 text-white shadow-sm relative z-10 w-full">📅 Posible parto:<br><span class="text-sm">${dueDateStr}</span></div></div>`;
+                    topCardHtml = `<div class="rounded-[2rem] p-6 mb-4 text-center bg-gradient-to-br from-fuchsia-50 to-pink-50 dark:from-fuchsia-900/40 dark:to-pink-900/20 shadow-sm border border-fuchsia-100 relative overflow-hidden"><div class="absolute -right-4 -top-4 text-fuchsia-100 opacity-50 transform scale-[4]">${ICONS.baby}</div><h2 class="text-xs font-bold uppercase text-fuchsia-500 mb-2 relative z-10">Modo Embarazo</h2><div class="text-5xl font-black text-fuchsia-600 mb-1 relative z-10">${weeks} <span class="text-xl">sem</span></div><div class="text-sm text-fuchsia-500 mb-3 font-bold relative z-10">y ${days} días de gestación</div><div class="inline-block px-4 py-2 rounded-xl text-xs font-bold bg-white text-fuchsia-600 shadow-sm relative z-10 border border-fuchsia-50 mb-3 w-full">👶 Tamaño aprox: <span class="text-sm block mt-1">${babySizeStr}</span></div><div class="inline-block px-4 py-2 rounded-xl text-xs font-bold bg-fuchsia-600 text-white shadow-sm relative z-10 w-full">📅 Posible parto:<br><span class="text-sm">${dueDateStr}</span></div></div>`;
                 } else {
                     topCardHtml = `<div class="rounded-[2rem] p-6 mb-4 text-center bg-white dark:bg-darkCard shadow-sm border border-slate-100 dark:border-darkBorder relative overflow-hidden">${todayP && todayP.l === 'Menstruación' ? '<div class="absolute top-0 left-0 w-full h-1 bg-rose-500"></div>' : ''}<h2 class="text-xs font-bold uppercase text-slate-400 dark:text-darkTextMuted mb-2">${new Date().toLocaleDateString('es-ES', {weekday:'long', day:'numeric'})}</h2><div class="text-5xl font-black text-slate-800 dark:text-darkText mb-1">${todayCD || '?'}</div><div class="text-sm text-slate-500 dark:text-darkTextMuted mb-4">Día del Ciclo (Promedio: ${user.config.cycleLen} días)</div>${todayCD ? `<div class="inline-block px-4 py-1 rounded-full text-sm font-bold ${todayP.light} ${todayP.t}">${todayP.l}</div>` : `<button onclick="setView('settings')" class="bg-theme-500 text-white px-4 py-2 rounded animate-pulse shadow-md">Configurar</button>`}</div>`;
                 }
@@ -540,39 +483,30 @@
                 const dailyTip = user.config.pregnancyMode ? TIPS['Embarazo'] : TIPS[todayP?.l || 'Folicular'];
                 const tipHtml = `<div class="bg-theme-50 dark:bg-theme-900/20 px-4 py-3 rounded-xl mb-6 border border-theme-100 dark:border-theme-900 flex items-start gap-3"><div class="text-theme-500 mt-0.5">✨</div><div class="text-xs text-theme-700 dark:text-theme-300 font-medium leading-snug">${dailyTip}</div></div>`;
 
-                html += `<div class="p-4 max-w-md mx-auto animate-in">${alertsHtml}${topCardHtml}${tipHtml}<div class="p-4 bg-white dark:bg-darkCard rounded-3xl shadow-sm mb-6 border border-slate-50 dark:border-darkBorder"><div class="flex justify-between items-center mb-4"><button onclick="setMonth(-1)" class="p-2 text-slate-400 dark:text-darkTextMuted hover:text-slate-600 dark:hover:text-white transition">${ICONS.left}</button><div class="text-center"><div class="font-bold capitalize text-lg dark:text-darkText">${state.currentMonth.toLocaleDateString('es-ES', {month:'long', year:'numeric'})}</div>${!isCurrentMonth ? `<button onclick="goToToday()" class="mt-1 text-[10px] text-white bg-theme-500 px-3 py-1 rounded-full font-bold shadow-sm hover:bg-theme-600 transition">Volver a Hoy</button>` : ''}</div><button onclick="setMonth(1)" class="p-2 text-slate-400 dark:text-darkTextMuted hover:text-slate-600 dark:hover:text-white transition">${ICONS.right}</button></div><div class="grid grid-cols-7 text-center text-xs text-slate-400 dark:text-darkTextMuted font-bold mb-2"><span>D</span><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span></div><div class="grid grid-cols-7 gap-1">${daysHtml}</div></div></div>`;
+                html += `<div class="p-4 max-w-md mx-auto animate-in">${alertsHtml}${topCardHtml}${tipHtml}<div class="p-4 bg-white dark:bg-darkCard rounded-3xl shadow-sm mb-6 border border-slate-50 dark:border-darkBorder"><div class="flex justify-between items-center mb-4"><button onclick="setMonth(-1)" class="p-2 text-slate-400 dark:text-darkTextMuted">${ICONS.left}</button><div class="text-center"><div class="font-bold capitalize text-lg dark:text-darkText">${state.currentMonth.toLocaleDateString('es-ES', {month:'long', year:'numeric'})}</div>${!isCurrentMonth ? `<button onclick="goToToday()" class="mt-1 text-[10px] text-white bg-theme-500 px-3 py-1 rounded-full font-bold shadow-sm">Volver a Hoy</button>` : ''}</div><button onclick="setMonth(1)" class="p-2 text-slate-400 dark:text-darkTextMuted">${ICONS.right}</button></div><div class="grid grid-cols-7 text-center text-xs text-slate-400 dark:text-darkTextMuted font-bold mb-2"><span>D</span><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span></div><div class="grid grid-cols-7 gap-1">${daysHtml}</div></div></div>`;
             }
             else if (state.view === 'year') {
                 let monthsHtml = '';
                 for(let m=0; m<12; m++) {
-                    const currentY = state.viewYear;
-                    const date = new Date(currentY, m, 1);
-                    const daysInM = new Date(currentY, m+1, 0).getDate();
-                    const startDay = date.getDay(); 
-                    let daysGrid = '';
-                    for(let i=0; i<startDay; i++) daysGrid += `<div></div>`;
+                    const date = new Date(state.viewYear, m, 1), daysInM = new Date(state.viewYear, m+1, 0).getDate(), startDay = date.getDay(); 
+                    let daysGrid = ''; for(let i=0; i<startDay; i++) daysGrid += `<div></div>`;
                     for(let d=1; d<=daysInM; d++) {
-                        const k = toKey(new Date(currentY, m, d));
-                        const p = getPhase(k);
-                        const isStart = getUser().periodHistory.includes(k);
+                        const k = toKey(new Date(state.viewYear, m, d)), p = getPhase(k), isStart = getUser().periodHistory.includes(k);
                         let bg = 'bg-slate-100 text-slate-300 dark:bg-slate-800 dark:text-slate-600';
-                        if (getUser().config.pregnancyMode) bg = 'bg-fuchsia-100 text-fuchsia-500 dark:bg-fuchsia-900/50 dark:text-fuchsia-400 font-bold';
+                        if (getUser().config.pregnancyMode) bg = 'bg-fuchsia-100 text-fuchsia-500 font-bold';
                         else if (isStart) bg = 'bg-red-600 text-white font-bold';
                         else if (p && p.l === 'Menstruación') bg = 'bg-rose-400 text-white';
-                        else if (p && p.l === 'Folicular') bg = 'bg-sky-300 text-sky-900 dark:bg-sky-800 dark:text-sky-200'; 
-                        else if (p && p.l === 'Fértil') bg = 'bg-purple-300 text-purple-900 dark:bg-purple-800 dark:text-purple-200';
+                        else if (p && p.l === 'Folicular') bg = 'bg-sky-300 text-sky-900'; 
+                        else if (p && p.l === 'Fértil') bg = 'bg-purple-300 text-purple-900';
                         else if (p && p.l === 'Ovulación') bg = 'bg-purple-600 text-white font-bold';
-                        else if (p) bg = 'bg-slate-100 text-slate-900 dark:bg-slate-700 dark:text-slate-200';
                         daysGrid += `<div class="w-full aspect-square rounded-sm text-[6px] flex items-center justify-center ${bg}">${d}</div>`;
                     }
                     monthsHtml += `<div class="bg-white dark:bg-darkCard p-2 rounded-lg border border-slate-100 dark:border-darkBorder shadow-sm"><div class="font-bold text-xs text-center mb-1 capitalize text-slate-700 dark:text-darkText">${date.toLocaleDateString('es-ES',{month:'long'})}</div><div class="grid grid-cols-7 gap-[1px] mb-1">${['D','L','M','M','J','V','S'].map(day => `<div class="text-[6px] text-center text-slate-400 dark:text-darkTextMuted">${day}</div>`).join('')}</div><div class="grid grid-cols-7 gap-[1px]">${daysGrid}</div></div>`;
                 }
-                html += `<div class="p-4 animate-in mb-24 max-w-md mx-auto"><div class="flex justify-between items-center mb-6 sticky top-0 bg-[#f8fafc] dark:bg-darkBg py-2 z-10"><button onclick="setView('calendar')" class="text-slate-600 dark:text-darkText">${ICONS.left}</button><div class="flex gap-4 items-center"><button onclick="setYear(-1)" class="p-2 bg-white dark:bg-darkCard text-slate-700 dark:text-darkText rounded-full shadow-sm border border-slate-100 dark:border-darkBorder">${ICONS.left}</button><h2 class="text-xl font-bold text-slate-800 dark:text-darkText">${state.viewYear}</h2><button onclick="setYear(1)" class="p-2 bg-white dark:bg-darkCard text-slate-700 dark:text-darkText rounded-full shadow-sm border border-slate-100 dark:border-darkBorder">${ICONS.right}</button></div><div class="w-6"></div></div><div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">${monthsHtml}</div></div>`;
+                html += `<div class="p-4 animate-in mb-24 max-w-md mx-auto"><div class="flex justify-between items-center mb-6 sticky top-0 bg-[#f8fafc] dark:bg-darkBg py-2 z-10"><button onclick="setView('calendar')" class="text-slate-600 dark:text-darkText">${ICONS.left}</button><div class="flex gap-4 items-center"><button onclick="setYear(-1)" class="p-2 bg-white dark:bg-darkCard text-slate-700 dark:text-darkText rounded-full shadow-sm">${ICONS.left}</button><h2 class="text-xl font-bold text-slate-800 dark:text-darkText">${state.viewYear}</h2><button onclick="setYear(1)" class="p-2 bg-white dark:bg-darkCard text-slate-700 dark:text-darkText rounded-full shadow-sm">${ICONS.right}</button></div><div class="w-6"></div></div><div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">${monthsHtml}</div></div>`;
             }
             else if (state.view === 'settings') {
                 const user = getUser();
-                
-                // GRAFICA BBT
                 let bbtLogs = Object.entries(user.logs).filter(([k, v]) => v.bbt).sort((a,b) => a[0].localeCompare(b[0])).slice(-8);
                 let bbtChartHtml = '';
                 if(bbtLogs.length > 1) {
@@ -583,64 +517,53 @@
                     bbtChartHtml = `<div class="mt-6 border-t border-slate-100 dark:border-darkBorder pt-4"><h4 class="text-xs font-bold text-slate-500 dark:text-darkTextMuted mb-4 flex items-center gap-1">${ICONS.thermometer} Temperatura Basal</h4><svg viewBox="0 -10 100 120" class="w-full h-24 overflow-visible"><polyline points="${pts}" fill="none" stroke="var(--theme-500)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>${bbtLogs.map((l, i) => `<circle cx="${(i / (bbtLogs.length - 1)) * 100}" cy="${100 - (((parseFloat(l[1].bbt) - minBbt) / range) * 100)}" r="4" fill="var(--theme-500)" stroke="white" stroke-width="1.5"/><text x="${(i / (bbtLogs.length - 1)) * 100}" y="${100 - (((parseFloat(l[1].bbt) - minBbt) / range) * 100) - 8}" text-anchor="middle" fill="var(--theme-700)" font-size="7" font-weight="bold">${l[1].bbt}</text>`).join('')}</svg><div class="flex justify-between mt-2 text-[8px] text-slate-400 dark:text-darkTextMuted">${bbtLogs.map(l => `<span>${l[0].split('-').slice(1).join('/')}</span>`).join('')}</div></div>`;
                 }
 
-                // GRAFICA CICLO
                 let chartBarsHtml = '';
                 if(user.periodHistory && user.periodHistory.length > 1) {
                     const sorted = [...user.periodHistory].sort((a,b) => new Date(a) - new Date(b));
                     const lengths = [];
-                    for(let i=1; i<sorted.length; i++) {
-                        const days = Math.ceil(Math.abs(new Date(sorted[i]) - new Date(sorted[i-1])) / 86400000);
-                        if(days >= 15 && days <= 60) lengths.push(days); 
+                    for(let i=1; i<sorted.length; i++) lengths.push(Math.ceil(Math.abs(new Date(sorted[i]) - new Date(sorted[i-1])) / 86400000));
+                    const displayLengths = lengths.filter(days => days >= 15 && days <= 60).slice(-8);
+                    if(displayLengths.length > 0) {
+                        const maxLen = Math.max(...displayLengths, 35);
+                        chartBarsHtml = displayLengths.map((len, idx) => {
+                            const h = (len / maxLen) * 100, isAvg = len >= user.config.cycleLen - 2 && len <= user.config.cycleLen + 2;
+                            return `<div class="flex flex-col items-center justify-end h-32 w-8 group"><span class="text-[8px] font-bold text-slate-400 mb-1 opacity-0 group-hover:opacity-100 transition">${len}d</span><div class="w-full rounded-t-md ${isAvg ? 'bg-theme-400' : 'bg-slate-200 dark:bg-slate-700'} bar-grow" style="height: ${h}%; animation-delay: ${idx * 0.1}s"></div><span class="text-[10px] mt-2 font-bold text-slate-500">C${idx+1}</span></div>`;
+                        }).join('');
                     }
-                    const displayLengths = lengths.slice(-8);
-                    const maxLen = Math.max(...displayLengths, 35);
-                    chartBarsHtml = displayLengths.map((len, idx) => {
-                        const h = (len / maxLen) * 100;
-                        const isAvg = len >= user.config.cycleLen - 2 && len <= user.config.cycleLen + 2;
-                        return `<div class="flex flex-col items-center justify-end h-32 w-8 group"><span class="text-[8px] font-bold text-slate-400 mb-1 opacity-0 group-hover:opacity-100 transition">${len}d</span><div class="w-full rounded-t-md ${isAvg ? 'bg-theme-400 dark:bg-theme-500' : 'bg-slate-200 dark:bg-slate-700'} bar-grow" style="height: ${h}%; animation-delay: ${idx * 0.1}s"></div><span class="text-[10px] mt-2 font-bold text-slate-500 dark:text-darkTextMuted">C${idx+1}</span></div>`;
-                    }).join('');
-                } else {
-                    chartBarsHtml = `<div class="w-full text-center text-sm text-slate-400 dark:text-darkTextMuted py-8">Registra al menos 2 periodos para ver tu gráfica.</div>`;
                 }
+                if(!chartBarsHtml) chartBarsHtml = `<div class="w-full text-center text-sm text-slate-400 dark:text-darkTextMuted py-8">Registra al menos 2 periodos para ver tu gráfica.</div>`;
 
-                // Lógica de PLANIFICACIÓN FAMILIAR
                 let planningHtml = '';
                 if (!user.config.pregnancyMode) {
                     let currentDate = new Date(user.config.lastPeriod + 'T00:00:00');
                     const todayDate = new Date(); todayDate.setHours(0,0,0,0);
                     while (new Date(currentDate.getTime() + user.config.cycleLen * 86400000) < todayDate) { currentDate = new Date(currentDate.getTime() + user.config.cycleLen * 86400000); }
                     const currentOvulation = new Date(currentDate.getTime() + (user.config.cycleLen - 14) * 86400000);
-                    if (currentOvulation < todayDate) { currentDate = new Date(currentDate.getTime() + user.config.cycleLen * 86400000); }
+                    if (currentOvulation < todayDate) currentDate = new Date(currentDate.getTime() + user.config.cycleLen * 86400000);
                     for (let i = 0; i < 3; i++) {
                         const projectedPeriod = new Date(currentDate.getTime() + (i * user.config.cycleLen) * 86400000);
                         const projectedOvulation = new Date(projectedPeriod.getTime() + (user.config.cycleLen - 14) * 86400000);
                         const projectedDue = new Date(projectedPeriod.getTime() + 280 * 86400000);
-                        planningHtml += `<div class="flex items-center justify-between p-3 border-b border-slate-100 dark:border-darkBorder last:border-0"><div><div class="text-xs font-bold text-theme-500 dark:text-theme-400 capitalize">Ciclo de ${projectedPeriod.toLocaleDateString('es-ES', { month: 'long' })}</div><div class="text-[10px] text-slate-500 dark:text-darkTextMuted mt-0.5">Ovulación est: ${projectedOvulation.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</div></div><div class="text-right"><div class="text-[10px] text-slate-400 dark:text-darkTextMuted">Nacimiento est.</div><div class="text-sm font-black text-slate-700 dark:text-darkText">${projectedDue.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}</div></div></div>`;
+                        planningHtml += `<div class="flex items-center justify-between p-3 border-b border-slate-100 dark:border-darkBorder last:border-0"><div><div class="text-xs font-bold text-theme-500 capitalize">Ciclo de ${projectedPeriod.toLocaleDateString('es-ES', { month: 'long' })}</div><div class="text-[10px] text-slate-500 mt-0.5">Ovulación est: ${projectedOvulation.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</div></div><div class="text-right"><div class="text-[10px] text-slate-400">Nacimiento est.</div><div class="text-sm font-black text-slate-700 dark:text-darkText">${projectedDue.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}</div></div></div>`;
                     }
-                } else {
-                    planningHtml = `<div class="text-center py-4 text-sm text-theme-500 dark:text-theme-400 font-bold">Estás en Modo Embarazo. ¡Felicitaciones! 🎉</div>`;
-                }
+                } else { planningHtml = `<div class="text-center py-4 text-sm text-theme-500 font-bold">Estás en Modo Embarazo. 🎉</div>`; }
 
-                let usersHtml = state.users.map(u => `<div class="flex justify-between items-center py-3 border-b border-slate-50 dark:border-darkBorder last:border-0"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-theme-100 dark:bg-theme-900/30 flex items-center justify-center text-theme-600 dark:text-theme-400 font-bold">${u.name[0]}</div><div class="flex flex-col"><button onclick="switchUser('${u.id}')" class="text-left font-bold ${u.id===state.currentUserId?'text-theme-600 dark:text-theme-400':'text-slate-700 dark:text-darkText'}">${u.name}</button><span class="text-[10px] text-slate-400 dark:text-darkTextMuted">ID: ${u.id.substr(0,4)}</span></div></div><div class="flex gap-2"><button onclick="editUser('${u.id}')" class="p-2 text-blue-500 bg-blue-50 dark:bg-blue-900/20 rounded-lg hover:bg-blue-100 transition">${ICONS.edit}</button>${state.users.length>1 ? `<button onclick="deleteUser('${u.id}')" class="p-2 text-red-500 bg-red-50 dark:bg-red-900/20 rounded-lg hover:bg-red-100 transition">${ICONS.trash}</button>` : ''}</div></div>`).join('');
                 const guideHtml = Object.entries(PHASE_INFO).map(([phase, info]) => `<div class="flex gap-3 mb-4 last:mb-0"><div class="w-4 h-4 rounded-full ${info.color} flex-shrink-0 mt-1"></div><div><div class="font-bold text-sm text-slate-800 dark:text-darkText">${phase}</div><div class="text-xs text-slate-500 dark:text-darkTextMuted leading-tight">${info.desc}</div></div></div>`).join('');
-                let historyHtml = '<div class="text-center py-4 text-slate-400 dark:text-darkTextMuted italic text-sm">No hay registros aún.</div>';
-                if(user.periodHistory && user.periodHistory.length > 0) {
-                     historyHtml = user.periodHistory.sort((a,b) => new Date(b) - new Date(a)).map(d => `<div class="flex justify-between items-center text-sm py-2 border-b border-slate-50 dark:border-darkBorder last:border-0"><span class="font-mono text-slate-600 dark:text-darkText">${d}</span><div class="flex items-center gap-2"><span class="text-[10px] font-bold text-rose-500 bg-rose-50 dark:bg-rose-900/30 dark:text-rose-400 px-2 py-1 rounded-full">Inicio</span><button onclick="deleteHistoryItem('${d}')" class="text-slate-400 hover:text-red-500 p-1 transition">${ICONS.trash}</button></div></div>`).join('');
+                
+                let usersHtml = state.users.map(u => `<div class="flex justify-between items-center py-3 border-b border-slate-50 dark:border-darkBorder last:border-0"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-theme-100 text-theme-600 font-bold flex justify-center items-center">${u.name[0]}</div><div><button onclick="switchUser('${u.id}')" class="font-bold ${u.id===state.currentUserId?'text-theme-600':'text-slate-700 dark:text-darkText'}">${u.name}</button><div class="text-[10px] text-slate-400">ID: ${u.id.substr(0,4)}</div></div></div><div class="flex gap-2"><button onclick="editUser('${u.id}')" class="p-2 text-blue-500 bg-blue-50 rounded-lg">${ICONS.edit}</button>${state.users.length>1?`<button onclick="deleteUser('${u.id}')" class="p-2 text-red-500 bg-red-50 rounded-lg">${ICONS.trash}</button>`:''}</div></div>`).join('');
+                
+                let historyHtml = '<div class="text-center py-4 text-slate-400 italic text-sm">No hay registros aún.</div>';
+                if(user.periodHistory?.length > 0) {
+                     historyHtml = [...user.periodHistory].sort((a,b) => new Date(b) - new Date(a)).map(d => `<div class="flex justify-between items-center text-sm py-2 border-b border-slate-50 dark:border-darkBorder"><span class="font-mono text-slate-600 dark:text-darkText">${d}</span><div class="flex items-center gap-2"><span class="text-[10px] font-bold text-rose-500 bg-rose-50 px-2 py-1 rounded-full">Inicio</span><button onclick="deleteHistoryItem('${d}')" class="text-slate-400 hover:text-red-500 p-1">${ICONS.trash}</button></div></div>`).join('');
                 }
 
                 html += `
                     <div class="p-6 max-w-md mx-auto animate-in">
                         <div class="flex justify-between mb-6 text-slate-800 dark:text-darkText"><button onclick="setView('calendar')">${ICONS.left}</button><h2 class="text-xl font-bold">Perfil y Ajustes</h2><div></div></div>
                         
-                        <div class="bg-white dark:bg-darkCard p-5 rounded-2xl shadow-sm mb-6 border border-slate-50 dark:border-darkBorder"><h3 class="font-bold mb-4 text-slate-800 dark:text-darkText text-lg flex gap-2 items-center"><span class="text-theme-500">${ICONS.history}</span> Panel de Salud</h3><div class="bg-theme-50 dark:bg-theme-900/20 p-4 rounded-xl mb-4 text-center border border-theme-100 dark:border-theme-800/50"><div class="text-xs text-theme-500 dark:text-theme-400 font-bold uppercase tracking-wider">Ciclo Promedio Actual</div><div class="text-3xl font-black text-theme-700 dark:text-theme-300 my-1">${user.config.cycleLen} <span class="text-sm font-normal text-theme-500">días</span></div></div><h4 class="text-xs font-bold text-slate-400 dark:text-darkTextMuted mb-2 text-center">Variación de ciclos</h4><div class="flex items-end justify-around h-40 border-b border-slate-200 dark:border-slate-700 pb-2 px-2 gap-2 overflow-x-auto">${chartBarsHtml}</div>${bbtChartHtml}</div>
+                        <div class="bg-white dark:bg-darkCard p-5 rounded-2xl shadow-sm mb-6 border border-slate-50 dark:border-darkBorder"><h3 class="font-bold mb-4 text-slate-800 dark:text-darkText text-lg flex gap-2 items-center"><span class="text-theme-500">${ICONS.history}</span> Panel de Salud</h3><div class="bg-theme-50 dark:bg-theme-900/20 p-4 rounded-xl mb-4 text-center"><div class="text-xs text-theme-500 font-bold uppercase tracking-wider">Ciclo Promedio Actual</div><div class="text-3xl font-black text-theme-700 dark:text-theme-300 my-1">${user.config.cycleLen} <span class="text-sm font-normal text-theme-500">días</span></div></div><h4 class="text-xs font-bold text-slate-400 text-center">Variación de ciclos</h4><div class="flex items-end justify-around h-40 border-b border-slate-200 pb-2 gap-2">${chartBarsHtml}</div>${bbtChartHtml}</div>
+                        <div class="bg-white dark:bg-darkCard p-5 rounded-2xl shadow-sm mb-6 border border-slate-50 dark:border-darkBorder"><h3 class="font-bold mb-2 text-slate-800 dark:text-darkText text-lg flex gap-2 items-center"><span class="text-fuchsia-500">${ICONS.baby}</span> Planificación Familiar</h3><p class="text-xs text-slate-400 mb-4 leading-snug">Posibles fechas de parto si concibes en tus próximos ciclos.</p><div class="bg-slate-50 dark:bg-darkBg rounded-xl border border-slate-100 dark:border-darkBorder">${planningHtml}</div></div>
                         
-                        <div class="bg-white dark:bg-darkCard p-5 rounded-2xl shadow-sm mb-6 border border-slate-50 dark:border-darkBorder">
-                            <h3 class="font-bold mb-2 text-slate-800 dark:text-darkText text-lg flex gap-2 items-center"><span class="text-fuchsia-500">${ICONS.baby}</span> Planificación Familiar</h3>
-                            <p class="text-xs text-slate-400 dark:text-darkTextMuted mb-4 leading-snug">Posibles fechas de parto si concibes en tus próximos ciclos.</p>
-                            <div class="bg-slate-50 dark:bg-darkBg rounded-xl border border-slate-100 dark:border-darkBorder">${planningHtml}</div>
-                        </div>
-
-                        <!-- TEMA DE LA APP (NUEVO) -->
                         <div class="bg-white dark:bg-darkCard p-5 rounded-2xl shadow-sm mb-6 border border-slate-50 dark:border-darkBorder">
                             <h3 class="font-bold mb-4 text-slate-800 dark:text-darkText text-lg">Tema de la App</h3>
                             <div class="flex justify-between gap-2">
@@ -651,18 +574,23 @@
                             </div>
                         </div>
 
-                        <div class="bg-white dark:bg-darkCard p-5 rounded-2xl shadow-sm mb-6 border border-slate-50 dark:border-darkBorder"><h3 class="font-bold mb-4 text-slate-800 dark:text-darkText text-lg flex gap-2 items-center"><span class="text-rose-500">${ICONS.fileText}</span> Reporte Médico</h3><button onclick="setView('pdf')" class="w-full py-3 bg-rose-50 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400 font-bold rounded-xl border border-rose-200 dark:border-rose-800 hover:bg-rose-100 dark:hover:bg-rose-900/40 transition shadow-sm">Configurar y Descargar PDF</button></div>
-                        <div class="bg-white dark:bg-darkCard p-5 rounded-2xl shadow-sm mb-6 border border-slate-50 dark:border-darkBorder"><h3 class="font-bold mb-4 text-slate-800 dark:text-darkText text-lg">Configuración del Ciclo</h3><div class="space-y-4 text-sm"><label class="block"><span class="text-slate-500 dark:text-darkTextMuted text-xs font-bold uppercase">Último Periodo</span><input type="date" value="${user.config.lastPeriod}" onchange="updateConfig('lastPeriod', this.value)" class="border border-slate-200 dark:border-darkBorder p-3 rounded-xl w-full mt-1 bg-slate-50 dark:bg-darkBg dark:text-white focus:border-theme-300 focus:outline-none"/></label><div class="flex gap-4"><label class="flex-1"><span class="text-slate-500 dark:text-darkTextMuted text-xs font-bold uppercase">Ciclo (Días)</span><input type="number" value="${user.config.cycleLen}" onchange="updateConfig('cycleLen', this.value)" class="border border-slate-200 dark:border-darkBorder p-3 rounded-xl w-full mt-1 bg-slate-50 dark:bg-darkBg dark:text-white focus:border-theme-300 focus:outline-none"/></label><label class="flex-1"><span class="text-slate-500 dark:text-darkTextMuted text-xs font-bold uppercase">Sangrado</span><input type="number" value="${user.config.periodLen}" onchange="updateConfig('periodLen', this.value)" class="border border-slate-200 dark:border-darkBorder p-3 rounded-xl w-full mt-1 bg-slate-50 dark:bg-darkBg dark:text-white focus:border-theme-300 focus:outline-none"/></label></div><div class="pt-2 border-t border-slate-100 dark:border-darkBorder mt-4 space-y-3"><label class="flex items-center gap-3 p-3 border border-slate-200 dark:border-darkBorder rounded-xl cursor-pointer hover:bg-theme-50 dark:hover:bg-theme-900/20 transition ${user.config.pregnancyMode ? 'opacity-50 pointer-events-none' : ''}"><input type="checkbox" ${user.config.pill ? 'checked' : ''} onchange="updateConfig('pill', this.checked ? 'true' : 'false')" class="w-5 h-5 accent-theme-500"><div class="flex flex-col"><span class="font-bold text-slate-700 dark:text-darkText">Pastilla Anticonceptiva</span><span class="text-xs text-slate-400 dark:text-darkTextMuted">Botón rápido en inicio</span></div></label><label class="flex items-center gap-3 p-3 border border-slate-200 dark:border-darkBorder rounded-xl cursor-pointer hover:bg-fuchsia-50 dark:hover:bg-fuchsia-900/20 transition ${user.config.pregnancyMode ? 'bg-fuchsia-50 dark:bg-fuchsia-900/20 border-fuchsia-200 dark:border-fuchsia-800' : ''}"><input type="checkbox" ${user.config.pregnancyMode ? 'checked' : ''} onchange="updateConfig('pregnancyMode', this.checked ? 'true' : 'false')" class="w-5 h-5 accent-fuchsia-500"><div class="flex flex-col"><span class="font-bold ${user.config.pregnancyMode ? 'text-fuchsia-600 dark:text-fuchsia-400' : 'text-slate-700 dark:text-darkText'}">Modo Embarazo</span><span class="text-xs ${user.config.pregnancyMode ? 'text-fuchsia-400 dark:text-fuchsia-500' : 'text-slate-400 dark:text-darkTextMuted'}">Pausa el ciclo y cuenta semanas</span></div></label></div></div></div>
-                        <div class="bg-white dark:bg-darkCard p-5 rounded-2xl shadow-sm mb-6 border border-slate-50 dark:border-darkBorder"><h3 class="font-bold mb-4 text-slate-800 dark:text-darkText text-lg flex gap-2 items-center text-purple-600 dark:text-purple-400">${ICONS.info} Guía del Ciclo</h3><div class="bg-slate-50 dark:bg-darkBg p-4 rounded-xl border border-slate-100 dark:border-darkBorder">${guideHtml}</div></div>
-                        <div class="bg-white dark:bg-darkCard p-5 rounded-2xl shadow-sm mb-6 border border-slate-50 dark:border-darkBorder"><div class="flex justify-between mb-4 items-center"><h3 class="font-bold text-lg text-slate-800 dark:text-darkText">Usuarios / Perfiles</h3><button onclick="addUser()" class="text-white bg-theme-500 p-1 rounded-lg hover:bg-theme-600 transition">${ICONS.plus}</button></div><div class="flex flex-col">${usersHtml}</div></div>
-                        <div class="bg-white dark:bg-darkCard p-5 rounded-2xl shadow-sm mb-6 border border-slate-50 dark:border-darkBorder"><h3 class="font-bold mb-4 flex gap-2 items-center text-rose-500 text-lg">Historial de Periodos</h3><p class="text-xs text-slate-400 mb-4 leading-tight">Aquí puedes ver tus inicios de periodo registrados manualmente y eliminar los que tengan error.</p><div class="max-h-64 overflow-y-auto pr-2 custom-scroll">${historyHtml}</div></div>
-                        <div class="bg-white dark:bg-darkCard p-5 rounded-2xl shadow-sm mb-6 border border-slate-50 dark:border-darkBorder"><h3 class="font-bold mb-4 text-slate-800 dark:text-darkText text-lg flex gap-2 items-center text-blue-500">${ICONS.lock} Seguridad PIN</h3>${state.pin ? `<div class="flex justify-between items-center bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border border-blue-100 dark:border-blue-800"><div class="flex gap-3 items-center"><div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div><span class="text-sm font-bold text-blue-900 dark:text-blue-300">App Protegida</span></div><button onclick="removePin()" class="text-red-500 text-sm font-bold underline">Eliminar</button></div>` : `<button onclick="startPinSetup()" class="w-full py-3 border-2 border-dashed border-slate-200 dark:border-darkBorder rounded-xl text-slate-500 dark:text-darkTextMuted font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition flex items-center justify-center gap-2">${ICONS.plus} Crear PIN de Acceso</button>`}</div>
-                        <div class="bg-white dark:bg-darkCard p-5 rounded-2xl shadow-sm mb-6 border border-slate-50 dark:border-darkBorder"><h3 class="font-bold mb-4 text-slate-800 dark:text-darkText text-lg flex gap-2 items-center text-emerald-500">${ICONS.download} Copia de Seguridad</h3><div class="grid grid-cols-2 gap-4"><button onclick="exportData()" class="flex flex-col items-center justify-center p-3 rounded-xl bg-slate-50 dark:bg-darkBg border border-slate-200 dark:border-darkBorder hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition gap-2 shadow-sm"><div class="text-emerald-500">${ICONS.download}</div><span class="text-xs font-bold text-slate-700 dark:text-darkText">Exportar</span></button><button onclick="triggerImport()" class="flex flex-col items-center justify-center p-3 rounded-xl bg-slate-50 dark:bg-darkBg border border-slate-200 dark:border-darkBorder hover:bg-blue-50 dark:hover:bg-blue-900/20 transition gap-2 shadow-sm"><div class="text-blue-500">${ICONS.upload}</div><span class="text-xs font-bold text-slate-700 dark:text-darkText">Importar</span></button></div></div>
+                        <div class="bg-white dark:bg-darkCard p-5 rounded-2xl shadow-sm mb-6 border border-slate-50 dark:border-darkBorder"><h3 class="font-bold mb-4 text-slate-800 dark:text-darkText text-lg flex gap-2 items-center"><span class="text-rose-500">${ICONS.fileText}</span> Reporte Médico</h3><button onclick="setView('pdf')" class="w-full py-3 bg-theme-50 text-theme-600 font-bold rounded-xl border border-theme-200 transition shadow-sm">Configurar y Descargar PDF</button></div>
+                        <div class="bg-white dark:bg-darkCard p-5 rounded-2xl shadow-sm mb-6 border border-slate-50 dark:border-darkBorder"><h3 class="font-bold mb-4 text-slate-800 dark:text-darkText text-lg">Configuración del Ciclo</h3><div class="space-y-4 text-sm"><label class="block"><span class="text-slate-500 text-xs font-bold uppercase">Último Periodo</span><input type="date" value="${user.config.lastPeriod}" onchange="updateConfig('lastPeriod', this.value)" class="border border-slate-200 dark:border-darkBorder p-3 rounded-xl w-full mt-1 bg-slate-50 dark:bg-darkBg dark:text-white focus:outline-none"/></label><div class="flex gap-4"><label class="flex-1"><span class="text-slate-500 text-xs font-bold uppercase">Ciclo (Días)</span><input type="number" value="${user.config.cycleLen}" onchange="updateConfig('cycleLen', this.value)" class="border border-slate-200 dark:border-darkBorder p-3 rounded-xl w-full mt-1 bg-slate-50 dark:bg-darkBg dark:text-white focus:outline-none"/></label><label class="flex-1"><span class="text-slate-500 text-xs font-bold uppercase">Sangrado</span><input type="number" value="${user.config.periodLen}" onchange="updateConfig('periodLen', this.value)" class="border border-slate-200 dark:border-darkBorder p-3 rounded-xl w-full mt-1 bg-slate-50 dark:bg-darkBg dark:text-white focus:outline-none"/></label></div><div class="pt-2 border-t border-slate-100 dark:border-darkBorder mt-4 space-y-3"><label class="flex items-center gap-3 p-3 border border-slate-200 dark:border-darkBorder rounded-xl cursor-pointer hover:bg-theme-50 transition ${user.config.pregnancyMode ? 'opacity-50 pointer-events-none' : ''}"><input type="checkbox" ${user.config.pill ? 'checked' : ''} onchange="updateConfig('pill', this.checked ? 'true' : 'false')" class="w-5 h-5 accent-theme-500"><div class="flex flex-col"><span class="font-bold text-slate-700 dark:text-darkText">Pastilla Anticonceptiva</span></div></label><label class="flex items-center gap-3 p-3 border border-slate-200 dark:border-darkBorder rounded-xl cursor-pointer hover:bg-fuchsia-50 transition"><input type="checkbox" ${user.config.pregnancyMode ? 'checked' : ''} onchange="updateConfig('pregnancyMode', this.checked ? 'true' : 'false')" class="w-5 h-5 accent-fuchsia-500"><div class="flex flex-col"><span class="font-bold ${user.config.pregnancyMode ? 'text-fuchsia-600' : 'text-slate-700 dark:text-darkText'}">Modo Embarazo</span></div></label></div></div></div>
                         
-                        <div class="text-center opacity-60 mb-12">
-                            <button onclick="openTutorial()" class="underline text-sm text-slate-600 dark:text-darkTextMuted mb-3 block w-full">Ver Tutorial de Nuevo</button>
-                            <p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 tracking-wider">DESARROLLADO POR JUAN MIGUEL RIOS REDONDO</p>
+                        <div class="bg-white dark:bg-darkCard p-5 rounded-2xl shadow-sm mb-6 border border-slate-50 dark:border-darkBorder">
+                            <h3 class="font-bold mb-4 text-slate-800 dark:text-darkText text-lg flex gap-2 items-center text-purple-500">${ICONS.info} Guía del Ciclo</h3>
+                            <div class="bg-slate-50 dark:bg-darkBg p-4 rounded-xl border border-slate-100 dark:border-darkBorder">${guideHtml}</div>
+                            <div class="mt-4 p-4 bg-slate-50 dark:bg-darkBg rounded-xl border border-slate-100 dark:border-darkBorder space-y-3">
+                                <div class="flex gap-3 items-center text-fuchsia-400">${ICONS.sparkles}<span class="text-xs font-bold text-slate-700 dark:text-darkText">Estrellas: Alta Fertilidad (Posible embarazo)</span></div>
+                                <div class="flex gap-3 items-center text-emerald-400">${ICONS.shieldCheck}<span class="text-xs font-bold text-slate-700 dark:text-darkText">Escudo: Días Seguros (Bajo riesgo)</span></div>
+                            </div>
                         </div>
+
+                        <div class="bg-white dark:bg-darkCard p-5 rounded-2xl shadow-sm mb-6 border border-slate-50 dark:border-darkBorder"><div class="flex justify-between mb-4 items-center"><h3 class="font-bold text-lg text-slate-800 dark:text-darkText">Usuarios</h3><button onclick="addUser()" class="text-white bg-theme-500 p-1 rounded-lg">${ICONS.plus}</button></div><div class="flex flex-col">${usersHtml}</div></div>
+                        <div class="bg-white dark:bg-darkCard p-5 rounded-2xl shadow-sm mb-6 border border-slate-50 dark:border-darkBorder"><h3 class="font-bold mb-4 flex gap-2 items-center text-rose-500 text-lg">Historial</h3><div class="max-h-64 overflow-y-auto pr-2 custom-scroll">${historyHtml}</div></div>
+                        <div class="bg-white dark:bg-darkCard p-5 rounded-2xl shadow-sm mb-6 border border-slate-50 dark:border-darkBorder"><h3 class="font-bold mb-4 text-slate-800 dark:text-darkText text-lg flex gap-2 items-center text-blue-500">${ICONS.lock} Seguridad PIN</h3>${state.pin ? `<div class="flex justify-between items-center bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border border-blue-100"><div class="flex gap-3 items-center"><div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div><span class="text-sm font-bold text-blue-900 dark:text-blue-300">App Protegida</span></div><button onclick="removePin()" class="text-red-500 text-sm font-bold underline">Eliminar</button></div>` : `<button onclick="startPinSetup()" class="w-full py-3 border-2 border-dashed border-slate-200 dark:border-darkBorder rounded-xl text-slate-500 font-bold flex items-center justify-center gap-2">${ICONS.plus} Crear PIN de Acceso</button>`}</div>
+                        <div class="bg-white dark:bg-darkCard p-5 rounded-2xl shadow-sm mb-6 border border-slate-50 dark:border-darkBorder"><h3 class="font-bold mb-4 text-slate-800 dark:text-darkText text-lg flex gap-2 items-center text-emerald-500">${ICONS.download} Respaldo</h3><div class="grid grid-cols-2 gap-4"><button onclick="exportData()" class="flex flex-col items-center justify-center p-3 rounded-xl bg-slate-50 dark:bg-darkBg border border-slate-200 dark:border-darkBorder gap-2"><div class="text-emerald-500">${ICONS.download}</div><span class="text-xs font-bold text-slate-700 dark:text-darkText">Exportar</span></button><button onclick="triggerImport()" class="flex flex-col items-center justify-center p-3 rounded-xl bg-slate-50 dark:bg-darkBg border border-slate-200 dark:border-darkBorder gap-2"><div class="text-blue-500">${ICONS.upload}</div><span class="text-xs font-bold text-slate-700 dark:text-darkText">Importar</span></button></div></div>
+                        <div class="text-center opacity-60 mb-12"><button onclick="openTutorial()" class="underline text-sm text-slate-600 dark:text-darkTextMuted mb-3 block w-full">Ver Tutorial de Nuevo</button><p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 tracking-wider">DESARROLLADO POR JUAN MIGUEL RIOS REDONDO</p></div>
                     </div>`;
             }
             
@@ -670,8 +598,8 @@
 
             if (state.view !== 'locked' && state.view !== 'setup_pin' && state.view !== 'pdf' && state.view !== 'pregnancy_tools') {
                 const activeClass = "text-theme-500 dark:text-theme-400 scale-110 transition-transform";
-                const inactiveClass = "text-slate-300 dark:text-slate-500 hover:text-slate-400 dark:hover:text-slate-400 transition";
-                html += `<div class="fixed bottom-0 w-full bg-white dark:bg-darkCard border-t border-slate-100 dark:border-darkBorder flex justify-around p-2 pb-6 z-40 shadow-[0_-5px_20px_rgba(0,0,0,0.02)] transition-colors"><button onclick="setView('calendar')" class="flex flex-col items-center p-2 ${state.view === 'calendar' ? activeClass : inactiveClass}">${ICONS.calendar} <span class="text-[10px] font-bold mt-1">Hoy</span></button><button onclick="setView('year')" class="flex flex-col items-center p-2 ${state.view === 'year' ? activeClass : inactiveClass}">${ICONS.grid} <span class="text-[10px] font-bold mt-1">Año</span></button><button onclick="setView('settings')" class="flex flex-col items-center p-2 ${state.view === 'settings' ? activeClass : inactiveClass}">${ICONS.settings} <span class="text-[10px] font-bold mt-1">Ajustes</span></button></div>`;
+                const inactiveClass = "text-slate-300 dark:text-slate-500";
+                html += `<div class="fixed bottom-0 w-full bg-white/90 dark:bg-darkCard/90 backdrop-blur-md border-t border-slate-100 dark:border-darkBorder flex justify-around p-2 pb-6 z-40 transition-colors"><button onclick="setView('calendar')" class="flex flex-col items-center p-2 ${state.view === 'calendar' ? activeClass : inactiveClass}">${ICONS.calendar} <span class="text-[10px] font-bold mt-1">Hoy</span></button><button onclick="setView('year')" class="flex flex-col items-center p-2 ${state.view === 'year' ? activeClass : inactiveClass}">${ICONS.grid} <span class="text-[10px] font-bold mt-1">Año</span></button><button onclick="setView('settings')" class="flex flex-col items-center p-2 ${state.view === 'settings' ? activeClass : inactiveClass}">${ICONS.settings} <span class="text-[10px] font-bold mt-1">Ajustes</span></button></div>`;
             }
 
             if (state.selectedDate) {
@@ -679,16 +607,22 @@
                 const user = getUser();
                 const log = user.logs[k] || {};
                 const displayDate = new Date(k + 'T00:00:00').toLocaleDateString('es-ES', {weekday:'long', day:'numeric'});
-                const isPeriodStart = user.periodHistory && user.periodHistory.includes(k);
+                const isStart = user.periodHistory && user.periodHistory.includes(k);
                 const currentPhase = getPhase(k);
                 const phaseDetails = currentPhase ? (PHASE_INFO[currentPhase.l] || { desc: 'Etapa gestacional.', color: 'bg-fuchsia-500', text: 'text-fuchsia-600 dark:text-fuchsia-400', light: 'bg-fuchsia-50 dark:bg-fuchsia-900/30 border-fuchsia-100 dark:border-fuchsia-800' }) : null;
 
                 const symList = user.config.pregnancyMode ? ['náuseas','antojos','pataditas','acidez','fatiga','sensibilidad'] : ['feliz','triste','irritable','cólicos','hinchazón','cansancio'];
                 const symptomsHtml = symList.map(s => {
                     const isActive = (log.symptoms || []).includes(s);
-                    const activeColor = user.config.pregnancyMode ? 'bg-fuchsia-100 dark:bg-fuchsia-900/40 border-fuchsia-300 text-fuchsia-700 dark:text-fuchsia-300 scale-105' : 'bg-theme-100 dark:bg-theme-900/40 border-theme-300 text-theme-700 dark:text-theme-300 scale-105';
+                    const activeColor = user.config.pregnancyMode ? 'bg-fuchsia-100 dark:bg-fuchsia-900/40 border-fuchsia-300 text-fuchsia-700 scale-105' : 'bg-theme-100 dark:bg-theme-900/40 border-theme-300 text-theme-700 dark:text-theme-300 scale-105';
                     return `<button onclick="updateLog('${k}', 'symptoms', '${s}')" class="p-3 rounded-xl border flex flex-col items-center gap-1 transition shadow-sm ${isActive ? activeColor : 'border-slate-100 dark:border-darkBorder text-slate-500 dark:text-darkTextMuted bg-white dark:bg-darkCard'}"><span class="capitalize text-xs font-bold">${s}</span></button>`;
                 }).join('');
+
+                let pillSection = '';
+                if (user.config.pill && !user.config.pregnancyMode) {
+                    const taken = log.pill;
+                    pillSection = `<div class="bg-theme-50 dark:bg-theme-900/20 p-4 rounded-xl mb-4 flex justify-between items-center border border-theme-100 dark:border-theme-800"><div class="flex items-center gap-3"><div class="bg-white dark:bg-darkCard p-2 rounded-full text-theme-500 shadow-sm">${ICONS.pill}</div><div><h4 class="font-bold text-slate-800 dark:text-darkText">Anticonceptivo</h4><p class="text-xs text-theme-600 dark:text-theme-400">${taken ? 'Tomada hoy' : 'Pendiente'}</p></div></div><button onclick="updateLog('${k}', 'pill')" class="px-4 py-2 rounded-lg font-bold text-sm transition ${taken ? 'bg-theme-500 text-white shadow-lg' : 'bg-white dark:bg-darkCard text-theme-500 border border-theme-200'}">${taken ? 'Tomada' : 'Marcar'}</button></div>`;
+                }
 
                 let fertilityHtml = '';
                 if (!user.config.pregnancyMode) {
@@ -696,9 +630,9 @@
                 }
 
                 const testResult = log.pregnancyTest;
-                const pregnancyTestSection = `<div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 p-4 rounded-2xl mb-4 border border-fuchsia-100 dark:border-fuchsia-900/50"><div class="flex items-center gap-2 mb-3"><div class="text-fuchsia-500">${ICONS.baby}</div><h4 class="text-sm font-bold text-fuchsia-700 dark:text-fuchsia-400 uppercase tracking-wider">Prueba de Embarazo</h4></div><div class="flex gap-2"><button onclick="updateLog('${k}', 'pregnancyTest', 'negative')" class="flex-1 py-2.5 rounded-xl text-sm font-bold transition flex justify-center items-center gap-2 ${testResult === 'negative' ? 'bg-slate-800 dark:bg-slate-700 text-white shadow-md' : 'bg-white dark:bg-darkCard text-slate-500 dark:text-darkTextMuted border border-slate-200 dark:border-darkBorder hover:bg-slate-50 dark:hover:bg-slate-800'}">Negativa</button><button onclick="updateLog('${k}', 'pregnancyTest', 'positive')" class="flex-1 py-2.5 rounded-xl text-sm font-bold transition flex justify-center items-center gap-2 ${testResult === 'positive' ? 'bg-fuchsia-500 text-white shadow-lg shadow-fuchsia-200 dark:shadow-none scale-105' : 'bg-white dark:bg-darkCard text-fuchsia-500 dark:text-fuchsia-400 border border-fuchsia-200 dark:border-fuchsia-800 hover:bg-fuchsia-50 dark:hover:bg-fuchsia-900/30'}">Positiva</button></div></div>`;
+                const pregnancyTestSection = `<div class="bg-fuchsia-50 dark:bg-fuchsia-900/20 p-4 rounded-2xl mb-4 border border-fuchsia-100 dark:border-fuchsia-900/50"><div class="flex items-center gap-2 mb-3"><div class="text-fuchsia-500">${ICONS.baby}</div><h4 class="text-sm font-bold text-fuchsia-700 dark:text-fuchsia-400 uppercase tracking-wider">Prueba de Embarazo</h4></div><div class="flex gap-2"><button onclick="updateLog('${k}', 'pregnancyTest', 'negative')" class="flex-1 py-2.5 rounded-xl text-sm font-bold transition flex justify-center items-center gap-2 ${testResult === 'negative' ? 'bg-slate-800 text-white shadow-md' : 'bg-white dark:bg-darkCard text-slate-500 border border-slate-200'}">Negativa</button><button onclick="updateLog('${k}', 'pregnancyTest', 'positive')" class="flex-1 py-2.5 rounded-xl text-sm font-bold transition flex justify-center items-center gap-2 ${testResult === 'positive' ? 'bg-fuchsia-500 text-white shadow-lg scale-105' : 'bg-white dark:bg-darkCard text-fuchsia-500 border border-fuchsia-200'}">Positiva</button></div></div>`;
 
-                html += `<div class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end justify-center animate-in" onclick="closeModal()"><div class="w-full max-w-sm bg-white dark:bg-darkBg rounded-t-[2rem] p-6 h-[85vh] overflow-y-auto shadow-2xl" onclick="event.stopPropagation()"><div class="flex justify-between items-center mb-6"><h3 class="text-2xl font-bold capitalize text-slate-800 dark:text-darkText">${displayDate}</h3><button onclick="closeModal()" class="p-2 bg-slate-100 dark:bg-darkCard rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 dark:text-darkText transition">${ICONS.close}</button></div>${currentPhase && !user.config.pregnancyMode ? `<div class="${phaseDetails.light} p-4 rounded-xl mb-4 border border-opacity-50"><div class="flex items-center gap-2 mb-1"><div class="w-2 h-2 rounded-full ${phaseDetails.color}"></div><h4 class="font-bold ${phaseDetails.text}">${currentPhase.l}</h4></div><p class="text-xs text-slate-600 dark:text-slate-400 leading-snug">${phaseDetails.desc}</p></div>` : ''}${!user.config.pregnancyMode ? `<div class="bg-rose-50 dark:bg-rose-900/20 p-5 rounded-2xl mb-4 border border-rose-100 dark:border-rose-900 relative overflow-hidden transition-all">${isPeriodStart ? '<div class="absolute -right-4 -top-4 w-16 h-16 bg-rose-200 dark:bg-rose-800 rounded-full opacity-50"></div>' : ''}<div class="flex justify-between items-center relative z-10"><div class="flex items-center gap-4"><div class="bg-white dark:bg-darkCard p-3 rounded-full text-rose-500 shadow-sm">${ICONS.droplet}</div><div><h4 class="font-bold text-slate-800 dark:text-darkText">Menstruación</h4><p class="text-xs text-slate-500 dark:text-darkTextMuted">¿Inició hoy?</p></div></div><div class="relative inline-block w-14 h-8 align-middle select-none"><input type="checkbox" id="periodToggle" class="toggle-checkbox absolute block w-8 h-8 rounded-full bg-white dark:bg-darkCard border-4 appearance-none cursor-pointer border-slate-300 dark:border-slate-600 transition-all duration-300" ${isPeriodStart ? 'checked' : ''} onclick="handlePeriodToggle('${k}')"/><label for="periodToggle" class="toggle-label block overflow-hidden h-8 rounded-full bg-slate-300 dark:bg-slate-600 cursor-pointer transition-all duration-300"></label></div></div>${isPeriodStart ? '<p class="text-xs text-rose-600 dark:text-rose-400 mt-3 font-bold text-center bg-white/60 dark:bg-darkBg/60 py-1.5 rounded-lg fade-in">✅ Inicio de ciclo registrado</p>' : ''}</div>` : ''}${pregnancyTestSection}${fertilityHtml}<div class="grid grid-cols-2 gap-4 mb-4"><div class="bg-emerald-50 dark:bg-emerald-900/20 p-3 rounded-2xl border border-emerald-100 dark:border-emerald-900"><label class="text-[10px] font-bold text-emerald-500 dark:text-emerald-400 uppercase tracking-wider flex items-center gap-1 mb-2">⚖️ Peso (kg)</label><input type="number" step="0.1" value="${log.weight || ''}" onchange="updateLog('${k}', 'weight', this.value)" placeholder="60.5" class="w-full text-center bg-white dark:bg-darkBg p-2 rounded-xl border border-emerald-100 dark:border-emerald-800 font-black text-slate-700 dark:text-darkText focus:outline-none"></div><div class="bg-indigo-50 dark:bg-indigo-900/20 p-3 rounded-2xl border border-indigo-100 dark:border-indigo-900"><div class="text-[10px] font-bold text-indigo-400 dark:text-indigo-300 mb-2 flex gap-1 uppercase tracking-wider text-center w-full justify-center">${ICONS.moon} Sueño</div><div class="flex items-center justify-between w-full"><button onclick="updateLog('${k}', 'sleep', 'dec')" class="w-6 h-6 bg-white dark:bg-darkCard rounded-full font-bold shadow-sm text-indigo-500">-</button><span class="font-black text-base text-slate-700 dark:text-darkText">${log.sleep||0}h</span><button onclick="updateLog('${k}', 'sleep', 'inc')" class="w-6 h-6 bg-indigo-500 text-white rounded-full font-bold shadow-sm">+</button></div></div></div><div class="mb-6"><label class="text-xs font-bold text-slate-400 dark:text-darkTextMuted mb-2 block uppercase tracking-wider">Notas del día</label><textarea onchange="updateLog('${k}', 'notes', this.value)" class="w-full p-4 bg-slate-50 dark:bg-darkBg dark:text-darkText border border-slate-200 dark:border-darkBorder rounded-2xl focus:outline-none focus:border-theme-500 transition" rows="3" placeholder="¿Cómo te sentiste hoy?">${log.notes||''}</textarea></div><div class="grid grid-cols-3 gap-3 mb-8">${symptomsHtml}</div><button onclick="closeModal()" class="w-full py-4 bg-slate-900 dark:bg-slate-700 text-white rounded-2xl font-bold shadow-xl active:scale-95 transition">Guardar Cambios</button></div></div>`;
+                html += `<div class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end justify-center animate-in" onclick="closeModal()"><div class="w-full max-w-sm bg-white dark:bg-darkBg rounded-t-[2rem] p-6 h-[85vh] overflow-y-auto shadow-2xl" onclick="event.stopPropagation()"><div class="flex justify-between items-center mb-6"><h3 class="text-2xl font-bold capitalize text-slate-800 dark:text-darkText">${displayDate}</h3><button onclick="closeModal()" class="p-2 bg-slate-100 dark:bg-darkCard rounded-full text-slate-500 transition">${ICONS.close}</button></div>${currentPhase && !user.config.pregnancyMode ? `<div class="${phaseDetails.light} p-4 rounded-xl mb-4 border border-opacity-50"><div class="flex items-center gap-2 mb-1"><div class="w-2 h-2 rounded-full ${phaseDetails.color}"></div><h4 class="font-bold ${phaseDetails.text}">${currentPhase.l}</h4></div><p class="text-xs text-slate-600 dark:text-slate-400 leading-snug">${phaseDetails.desc}</p></div>` : ''}${!user.config.pregnancyMode ? `<div class="bg-rose-50 dark:bg-rose-900/20 p-5 rounded-2xl mb-4 border border-rose-100 dark:border-rose-900 relative overflow-hidden transition-all">${isStart ? '<div class="absolute -right-4 -top-4 w-16 h-16 bg-rose-200 dark:bg-rose-800 rounded-full opacity-50"></div>' : ''}<div class="flex justify-between items-center relative z-10"><div class="flex items-center gap-4"><div class="bg-white dark:bg-darkCard p-3 rounded-full text-rose-500 shadow-sm">${ICONS.droplet}</div><div><h4 class="font-bold text-slate-800 dark:text-darkText">Menstruación</h4><p class="text-xs text-slate-500 dark:text-darkTextMuted">¿Inició hoy?</p></div></div><div class="relative inline-block w-14 h-8 align-middle select-none"><input type="checkbox" id="periodToggle" class="toggle-checkbox absolute block w-8 h-8 rounded-full bg-white dark:bg-darkCard border-4 appearance-none cursor-pointer border-slate-300 transition-all duration-300" ${isStart ? 'checked' : ''} onclick="handlePeriodToggle('${k}')"/><label for="periodToggle" class="toggle-label block overflow-hidden h-8 rounded-full bg-slate-300 dark:bg-slate-600 cursor-pointer transition-all duration-300"></label></div></div>${isStart ? '<p class="text-xs text-rose-600 dark:text-rose-400 mt-3 font-bold text-center bg-white/60 dark:bg-darkBg/60 py-1.5 rounded-lg fade-in">✅ Inicio de ciclo registrado</p>' : ''}</div>` : ''}${pregnancyTestSection}${pillSection}${fertilityHtml}<div class="grid grid-cols-2 gap-4 mb-4"><div class="bg-emerald-50 dark:bg-emerald-900/20 p-3 rounded-2xl border border-emerald-100 dark:border-emerald-900"><label class="text-[10px] font-bold text-emerald-500 dark:text-emerald-400 uppercase tracking-wider flex items-center gap-1 mb-2">⚖️ Peso (kg)</label><input type="number" step="0.1" value="${log.weight || ''}" onchange="updateLog('${k}', 'weight', this.value)" placeholder="60.5" class="w-full text-center bg-white dark:bg-darkBg p-2 rounded-xl border border-emerald-100 dark:border-emerald-800 font-black text-slate-700 dark:text-darkText focus:outline-none"></div><div class="bg-indigo-50 dark:bg-indigo-900/20 p-3 rounded-2xl border border-indigo-100 dark:border-indigo-900"><div class="text-[10px] font-bold text-indigo-400 dark:text-indigo-300 mb-2 flex gap-1 uppercase tracking-wider text-center w-full justify-center">${ICONS.moon} Sueño</div><div class="flex items-center justify-between w-full"><button onclick="updateLog('${k}', 'sleep', 'dec')" class="w-6 h-6 bg-white dark:bg-darkCard rounded-full font-bold shadow-sm text-indigo-500">-</button><span class="font-black text-base text-slate-700 dark:text-darkText">${log.sleep||0}h</span><button onclick="updateLog('${k}', 'sleep', 'inc')" class="w-6 h-6 bg-indigo-500 text-white rounded-full font-bold shadow-sm">+</button></div></div></div><div class="mb-6"><label class="text-xs font-bold text-slate-400 dark:text-darkTextMuted mb-2 block uppercase tracking-wider">Notas del día</label><textarea onchange="updateLog('${k}', 'notes', this.value)" class="w-full p-4 bg-slate-50 dark:bg-darkBg dark:text-darkText border border-slate-200 dark:border-darkBorder rounded-2xl focus:outline-none focus:border-theme-500 transition" rows="3" placeholder="¿Cómo te sentiste hoy?">${log.notes||''}</textarea></div><div class="grid grid-cols-3 gap-3 mb-8">${symptomsHtml}</div><button onclick="closeModal()" class="w-full py-4 bg-theme-600 text-white rounded-2xl font-bold shadow-xl active:scale-95 transition">Guardar Cambios</button></div></div>`;
             }
 
             app.innerHTML = html;
