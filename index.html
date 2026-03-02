@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" class="light">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -107,12 +107,13 @@
             thermometer: '<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>'
         };
 
+        // --- INFORMACIÓN DE FASES (RESTAURADA) ---
         const PHASE_INFO = {
-            'Menstruación': { desc: 'El revestimiento uterino se desprende. Buen momento para descansar.', color: 'bg-rose-500', text: 'text-rose-600 dark:text-rose-400', light: 'bg-rose-50 dark:bg-rose-900/30 border-rose-100 dark:border-rose-800' },
-            'Folicular': { desc: 'Los niveles de estrógeno suben, aumentando tu energía y creatividad.', color: 'bg-pink-300', text: 'text-pink-600 dark:text-pink-400', light: 'bg-pink-50 dark:bg-pink-900/30 border-pink-100 dark:border-pink-800' },
-            'Fértil': { desc: 'La ventana fértil ha comenzado. Alta probabilidad de embarazo.', color: 'bg-purple-400', text: 'text-purple-600 dark:text-purple-400', light: 'bg-purple-50 dark:bg-purple-900/30 border-purple-100 dark:border-purple-800' },
-            'Ovulación': { desc: 'Pico máximo de fertilidad y libido en el ciclo.', color: 'bg-purple-600', text: 'text-purple-700 dark:text-purple-300', light: 'bg-purple-100 dark:bg-purple-900/50 border-purple-200 dark:border-purple-700' },
-            'Lútea': { desc: 'La progesterona sube. Puedes sentir síntomas premenstruales (SPM).', color: 'bg-amber-400', text: 'text-amber-600 dark:text-amber-400', light: 'bg-amber-50 dark:bg-amber-900/30 border-amber-100 dark:border-amber-800' }
+            'Menstruación': { desc: 'El revestimiento uterino se desprende. Tu energía puede estar más baja. Es un buen momento para descansar e introspección.', color: 'bg-rose-500', text: 'text-rose-600 dark:text-rose-400', light: 'bg-rose-50 dark:bg-rose-900/30 border-rose-100 dark:border-rose-800' },
+            'Folicular': { desc: 'Tu cuerpo se prepara para liberar un óvulo. Los niveles de estrógeno suben, aumentando tu energía y creatividad.', color: 'bg-pink-300', text: 'text-pink-600 dark:text-pink-400', light: 'bg-pink-50 dark:bg-pink-900/30 border-pink-100 dark:border-pink-800' },
+            'Fértil': { desc: 'La ventana fértil ha comenzado. Te sientes más sociable y con energía. Hay alta probabilidad de embarazo.', color: 'bg-purple-400', text: 'text-purple-600 dark:text-purple-400', light: 'bg-purple-50 dark:bg-purple-900/30 border-purple-100 dark:border-purple-800' },
+            'Ovulación': { desc: 'El ovario libera un óvulo. Es el pico máximo de fertilidad y libido en el ciclo.', color: 'bg-purple-600', text: 'text-purple-700 dark:text-purple-300', light: 'bg-purple-100 dark:bg-purple-900/50 border-purple-200 dark:border-purple-700' },
+            'Lútea': { desc: 'Si no hubo embarazo, la progesterona sube. La energía baja y puedes sentir síntomas premenstruales (SPM).', color: 'bg-amber-400', text: 'text-amber-600 dark:text-amber-400', light: 'bg-amber-50 dark:bg-amber-900/30 border-amber-100 dark:border-amber-800' }
         };
 
         const BABY_SIZES = [
@@ -358,12 +359,13 @@
                 return;
             }
 
-            // --- TUTORIAL ---
+            // --- TUTORIAL ORIGINAL ACTUALIZADO ---
             if (state.showTutorial) {
                 const slides = [
-                    { t: "Bienvenida a Lunea", d: "Tu espacio privado para conocer tu ciclo. 100% seguro en tu dispositivo.", i: ICONS.heart, c: "text-rose-500 bg-rose-100" },
-                    { t: "Salud Integral", d: "Registro de fertilidad avanzada, temperatura y nuevo Modo Embarazo con predicción de parto.", i: ICONS.baby, c: "text-fuchsia-500 bg-fuchsia-100" },
-                    { t: "Todo bajo control", d: "Reportes en PDF reales, estadísticas visuales y privacidad con un toque (Modo Borroso).", i: ICONS.fileText, c: "text-indigo-500 bg-indigo-100" },
+                    { t: "Bienvenida a Lunea", d: "Tu espacio privado para conocer tu ciclo. Sin internet, 100% seguro en tu dispositivo.", i: ICONS.heart, c: "text-rose-500 bg-rose-100" },
+                    { t: "Seguridad y Privacidad", d: "Protege tu app con PIN o usa el botón del Ojo para ocultar tu pantalla al instante.", i: ICONS.lock, c: "text-slate-700 bg-slate-100" },
+                    { t: "Historial Inteligente", d: "Marca tus inicios de periodo. Lunea calculará tu promedio real automáticamente.", i: ICONS.history, c: "text-indigo-500 bg-indigo-100" },
+                    { t: "Nuevas Opciones", d: "Integración del modo embarazo, descarga de reportes PDF y fertilidad avanzada.", i: ICONS.baby, c: "text-fuchsia-500 bg-fuchsia-100" },
                     { t: "¡Empezar!", d: "Todo listo para comenzar a conocerte mejor.", i: ICONS.check, c: "text-green-500 bg-green-100" }
                 ];
                 const slide = slides[tutorialStep];
@@ -379,7 +381,7 @@
                 return;
             }
 
-            // --- REPORTE MÉDICO (PDF) ---
+            // --- REPORTE MÉDICO (PDF DIRECTO) ---
             if (state.view === 'pdf') {
                 const user = getUser();
                 const logs = Object.keys(user.logs).sort().reverse().slice(0, 30);
@@ -453,7 +455,7 @@
                             <div class="bg-white dark:bg-orange-900 p-3 rounded-full text-orange-500 dark:text-orange-400 shadow-sm shrink-0">${ICONS.info}</div>
                             <div>
                                 <h4 class="font-bold text-orange-800 dark:text-orange-300 text-lg">Retraso de ${daysLate} día(s)</h4>
-                                <p class="text-xs text-orange-600 dark:text-orange-400 mt-1 leading-snug">Tu periodo está tardando más de lo habitual. Podría deberse a una irregularidad o un posible embarazo.</p>
+                                <p class="text-xs text-orange-600 dark:text-orange-400 mt-1 leading-snug">Tu periodo está tardando más de lo habitual. Podría deberse a un posible embarazo.</p>
                             </div>
                         </div>`;
                 }
@@ -585,20 +587,20 @@
                     </div>`;
             }
 
-            // --- AJUSTES ---
+            // --- AJUSTES COMPLETOS ---
             else if (state.view === 'settings') {
                 const user = getUser();
                 
-                // Chart Historial (NUEVO)
+                // Chart Historial Animado
                 let chartBarsHtml = '';
                 if(user.periodHistory && user.periodHistory.length > 1) {
                     const sorted = [...user.periodHistory].sort((a,b) => new Date(a) - new Date(b));
                     const lengths = [];
                     for(let i=1; i<sorted.length; i++) {
                         const days = Math.ceil(Math.abs(new Date(sorted[i]) - new Date(sorted[i-1])) / 86400000);
-                        if(days >= 15 && days <= 60) lengths.push(days); // Filtrar anomalías extremas en chart
+                        if(days >= 15 && days <= 60) lengths.push(days); 
                     }
-                    const displayLengths = lengths.slice(-8); // Últimos 8 ciclos
+                    const displayLengths = lengths.slice(-8);
                     const maxLen = Math.max(...displayLengths, 35);
                     chartBarsHtml = displayLengths.map((len, idx) => {
                         const h = (len / maxLen) * 100;
@@ -614,11 +616,52 @@
                     chartBarsHtml = `<div class="w-full text-center text-sm text-slate-400 dark:text-darkTextMuted py-8">Registra al menos 2 periodos para ver tu gráfica.</div>`;
                 }
 
+                // Usuarios Restaurado
+                let usersHtml = state.users.map(u => `
+                    <div class="flex justify-between items-center py-3 border-b border-slate-50 dark:border-darkBorder last:border-0">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-500 dark:text-darkText font-bold">${u.name[0]}</div>
+                            <div class="flex flex-col">
+                                <button onclick="switchUser('${u.id}')" class="text-left font-bold ${u.id===state.currentUserId?'text-rose-600 dark:text-rose-400':'text-slate-700 dark:text-darkText'}">${u.name}</button>
+                                <span class="text-[10px] text-slate-400 dark:text-darkTextMuted">ID: ${u.id.substr(0,4)}</span>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="editUser('${u.id}')" class="p-2 text-blue-500 bg-blue-50 dark:bg-blue-900/20 rounded-lg hover:bg-blue-100 transition">${ICONS.edit}</button>
+                            ${state.users.length>1 ? `<button onclick="deleteUser('${u.id}')" class="p-2 text-red-500 bg-red-50 dark:bg-red-900/20 rounded-lg hover:bg-red-100 transition">${ICONS.trash}</button>` : ''}
+                        </div>
+                    </div>
+                `).join('');
+
+                // Guía del Ciclo Restaurada
+                const guideHtml = Object.entries(PHASE_INFO).map(([phase, info]) => `
+                    <div class="flex gap-3 mb-4 last:mb-0">
+                        <div class="w-4 h-4 rounded-full ${info.color} flex-shrink-0 mt-1"></div>
+                        <div>
+                            <div class="font-bold text-sm text-slate-800 dark:text-darkText">${phase}</div>
+                            <div class="text-xs text-slate-500 dark:text-darkTextMuted leading-tight">${info.desc}</div>
+                        </div>
+                    </div>
+                `).join('');
+
+                // Historial Manual Restaurado
+                let historyHtml = '<div class="text-center py-4 text-slate-400 dark:text-darkTextMuted italic text-sm">No hay registros aún.</div>';
+                if(user.periodHistory && user.periodHistory.length > 0) {
+                     historyHtml = user.periodHistory.sort((a,b) => new Date(b) - new Date(a)).map(d => `
+                            <div class="flex justify-between items-center text-sm py-2 border-b border-slate-50 dark:border-darkBorder last:border-0">
+                                <span class="font-mono text-slate-600 dark:text-darkText">${d}</span>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-[10px] font-bold text-rose-500 bg-rose-50 dark:bg-rose-900/30 dark:text-rose-400 px-2 py-1 rounded-full">Inicio de periodo</span>
+                                    <button onclick="deleteHistoryItem('${d}')" class="text-slate-400 hover:text-red-500 p-1 transition">${ICONS.trash}</button>
+                                </div>
+                            </div>`).join('');
+                }
+
                 html += `
                     <div class="p-6 max-w-md mx-auto animate-in">
                         <div class="flex justify-between mb-6 text-slate-800 dark:text-darkText"><button onclick="setView('calendar')">${ICONS.left}</button><h2 class="text-xl font-bold">Perfil y Ajustes</h2><div></div></div>
                         
-                        <!-- ESTADÍSTICAS VISUALES (NUEVO) -->
+                        <!-- ESTADÍSTICAS VISUALES -->
                         <div class="bg-white dark:bg-darkCard p-5 rounded-2xl shadow-sm mb-6 border border-slate-50 dark:border-darkBorder">
                             <h3 class="font-bold mb-4 text-slate-800 dark:text-darkText text-lg flex gap-2 items-center"><span class="text-indigo-500">${ICONS.history}</span> Estadísticas</h3>
                             <div class="bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded-xl mb-4 text-center border border-indigo-100 dark:border-indigo-800/50">
@@ -631,13 +674,15 @@
                             </div>
                         </div>
 
+                        <!-- REPORTE PDF -->
                         <div class="bg-white dark:bg-darkCard p-5 rounded-2xl shadow-sm mb-6 border border-slate-50 dark:border-darkBorder">
                             <h3 class="font-bold mb-4 text-slate-800 dark:text-darkText text-lg flex gap-2 items-center"><span class="text-rose-500">${ICONS.fileText}</span> Reporte Médico</h3>
-                            <button onclick="setView('pdf')" class="w-full py-3 bg-rose-50 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400 font-bold rounded-xl border border-rose-200 dark:border-rose-800 hover:bg-rose-100 dark:hover:bg-rose-900/40 transition">Generar y Descargar PDF</button>
+                            <button onclick="setView('pdf')" class="w-full py-3 bg-rose-50 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400 font-bold rounded-xl border border-rose-200 dark:border-rose-800 hover:bg-rose-100 dark:hover:bg-rose-900/40 transition shadow-sm">Generar y Descargar PDF</button>
                         </div>
 
+                        <!-- CONFIGURACIÓN MANUAL -->
                         <div class="bg-white dark:bg-darkCard p-5 rounded-2xl shadow-sm mb-6 border border-slate-50 dark:border-darkBorder">
-                            <h3 class="font-bold mb-4 text-slate-800 dark:text-darkText text-lg">Configuración</h3>
+                            <h3 class="font-bold mb-4 text-slate-800 dark:text-darkText text-lg">Configuración del Ciclo</h3>
                             <div class="space-y-4 text-sm">
                                 <label class="block">
                                     <span class="text-slate-500 dark:text-darkTextMuted text-xs font-bold uppercase">Último Periodo</span>
@@ -674,6 +719,31 @@
                             </div>
                         </div>
 
+                        <!-- GUÍA DEL CICLO (RESTAURADA) -->
+                        <div class="bg-white dark:bg-darkCard p-5 rounded-2xl shadow-sm mb-6 border border-slate-50 dark:border-darkBorder">
+                            <h3 class="font-bold mb-4 text-slate-800 dark:text-darkText text-lg flex gap-2 items-center text-purple-600 dark:text-purple-400">${ICONS.info} Guía del Ciclo</h3>
+                            <div class="bg-slate-50 dark:bg-darkBg p-4 rounded-xl border border-slate-100 dark:border-darkBorder">
+                                ${guideHtml}
+                            </div>
+                        </div>
+
+                        <!-- USUARIOS (RESTAURADA) -->
+                        <div class="bg-white dark:bg-darkCard p-5 rounded-2xl shadow-sm mb-6 border border-slate-50 dark:border-darkBorder">
+                            <div class="flex justify-between mb-4 items-center">
+                                <h3 class="font-bold text-lg text-slate-800 dark:text-darkText">Usuarios / Perfiles</h3>
+                                <button onclick="addUser()" class="text-white bg-rose-500 p-1 rounded-lg hover:bg-rose-600 transition">${ICONS.plus}</button>
+                            </div>
+                            <div class="flex flex-col">${usersHtml}</div>
+                        </div>
+
+                        <!-- HISTORIAL MANUAL (RESTAURADA) -->
+                        <div class="bg-white dark:bg-darkCard p-5 rounded-2xl shadow-sm mb-6 border border-slate-50 dark:border-darkBorder">
+                             <h3 class="font-bold mb-4 flex gap-2 items-center text-rose-500 text-lg">Historial de Periodos</h3>
+                             <p class="text-xs text-slate-400 mb-4 leading-tight">Aquí puedes ver tus inicios de periodo registrados manualmente y eliminar los que tengan error.</p>
+                             <div class="max-h-64 overflow-y-auto pr-2 custom-scroll">${historyHtml}</div>
+                        </div>
+
+                        <!-- SEGURIDAD Y RESPALDO -->
                         <div class="bg-white dark:bg-darkCard p-5 rounded-2xl shadow-sm mb-6 border border-slate-50 dark:border-darkBorder">
                             <h3 class="font-bold mb-4 text-slate-800 dark:text-darkText text-lg flex gap-2 items-center text-blue-500">${ICONS.lock} Seguridad PIN</h3>
                             ${state.pin ? `
@@ -694,11 +764,11 @@
                         <div class="bg-white dark:bg-darkCard p-5 rounded-2xl shadow-sm mb-6 border border-slate-50 dark:border-darkBorder">
                             <h3 class="font-bold mb-4 text-slate-800 dark:text-darkText text-lg flex gap-2 items-center text-emerald-500">${ICONS.download} Copia de Seguridad</h3>
                             <div class="grid grid-cols-2 gap-4">
-                                <button onclick="exportData()" class="flex flex-col items-center justify-center p-3 rounded-xl bg-slate-50 dark:bg-darkBg border border-slate-200 dark:border-darkBorder hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition gap-2">
+                                <button onclick="exportData()" class="flex flex-col items-center justify-center p-3 rounded-xl bg-slate-50 dark:bg-darkBg border border-slate-200 dark:border-darkBorder hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition gap-2 shadow-sm">
                                     <div class="text-emerald-500">${ICONS.download}</div>
                                     <span class="text-xs font-bold text-slate-700 dark:text-darkText">Exportar</span>
                                 </button>
-                                <button onclick="triggerImport()" class="flex flex-col items-center justify-center p-3 rounded-xl bg-slate-50 dark:bg-darkBg border border-slate-200 dark:border-darkBorder hover:bg-blue-50 dark:hover:bg-blue-900/20 transition gap-2">
+                                <button onclick="triggerImport()" class="flex flex-col items-center justify-center p-3 rounded-xl bg-slate-50 dark:bg-darkBg border border-slate-200 dark:border-darkBorder hover:bg-blue-50 dark:hover:bg-blue-900/20 transition gap-2 shadow-sm">
                                     <div class="text-blue-500">${ICONS.upload}</div>
                                     <span class="text-xs font-bold text-slate-700 dark:text-darkText">Importar</span>
                                 </button>
@@ -778,7 +848,7 @@
                                     <option value="Seco" ${log.flow === 'Seco' ? 'selected' : ''}>Seco</option>
                                     <option value="Pegajoso" ${log.flow === 'Pegajoso' ? 'selected' : ''}>Pegajoso</option>
                                     <option value="Cremoso" ${log.flow === 'Cremoso' ? 'selected' : ''}>Cremoso</option>
-                                    <option value="Clara_huevo" ${log.flow === 'Clara_huevo' ? 'selected' : ''}>Clara de huevo (Fértil)</option>
+                                    <option value="Clara_huevo" ${log.flow === 'Clara_huevo' ? 'selected' : ''}>Fértil (Clara)</option>
                                 </select>
                             </div>
                         </div>
